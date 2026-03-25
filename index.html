@@ -1,1 +1,1526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DATAEUROS - Advanced QA & Security Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
+        :root {
+            --primary: #00d9ff;
+            --primary-dark: #0099cc;
+            --secondary: #ff006e;
+            --accent: #8338ec;
+            --bg-dark: #0a0e27;
+            --bg-darker: #050813;
+            --text-light: #e0e0ff;
+            --text-muted: #a0a0c0;
+            --success: #00ff88;
+            --border: rgba(0, 217, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Syne', sans-serif;
+            background: linear-gradient(135deg, var(--bg-darker) 0%, #1a1f4a 50%, var(--bg-darker) 100%);
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: var(--bg-darker);
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.5;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Navbar */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.5rem 2rem;
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 39, 0.7);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .cta-btn {
+            padding: 0.8rem 1.8rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        /* Hero Section - Page 1 */
+        .page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            margin-top: 80px;
+            padding: 2rem;
+        }
+
+        .hero {
+            min-height: calc(100vh - 80px);
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 1000px;
+            z-index: 10;
+            animation: heroFade 1s ease-out;
+        }
+
+        @keyframes heroFade {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+            letter-spacing: -1px;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .primary-btn, .secondary-btn {
+            padding: 1rem 2.5rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .primary-btn {
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--bg-dark);
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+        }
+
+        .primary-btn:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.5);
+        }
+
+        .secondary-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .secondary-btn:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            transform: translateY(-5px);
+        }
+
+        /* Content Sections */
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 5;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title h2 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-title p {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Services Grid - Page 2 */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+            cursor: pointer;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(0, 217, 255, 0.1), transparent);
+            transform: rotate(45deg);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .service-card:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.2);
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .service-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .service-card p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+
+        /* Features Grid - Page 3 */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(131, 56, 236, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .feature-card:hover {
+            background: rgba(131, 56, 236, 0.1);
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* About Content */
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .about-text h2 {
+            font-size: 2.8rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-text p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 800;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .team-member {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .team-member:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .team-member h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .team-member p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        .pricing-card.featured {
+            background: rgba(131, 56, 236, 0.1);
+            border-color: var(--accent);
+            transform: scale(1.05);
+        }
+
+        .pricing-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .pricing-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+
+        .price {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 800;
+        }
+
+        .price span {
+            font-size: 1rem;
+            color: var(--text-muted);
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .pricing-features li {
+            padding: 0.8rem 0;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--success);
+            font-weight: 800;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        .contact-card {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .contact-card:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary);
+            transform: translateY(-5px);
+        }
+
+        .contact-card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .contact-card p {
+            color: var(--text-muted);
+            word-break: break-word;
+            margin-bottom: 0.5rem;
+        }
+
+        .contact-card a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+
+        .contact-card a:hover {
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        /* Map Section */
+        .map-container {
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            height: 500px;
+            margin-top: 2rem;
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.15);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Process Section */
+        .process-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .process-step {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-bottom: 4rem;
+        }
+
+        .process-step:nth-child(even) {
+            direction: rtl;
+        }
+
+        .process-step:nth-child(even) > * {
+            direction: ltr;
+        }
+
+        .step-number {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .step-content h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+
+        .step-content p {
+            color: var(--text-muted);
+            line-height: 1.8;
+        }
+
+        .step-image {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(131, 56, 236, 0.1));
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            font-size: 5rem;
+        }
+
+        /* Form Section */
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: 'Syne', sans-serif;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0, 217, 255, 0.05);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-submit {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: var(--bg-dark);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Syne', sans-serif;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
+        }
+
+        /* Testimonials */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .testimonial {
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 2rem;
+            transition: all 0.3s;
+        }
+
+        .testimonial:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .stars {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .testimonial-text {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+            line-height: 1.7;
+            font-style: italic;
+        }
+
+        .testimonial-author {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            background: rgba(5, 8, 19, 0.5);
+            position: relative;
+            z-index: 5;
+        }
+
+        footer p {
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-links a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: var(--primary);
+            color: var(--bg-dark);
+            transform: translateY(-5px);
+        }
+
+        /* Scroll Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links.active {
+                display: flex;
+                position: absolute;
+                top: 70px;
+                left: 0;
+                right: 0;
+                flex-direction: column;
+                background: rgba(10, 14, 39, 0.95);
+                padding: 2rem;
+                gap: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .primary-btn, .secondary-btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .about-content,
+            .process-step {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .process-step:nth-child(even) {
+                direction: ltr;
+            }
+
+            .features-list {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title h2 {
+                font-size: 2rem;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+
+            .services-grid,
+            .features-grid,
+            .team-grid,
+            .pricing-grid,
+            .testimonials-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background -->
+    <div class="bg-animation" id="bgAnimation"></div>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="logo" onclick="scrollToSection('home')">DATAEUROS</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#services">Services</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#process">Process</a></li>
+            <li><a href="#team">Team</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact">Contact</a></li>
+            <li><button class="cta-btn" onclick="scrollToSection('contact')">Get Started</button></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- PAGE 1: Hero Section -->
+    <section class="page hero" id="home">
+        <div class="hero-content">
+            <h1>Advanced QA & Security Solutions</h1>
+            <p>Enterprise-grade software testing, quality assurance, and security audits with cutting-edge AI-powered technology</p>
+            <div class="hero-buttons">
+                <button class="primary-btn" onclick="scrollToSection('services')">Explore Services</button>
+                <button class="secondary-btn" onclick="scrollToSection('contact')">Contact Us</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 2: Services Section -->
+    <section class="page" id="services" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
+        <div class="content">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>Comprehensive QA solutions designed for modern enterprises</p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card fade-in">
+                    <div class="service-icon">🧪</div>
+                    <h3>Manual Testing</h3>
+                    <p>Expert manual QA testing with comprehensive test case design, execution, and detailed defect reporting for all application types.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚙️</div>
+                    <h3>Test Automation</h3>
+                    <p>Robust automation frameworks using Selenium, Cypress, TestNG, and API testing solutions for continuous integration.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🔍</div>
+                    <h3>Quality Assurance</h3>
+                    <p>End-to-end QA strategy, process optimization, and continuous improvement frameworks tailored to your needs.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🐛</div>
+                    <h3>Bug Audits</h3>
+                    <p>Comprehensive bug identification, severity assessment, and detailed audit reports with remediation strategies.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">⚡</div>
+                    <h3>Performance Testing</h3>
+                    <p>Load testing, stress testing, and performance optimization for mission-critical applications and infrastructure.</p>
+                </div>
+                <div class="service-card fade-in">
+                    <div class="service-icon">🔐</div>
+                    <h3>Security Testing</h3>
+                    <p>Penetration testing, vulnerability assessment, and security audits to protect your digital assets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 3: Features Section -->
+    <section class="page" id="features">
+        <div class="content">
+            <div class="section-title">
+                <h2>Why Choose Us</h2>
+                <p>Industry-leading expertise and technology</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card fade-in">
+                    <h3>🏆 Award-Winning</h3>
+                    <p>Recognized industry leaders in QA and security testing with multiple certifications and awards.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>👥 Expert Team</h3>
+                    <p>Certified professionals with 10+ years of experience in software testing and security audits.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>🔧 Advanced Tools</h3>
+                    <p>Latest testing tools and frameworks including Selenium, JMeter, Burp Suite, and custom solutions.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>⏰ 24/7 Support</h3>
+                    <p>Round-the-clock support and maintenance for your testing and security needs.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>🌍 Global Standards</h3>
+                    <p>ISO 27001 certified, OWASP compliant, and following international best practices.</p>
+                </div>
+                <div class="feature-card fade-in">
+                    <h3>📈 Proven Track Record</h3>
+                    <p>Successfully tested 500+ applications with 99.8% defect detection rate.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 4: About Section -->
+    <section class="page" id="about" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
+        <div class="content">
+            <div class="section-title">
+                <h2>About DATAEUROS</h2>
+                <p>Your trusted partner in quality assurance and security testing</p>
+            </div>
+            <div class="about-content">
+                <div class="about-text">
+                    <h2>Excellence in Testing</h2>
+                    <p>DATAEUROS is a premier IT outsourcing and consulting firm specializing in quality assurance and security testing. With years of expertise, we deliver award-winning solutions that exceed industry standards.</p>
+                    <p>Our team of certified professionals uses cutting-edge technology and methodologies to ensure your software meets the highest quality and security standards.</p>
+                    <div class="features-list">
+                        <div class="feature-item"><span>Industry Experts</span></div>
+                        <div class="feature-item"><span>Certified Professionals</span></div>
+                        <div class="feature-item"><span>24/7 Support</span></div>
+                        <div class="feature-item"><span>Advanced Tools</span></div>
+                        <div class="feature-item"><span>Global Standards</span></div>
+                        <div class="feature-item"><span>Proven Track Record</span></div>
+                    </div>
+                </div>
+                <div style="position: relative; height: 400px;">
+                    <div style="position: absolute; width: 300px; height: 300px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 20px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.2; filter: blur(40px);"></div>
+                    <div style="position: absolute; width: 300px; height: 300px; background: linear-gradient(135deg, var(--secondary), var(--primary)); border-radius: 20px; top: 50%; left: 50%; transform: translate(-50%, -50%) translateY(30px); opacity: 0.15; filter: blur(60px);"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 5: Process Section -->
+    <section class="page" id="process">
+        <div class="content">
+            <div class="section-title">
+                <h2>Our Process</h2>
+                <p>Proven methodology for quality assurance</p>
+            </div>
+            <div class="process-container">
+                <div class="process-step">
+                    <div class="step-image">📋</div>
+                    <div class="step-content">
+                        <div class="step-number">01</div>
+                        <h3>Requirements Analysis</h3>
+                        <p>We thoroughly analyze your project requirements, understand your business goals, and identify testing needs.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-image">🎯</div>
+                    <div class="step-content">
+                        <div class="step-number">02</div>
+                        <h3>Test Planning</h3>
+                        <p>Develop comprehensive test strategies, define test cases, and create detailed testing roadmaps.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-image">🔍</div>
+                    <div class="step-content">
+                        <div class="step-number">03</div>
+                        <h3>Test Execution</h3>
+                        <p>Execute tests across multiple platforms, browsers, and devices with meticulous attention to detail.</p>
+                    </div>
+                </div>
+
+                <div class="process-step">
+                    <div class="step-image">📊</div>
+                    <div class="step-content">
+                        <div class="step-number">04</div>
+                        <h3>Reporting & Analysis</h3>
+                        <p>Provide detailed reports with bug tracking, metrics, and recommendations for improvement.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 6: Team Section -->
+    <section class="page" id="team" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
+        <div class="content">
+            <div class="section-title">
+                <h2>Our Team</h2>
+                <p>Meet the experts behind DATAEUROS</p>
+            </div>
+            <div class="team-grid">
+                <div class="team-member fade-in">
+                    <div class="member-avatar">👨‍💼</div>
+                    <h3>Rajesh Kumar</h3>
+                    <p>CEO & Founder<br><em>15+ years in QA</em></p>
+                </div>
+                <div class="team-member fade-in">
+                    <div class="member-avatar">👩‍💻</div>
+                    <h3>Priya Singh</h3>
+                    <p>Test Automation Lead<br><em>12+ years expertise</em></p>
+                </div>
+                <div class="team-member fade-in">
+                    <div class="member-avatar">👨‍🔬</div>
+                    <h3>Aditya Sharma</h3>
+                    <p>Security Testing Head<br><em>10+ years in security</em></p>
+                </div>
+                <div class="team-member fade-in">
+                    <div class="member-avatar">👩‍🔧</div>
+                    <h3>Neha Patel</h3>
+                    <p>QA Manager<br><em>8+ years experience</em></p>
+                </div>
+                <div class="team-member fade-in">
+                    <div class="member-avatar">👨‍💼</div>
+                    <h3>Vikram Singh</h3>
+                    <p>Performance Tester<br><em>7+ years in testing</em></p>
+                </div>
+                <div class="team-member fade-in">
+                    <div class="member-avatar">👩‍💼</div>
+                    <h3>Anjali Verma</h3>
+                    <p>Client Relations<br><em>6+ years in support</em></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 7: Pricing Section -->
+    <section class="page" id="pricing">
+        <div class="content">
+            <div class="section-title">
+                <h2>Pricing Plans</h2>
+                <p>Flexible solutions for businesses of all sizes</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card fade-in">
+                    <h3>Startup</h3>
+                    <div class="price">₹50K<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Manual Testing (40 hours/week)</li>
+                        <li>Basic Automation Scripts</li>
+                        <li>Monthly Reports</li>
+                        <li>Email Support</li>
+                    </ul>
+                    <button class="primary-btn" style="width: 100%;">Choose Plan</button>
+                </div>
+
+                <div class="pricing-card featured fade-in">
+                    <h3>Professional</h3>
+                    <div class="price">₹150K<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Full Testing Suite</li>
+                        <li>Advanced Automation</li>
+                        <li>Weekly Reports</li>
+                        <li>Priority Support</li>
+                        <li>Performance Testing</li>
+                    </ul>
+                    <button class="primary-btn" style="width: 100%;">Choose Plan</button>
+                </div>
+
+                <div class="pricing-card fade-in">
+                    <h3>Enterprise</h3>
+                    <div class="price">₹500K<span>/month</span></div>
+                    <ul class="pricing-features">
+                        <li>Complete Testing Solutions</li>
+                        <li>Security Testing</li>
+                        <li>Real-time Reports</li>
+                        <li>24/7 Dedicated Support</li>
+                        <li>Custom Solutions</li>
+                    </ul>
+                    <button class="primary-btn" style="width: 100%;">Choose Plan</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 8: Testimonials Section -->
+    <section class="page" id="testimonials" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
+        <div class="content">
+            <div class="section-title">
+                <h2>Client Testimonials</h2>
+                <p>What our clients say about DATAEUROS</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial fade-in">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"DATAEUROS transformed our testing process. Their automation solutions reduced our testing time by 60% and improved quality significantly."</p>
+                    <p class="testimonial-author">— Amit Gupta, TechCorp India</p>
+                </div>
+
+                <div class="testimonial fade-in">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The security testing audit uncovered critical vulnerabilities. Their professional team provided excellent recommendations and support."</p>
+                    <p class="testimonial-author">— Sarah Johnson, Global Software Inc.</p>
+                </div>
+
+                <div class="testimonial fade-in">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Outstanding service! Their 24/7 support and detailed reporting made managing our QA process seamless and efficient."</p>
+                    <p class="testimonial-author">— Rajesh Verma, StartupHub</p>
+                </div>
+
+                <div class="testimonial fade-in">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"We've been working with DATAEUROS for 3 years. Their expertise and dedication to quality is unmatched in the industry."</p>
+                    <p class="testimonial-author">— Priya Sharma, DevSolutions Ltd</p>
+                </div>
+
+                <div class="testimonial fade-in">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"The performance testing helped us optimize our application. Their team identified bottlenecks we didn't even know existed."</p>
+                    <p class="testimonial-author">— Vikas Nair, CloudTech Solutions</p>
+                </div>
+
+                <div class="testimonial fade-in">
+                    <div class="stars">★★★★★</div>
+                    <p class="testimonial-text">"Professional, reliable, and result-oriented. DATAEUROS is our go-to partner for all QA and security testing needs."</p>
+                    <p class="testimonial-author">— Neha Malhotra, FinanceApp Pro</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 9: Contact Form Section -->
+    <section class="page" id="contact-form">
+        <div class="content">
+            <div class="section-title">
+                <h2>Get In Touch</h2>
+                <p>Send us a message and we'll respond within 24 hours</p>
+            </div>
+            <form class="contact-form" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="phone">Phone Number</label>
+                    <input type="tel" id="phone" name="phone">
+                </div>
+                <div class="form-group">
+                    <label for="service">Service Interest</label>
+                    <select id="service" name="service" style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); border-radius: 8px; color: var(--text-light); font-family: 'Syne', sans-serif;" required>
+                        <option value="">Select a service</option>
+                        <option value="manual">Manual Testing</option>
+                        <option value="automation">Test Automation</option>
+                        <option value="qa">Quality Assurance</option>
+                        <option value="bugs">Bug Audits</option>
+                        <option value="performance">Performance Testing</option>
+                        <option value="security">Security Testing</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" required></textarea>
+                </div>
+                <button type="submit" class="form-submit">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- PAGE 10: Contact Information Section -->
+    <section class="page" id="contact" style="background: linear-gradient(135deg, rgba(131, 56, 236, 0.05), rgba(255, 0, 110, 0.05));">
+        <div class="content">
+            <div class="section-title">
+                <h2>Contact Information</h2>
+                <p>Multiple ways to reach DATAEUROS</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-card">
+                    <h3>📧 General Inquiries</h3>
+                    <p><a href="mailto:info@dataeuros.com">info@dataeuros.com</a></p>
+                    <p>For general questions and project inquiries</p>
+                </div>
+                <div class="contact-card">
+                    <h3>👥 Human Resources</h3>
+                    <p><a href="mailto:hr@dataeuros.com">hr@dataeuros.com</a></p>
+                    <p>Job opportunities and career inquiries</p>
+                </div>
+                <div class="contact-card">
+                    <h3>👔 Executive Office</h3>
+                    <p><a href="mailto:ceo@dataeuros.com">ceo@dataeuros.com</a></p>
+                    <p>Strategic partnerships and senior management</p>
+                </div>
+                <div class="contact-card">
+                    <h3>☎️ Sales & Support</h3>
+                    <p><a href="mailto:contact@dataeuros.com">contact@dataeuros.com</a></p>
+                    <p>Sales inquiries and customer support</p>
+                </div>
+                <div class="contact-card">
+                    <h3>📱 Phone</h3>
+                    <p><a href="tel:+919419281505">+91 9419281505</a></p>
+                    <p>Direct line - Available 24/7</p>
+                </div>
+                <div class="contact-card">
+                    <h3>📍 Office Location</h3>
+                    <p>23/A Shastri Nagar<br>Jammu, Jammu & Kashmir 180001<br>India</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PAGE 11: Map Section -->
+    <section class="page" id="map-page" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
+        <div class="content">
+            <div class="section-title">
+                <h2>Visit Us</h2>
+                <p>Our office location - Easy to find and accessible</p>
+            </div>
+            <div id="map" class="map-container" style="margin-top: 3rem; height: 500px; border-radius: 15px; border: 2px solid var(--border); overflow: hidden;"></div>
+            <div style="text-align: center; margin-top: 3rem;">
+                <h3 style="color: var(--primary); margin-bottom: 1rem;">Address Details</h3>
+                <p style="color: var(--text-muted); font-size: 1.1rem;">
+                    <strong>DATAEUROS</strong><br>
+                    23/A Shastri Nagar<br>
+                    Jammu, Jammu & Kashmir 180001<br>
+                    India
+                </p>
+                <p style="color: var(--text-muted); margin-top: 1rem;">
+                    <strong>Working Hours:</strong><br>
+                    Monday - Friday: 9:00 AM - 6:00 PM IST<br>
+                    24/7 Emergency Support Available
+                </p>
+                <p style="color: var(--text-muted); margin-top: 1.5rem;">
+                    <strong>Quick Contact:</strong><br>
+                    📞 <a href="tel:+919419281505" style="color: var(--primary); text-decoration: none;">+91 9419281505</a><br>
+                    📧 <a href="mailto:contact@dataeuros.com" style="color: var(--primary); text-decoration: none;">contact@dataeuros.com</a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 DATAEUROS. All rights reserved. | Advanced QA & Security Solutions</p>
+        <div class="footer-links">
+            <a href="#services">Services</a>
+            <a href="#about">About</a>
+            <a href="#process">Process</a>
+            <a href="#pricing">Pricing</a>
+            <a href="#contact">Contact</a>
+        </div>
+        <div class="social-links">
+            <a href="https://www.linkedin.com" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="https://www.facebook.com" target="_blank" title="Facebook"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.twitter.com" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
+            <a href="https://www.instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+        </div>
+        <p style="margin-top: 1.5rem; font-size: 0.9rem;">
+            Certified • ISO 27001 • OWASP Compliant • Award-Winning Solutions
+        </p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script>
+        // Generate animated particles
+        function createParticles() {
+            const bgAnimation = document.getElementById('bgAnimation');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = '100vh';
+                particle.style.animationDuration = (Math.random() * 5 + 8) + 's';
+                particle.style.animationDelay = Math.random() * 2 + 's';
+                particle.style.opacity = Math.random() * 0.5 + 0.3;
+                bgAnimation.appendChild(particle);
+            }
+        }
+
+        // Initialize Leaflet Map
+        function initMap() {
+            // Jammu coordinates
+            const jammuLat = 32.7265;
+            const jammuLng = 74.8673;
+
+            // Create map
+            const map = L.map('map').setView([jammuLat, jammuLng], 15);
+
+            // Add OpenStreetMap tiles
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors',
+                maxZoom: 19,
+                style: 'dark'
+            }).addTo(map);
+
+            // Add custom marker
+            const marker = L.marker([jammuLat, jammuLng]).addTo(map);
+            marker.bindPopup(
+                '<div style="color: #0a0e27; font-family: Syne; text-align: center;">' +
+                '<strong style="font-size: 1.1rem;">DATAEUROS</strong><br>' +
+                '23/A Shastri Nagar<br>' +
+                'Jammu, J&K 180001<br>' +
+                '📞 +91 9419281505<br>' +
+                '📧 contact@dataeuros.com' +
+                '</div>'
+            ).openPopup();
+
+            // Customize map appearance
+            const style = document.createElement('style');
+            style.innerHTML = `
+                .leaflet-container {
+                    background: rgba(10, 14, 39, 0.8);
+                }
+                .leaflet-tile {
+                    filter: invert(0.9) hue-rotate(180deg) saturate(0.8);
+                }
+                .leaflet-popup-content-wrapper {
+                    background: rgba(0, 217, 255, 0.95);
+                    border-radius: 8px;
+                    border: 1px solid rgba(0, 217, 255, 0.5);
+                }
+                .leaflet-popup-tip {
+                    background: rgba(0, 217, 255, 0.95);
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Observe elements for scroll animations
+        function observeElements() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.service-card, .feature-card, .team-member, .pricing-card, .testimonial, .contact-card').forEach(el => observer.observe(el));
+        }
+
+        // Smooth scroll function
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({ behavior: 'smooth' });
+                // Close mobile menu if open
+                document.getElementById('navLinks').classList.remove('active');
+            }
+        }
+
+        // Mobile menu toggle
+        document.getElementById('menuToggle').addEventListener('click', () => {
+            document.getElementById('navLinks').classList.toggle('active');
+        });
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('navLinks').classList.remove('active');
+            });
+        });
+
+        // Form submission
+        function handleSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            
+            // Create mailto link with form data
+            const mailtoLink = `mailto:contact@dataeuros.com?subject=New Inquiry from ${formData.get('name')}&body=Name: ${formData.get('name')}%0AEmail: ${formData.get('email')}%0APhone: ${formData.get('phone')}%0AService: ${formData.get('service')}%0AMessage: ${formData.get('message')}`;
+            
+            window.location.href = mailtoLink;
+            
+            // Reset form
+            event.target.reset();
+            alert('Thank you! Your message has been sent. We will contact you shortly.');
+        }
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.style.background = 'rgba(10, 14, 39, 0.95)';
+                nav.style.boxShadow = '0 4px 20px rgba(0, 217, 255, 0.1)';
+            } else {
+                nav.style.background = 'rgba(10, 14, 39, 0.7)';
+                nav.style.boxShadow = 'none';
+            }
+        });
+
+        // Initialize everything
+        createParticles();
+        observeElements();
+        
+        // Initialize map when page loads
+        window.addEventListener('load', initMap);
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
