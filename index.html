@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DATAEUROS - Advanced QA & Security Solutions</title>
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>DATAEUROS - Enterprise QA & Cybersecurity Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@100;300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
     <style>
@@ -16,62 +16,386 @@
 
         :root {
             --primary: #00d9ff;
+            --primary-light: #33e8ff;
             --primary-dark: #0099cc;
             --secondary: #ff006e;
-            --accent: #8338ec;
-            --bg-dark: #0a0e27;
-            --bg-darker: #050813;
+            --tertiary: #8338ec;
+            --accent: #00ff88;
+            --bg-dark: #0a0e1f;
+            --bg-darker: #050811;
+            --surface-1: rgba(10, 14, 31, 0.7);
+            --surface-2: rgba(10, 14, 31, 0.9);
             --text-light: #e0e0ff;
             --text-muted: #a0a0c0;
+            --text-subtle: #7a7a9f;
+            --border: rgba(0, 217, 255, 0.15);
+            --border-light: rgba(0, 217, 255, 0.08);
             --success: #00ff88;
-            --border: rgba(0, 217, 255, 0.2);
+            --error: #ff3333;
         }
 
-        body {
-            font-family: 'Syne', sans-serif;
-            background: linear-gradient(135deg, var(--bg-darker) 0%, #1a1f4a 50%, var(--bg-darker) 100%);
-            color: var(--text-light);
-            overflow-x: hidden;
-            position: relative;
+        html {
             scroll-behavior: smooth;
         }
 
-        /* Animated Background */
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: #000814;
+            color: var(--text-light);
+            overflow-x: hidden;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        /* 11D Network Background Canvas */
         .bg-animation {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
-            background: var(--bg-darker);
+            z-index: -2;
+            background: #000814;
             overflow: hidden;
         }
 
-        .particle {
+        canvas {
+            display: block;
             position: absolute;
-            width: 2px;
-            height: 2px;
-            background: var(--primary);
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: float linear infinite;
+            top: 0;
+            left: 0;
         }
 
-        @keyframes float {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
+        .network-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(10, 14, 31, 0.4) 0%, rgba(0, 217, 255, 0.05) 50%, rgba(10, 14, 31, 0.4) 100%);
+            pointer-events: none;
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000814;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 99999;
+            animation: fadeOutLoading 1s ease-out 2.5s forwards;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        @keyframes fadeOutLoading {
+            to {
                 opacity: 0;
+                visibility: hidden;
             }
-            10% {
-                opacity: 0.8;
+        }
+
+        .loader-network {
+            position: relative;
+            width: 120px;
+            height: 120px;
+        }
+
+        .loader-dot {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.8);
+            animation: orbitDot 3s ease-in-out infinite;
+        }
+
+        .loader-dot:nth-child(1) { animation-delay: 0s; }
+        .loader-dot:nth-child(2) { animation-delay: 0.75s; }
+        .loader-dot:nth-child(3) { animation-delay: 1.5s; }
+        .loader-dot:nth-child(4) { animation-delay: 2.25s; }
+
+        @keyframes orbitDot {
+            0% {
+                transform: translate(50px, 0) scale(1);
+                opacity: 1;
             }
-            90% {
-                opacity: 0.8;
+            50% {
+                transform: translate(0, 50px) scale(0.5);
+                opacity: 0.5;
             }
             100% {
-                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                transform: translate(-50px, 0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .loader-text {
+            font-size: 1.3rem;
+            color: var(--primary);
+            letter-spacing: 4px;
+            font-weight: 700;
+            font-family: 'Space Grotesk', sans-serif;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+
+        /* MODAL - PROFESSIONAL INQUIRY FORM */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(131, 56, 236, 0.1));
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            padding: 4rem;
+            max-width: 600px;
+            width: 90%;
+            backdrop-filter: blur(30px);
+            animation: modalSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 50px 100px rgba(0, 217, 255, 0.2);
+        }
+
+        @keyframes modalSlideIn {
+            from {
                 opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 1.5rem;
+        }
+
+        .modal-header h2 {
+            font-size: 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .modal-close {
+            width: 45px;
+            height: 45px;
+            background: rgba(0, 217, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .modal-close:hover {
+            background: var(--primary);
+            color: #000814;
+            transform: rotate(90deg);
+        }
+
+        .modal-form .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-form label {
+            display: block;
+            margin-bottom: 0.7rem;
+            color: var(--primary);
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+        }
+
+        .modal-form input,
+        .modal-form textarea,
+        .modal-form select {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-light);
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s;
+            font-weight: 300;
+            font-size: 0.95rem;
+        }
+
+        .modal-form input::placeholder,
+        .modal-form textarea::placeholder {
+            color: var(--text-subtle);
+        }
+
+        .modal-form input:focus,
+        .modal-form textarea:focus,
+        .modal-form select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(0, 217, 255, 0.08);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        .modal-form textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-error {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 0.4rem;
+            display: none;
+        }
+
+        .form-error.show {
+            display: block;
+        }
+
+        .form-input.error {
+            border-color: var(--error);
+            background: rgba(255, 51, 51, 0.05);
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .modal-submit {
+            flex: 1;
+            padding: 1.1rem;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            color: #000814;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.5);
+        }
+
+        .modal-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .modal-cancel {
+            flex: 1;
+            padding: 1.1rem;
+            background: rgba(0, 217, 255, 0.1);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .modal-cancel:hover {
+            background: var(--primary);
+            color: #000814;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .success-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.4);
+        }
+
+        .success-message h3 {
+            font-size: 1.8rem;
+            color: var(--success);
+            margin-bottom: 1rem;
+        }
+
+        .success-message p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
             }
         }
 
@@ -80,31 +404,44 @@
             position: fixed;
             top: 0;
             width: 100%;
-            padding: 1.5rem 2rem;
-            backdrop-filter: blur(10px);
-            background: rgba(10, 14, 39, 0.7);
-            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 3rem;
+            backdrop-filter: blur(40px);
+            background: rgba(5, 8, 20, 0.5);
+            border-bottom: 1px solid var(--border-light);
             z-index: 1000;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
+        }
+
+        nav.scrolled {
+            background: rgba(5, 8, 20, 0.8);
+            box-shadow: 0 10px 40px rgba(0, 217, 255, 0.08);
+            padding: 1rem 3rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .logo {
-            font-size: 1.8rem;
+            font-size: 1.4rem;
             font-weight: 800;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
+            letter-spacing: 2px;
+            font-family: 'Space Grotesk', sans-serif;
+            background: linear-gradient(120deg, var(--primary), var(--tertiary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: 2px;
-            text-transform: uppercase;
             cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .logo:hover {
+            filter: drop-shadow(0 0 20px rgba(0, 217, 255, 0.8));
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 3rem;
             list-style: none;
             align-items: center;
         }
@@ -113,83 +450,266 @@
             color: var(--text-light);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             position: relative;
-            transition: color 0.3s;
+            transition: all 0.3s;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
         }
 
-        .nav-links a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: var(--primary);
-            transition: width 0.3s;
+        .nav-links a:hover {
+            color: var(--primary);
         }
 
-        .nav-links a:hover::after {
-            width: 100%;
-        }
-
-        .cta-btn {
-            padding: 0.8rem 1.8rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: var(--bg-dark);
+        .nav-cta {
+            padding: 0.7rem 2rem;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            color: #000814;
             border: none;
-            border-radius: 50px;
-            font-weight: 600;
+            border-radius: 30px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: 'Syne', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            box-shadow: 0 0 25px rgba(0, 217, 255, 0.4);
         }
 
-        .cta-btn:hover {
+        .nav-cta:hover {
             transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.6);
         }
 
-        .menu-toggle {
-            display: none;
-            flex-direction: column;
-            gap: 5px;
-            cursor: pointer;
-            background: none;
-            border: none;
-        }
-
-        .menu-toggle span {
-            width: 25px;
-            height: 2px;
-            background: var(--primary);
-            border-radius: 2px;
-        }
-
-        /* Hero Section - Page 1 */
+        /* Page Base */
         .page {
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
+            padding: 6rem 3rem 3rem;
             overflow: hidden;
-            margin-top: 80px;
-            padding: 2rem;
         }
 
         .hero {
-            min-height: calc(100vh - 80px);
+            margin-top: 0;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 217, 255, 0.15) 0%, transparent 70%);
+            filter: blur(100px);
+            animation: heroGlow 5s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        @keyframes heroGlow {
+            0%, 100% { transform: translateX(-50%) scale(0.8); opacity: 0.4; }
+            50% { transform: translateX(-50%) scale(1.3); opacity: 0.8; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-title h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: -1px;
+        }
+
+        .section-title p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            margin: 0 auto;
+            font-weight: 300;
+            letter-spacing: 0.5px;
         }
 
         .hero-content {
             text-align: center;
-            max-width: 1000px;
+            max-width: 1100px;
             z-index: 10;
-            animation: heroFade 1s ease-out;
+            position: relative;
         }
 
-        @keyframes heroFade {
+        .hero-badge {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: rgba(0, 217, 255, 0.08);
+            border: 1px solid var(--border);
+            border-radius: 50px;
+            color: var(--primary);
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 2rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 5.5rem;
+            font-weight: 900;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 40%, var(--tertiary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+            letter-spacing: -2px;
+            font-family: 'Space Grotesk', sans-serif;
+            animation: heroTitleIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+            opacity: 0;
+        }
+
+        @keyframes heroTitleIn {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            animation: heroTitleIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s forwards;
+            opacity: 0;
+        }
+
+        .hero-description {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            font-weight: 300;
+            animation: heroTitleIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.7s forwards;
+            opacity: 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: heroTitleIn 1s cubic-bezier(0.34, 1.56, 0.64, 1) 0.9s forwards;
+            opacity: 0;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1.1rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            font-family: 'Space Grotesk', sans-serif;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            color: #000814;
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.6);
+        }
+
+        .btn-secondary {
+            background: rgba(0, 217, 255, 0.1);
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: #000814;
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.5);
+        }
+
+        /* Section Base */
+        .section {
+            position: relative;
+            z-index: 5;
+            padding: 10rem 0;
+        }
+
+        .services-section {
+            background: linear-gradient(180deg, transparent 0%, rgba(0, 217, 255, 0.03) 50%, transparent 100%);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .service-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(131, 56, 236, 0.08));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            animation: cardFadeIn 0.8s ease-out backwards;
+        }
+
+        @keyframes cardFadeIn {
             from {
                 opacity: 0;
                 transform: translateY(30px);
@@ -200,403 +720,491 @@
             }
         }
 
-        .hero h1 {
-            font-size: 4.5rem;
-            font-weight: 800;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            line-height: 1.2;
-            letter-spacing: -1px;
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            color: var(--text-muted);
-            margin-bottom: 2.5rem;
-            line-height: 1.6;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1.5rem;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .primary-btn, .secondary-btn {
-            padding: 1rem 2.5rem;
-            border: none;
-            border-radius: 50px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Syne', sans-serif;
-        }
-
-        .primary-btn {
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: var(--bg-dark);
-            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
-        }
-
-        .primary-btn:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.5);
-        }
-
-        .secondary-btn {
-            background: transparent;
-            border: 2px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .secondary-btn:hover {
-            background: var(--primary);
-            color: var(--bg-dark);
-            transform: translateY(-5px);
-        }
-
-        /* Content Sections */
-        .content {
-            max-width: 1200px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 5;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .section-title p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* Services Grid - Page 2 */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .service-card {
-            background: rgba(0, 217, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 2.5rem;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.320, 1);
-            cursor: pointer;
-        }
-
-        .service-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(0, 217, 255, 0.1), transparent);
-            transform: rotate(45deg);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateX(-100%) translateY(-100%) rotate(45deg);
-            }
-            100% {
-                transform: translateX(100%) translateY(100%) rotate(45deg);
-            }
-        }
+        .service-card:nth-child(1) { animation-delay: 0.1s; }
+        .service-card:nth-child(2) { animation-delay: 0.2s; }
+        .service-card:nth-child(3) { animation-delay: 0.3s; }
+        .service-card:nth-child(4) { animation-delay: 0.4s; }
+        .service-card:nth-child(5) { animation-delay: 0.5s; }
+        .service-card:nth-child(6) { animation-delay: 0.6s; }
 
         .service-card:hover {
-            background: rgba(0, 217, 255, 0.1);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(131, 56, 236, 0.15));
             border-color: var(--primary);
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 217, 255, 0.2);
+            transform: translateY(-20px);
+            box-shadow: 0 40px 80px rgba(0, 217, 255, 0.15), inset 0 1px 1px rgba(255, 255, 255, 0.1);
         }
 
         .service-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
             display: inline-block;
+            position: relative;
+            z-index: 2;
         }
 
         .service-card h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
+            font-size: 1.6rem;
+            margin-bottom: 1.2rem;
             color: var(--primary);
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
         }
 
         .service-card p {
             color: var(--text-muted);
-            line-height: 1.7;
-            font-size: 0.95rem;
+            line-height: 1.8;
+            font-size: 1rem;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
         }
 
-        /* Features Grid - Page 3 */
+        /* Features Section */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2.5rem;
         }
 
         .feature-card {
-            background: rgba(131, 56, 236, 0.05);
+            background: linear-gradient(135deg, rgba(131, 56, 236, 0.08), rgba(0, 217, 255, 0.08));
             border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: all 0.3s;
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            backdrop-filter: blur(20px);
         }
 
         .feature-card:hover {
-            background: rgba(131, 56, 236, 0.1);
-            border-color: var(--accent);
-            transform: translateY(-5px);
+            background: linear-gradient(135deg, rgba(131, 56, 236, 0.15), rgba(0, 217, 255, 0.12));
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 217, 255, 0.12);
         }
 
         .feature-card h3 {
-            color: var(--accent);
+            color: var(--primary);
             margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 700;
         }
 
         .feature-card p {
             color: var(--text-muted);
-            line-height: 1.6;
+            line-height: 1.7;
+            font-weight: 300;
         }
 
-        /* About Content */
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 4rem;
-            align-items: center;
-            margin-bottom: 4rem;
-        }
-
-        .about-text h2 {
-            font-size: 2.8rem;
-            margin-bottom: 1.5rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .about-text p {
-            font-size: 1.05rem;
-            line-height: 1.8;
-            color: var(--text-muted);
-            margin-bottom: 1.5rem;
-        }
-
-        .features-list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-        }
-
-        .feature-item {
-            display: flex;
-            gap: 1rem;
-            align-items: flex-start;
-        }
-
-        .feature-item::before {
-            content: '✓';
-            color: var(--success);
-            font-weight: 800;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        /* Team Section */
-        .team-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .team-member {
-            background: rgba(0, 217, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s;
-        }
-
-        .team-member:hover {
-            background: rgba(0, 217, 255, 0.1);
-            border-color: var(--primary);
-            transform: translateY(-5px);
-        }
-
-        .member-avatar {
-            width: 120px;
-            height: 120px;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            border-radius: 50%;
-            margin: 0 auto 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-        }
-
-        .team-member h3 {
-            color: var(--primary);
-            margin-bottom: 0.5rem;
-        }
-
-        .team-member p {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        /* Pricing Section */
-        .pricing-grid {
+        /* Process Section */
+        .process-steps {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
         }
 
-        .pricing-card {
-            background: rgba(0, 217, 255, 0.05);
+        .process-step {
+            counter-increment: step-counter;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(131, 56, 236, 0.08));
             border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 2.5rem;
+            border-radius: 20px;
+            padding: 3rem;
             position: relative;
+            transition: all 0.4s;
+            backdrop-filter: blur(20px);
+        }
+
+        .process-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            top: -15px;
+            left: 2rem;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            color: #000814;
+            font-size: 1.5rem;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.4);
+        }
+
+        .process-step:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(131, 56, 236, 0.15));
+        }
+
+        .process-step h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            font-weight: 700;
+        }
+
+        .process-step p {
+            color: var(--text-muted);
+            line-height: 1.7;
+            font-weight: 300;
+        }
+
+        /* Security Section */
+        .security-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .security-visual {
+            position: relative;
+            height: 500px;
+            perspective: 1200px;
+        }
+
+        .shield-core {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        .shield-svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 40px rgba(0, 217, 255, 0.6));
+            animation: shieldPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes shieldPulse {
+            0%, 100% {
+                filter: drop-shadow(0 0 30px rgba(0, 217, 255, 0.4)) drop-shadow(0 0 60px rgba(0, 217, 255, 0.2));
+            }
+            50% {
+                filter: drop-shadow(0 0 50px rgba(0, 217, 255, 0.8)) drop-shadow(0 0 100px rgba(0, 217, 255, 0.4));
+            }
+        }
+
+        .security-content h3 {
+            font-size: 2.8rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            font-weight: 800;
+        }
+
+        .security-content p {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            font-weight: 300;
+        }
+
+        .security-features-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .security-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+            background: rgba(0, 217, 255, 0.05);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-light);
             transition: all 0.3s;
         }
 
+        .security-feature:hover {
+            background: rgba(0, 217, 255, 0.1);
+            border-color: var(--primary);
+        }
+
+        .security-feature::before {
+            content: '◆';
+            color: var(--accent);
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .security-feature span {
+            color: var(--text-light);
+            font-weight: 600;
+        }
+
+        /* Team Section */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .team-member {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(131, 56, 236, 0.08));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.4s;
+            backdrop-filter: blur(20px);
+        }
+
+        .team-member:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(131, 56, 236, 0.15));
+            border-color: var(--primary);
+            transform: translateY(-10px);
+            box-shadow: 0 30px 60px rgba(0, 217, 255, 0.12);
+        }
+
+        .member-avatar {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            border-radius: 20px;
+            margin: 0 auto 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 0 30px rgba(0, 217, 255, 0.4);
+        }
+
+        .team-member h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .team-member p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 300;
+        }
+
+        /* Pricing Section */
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(131, 56, 236, 0.08));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            backdrop-filter: blur(20px);
+        }
+
         .pricing-card.featured {
-            background: rgba(131, 56, 236, 0.1);
-            border-color: var(--accent);
+            border: 2px solid var(--primary);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(131, 56, 236, 0.15));
             transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0, 217, 255, 0.3);
         }
 
         .pricing-card:hover {
             border-color: var(--primary);
-            transform: translateY(-5px);
+            transform: translateY(-10px);
+        }
+
+        .pricing-card.featured:hover {
+            transform: scale(1.08) translateY(-10px);
+        }
+
+        .pricing-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            color: #000814;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            letter-spacing: 1px;
         }
 
         .pricing-card h3 {
             color: var(--primary);
+            font-size: 1.8rem;
             margin-bottom: 1rem;
-            font-size: 1.5rem;
+            font-weight: 700;
         }
 
         .price {
-            font-size: 2.5rem;
+            font-size: 3rem;
             color: var(--primary);
             margin-bottom: 1rem;
-            font-weight: 800;
+            font-weight: 900;
+            letter-spacing: -1px;
         }
 
         .price span {
             font-size: 1rem;
             color: var(--text-muted);
+            font-weight: 400;
         }
 
         .pricing-features {
             list-style: none;
-            margin-bottom: 2rem;
+            margin: 2rem 0;
         }
 
         .pricing-features li {
             padding: 0.8rem 0;
             color: var(--text-muted);
-            border-bottom: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
             display: flex;
             align-items: center;
             gap: 0.8rem;
+            font-weight: 300;
         }
 
         .pricing-features li::before {
             content: '✓';
-            color: var(--success);
+            color: var(--accent);
             font-weight: 800;
+            font-size: 1.2rem;
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--tertiary));
+            color: #000814;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1.5rem;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
+        }
+
+        /* Testimonials Section */
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .testimonial {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(131, 56, 236, 0.08));
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 2.5rem;
+            transition: all 0.4s;
+            backdrop-filter: blur(20px);
+        }
+
+        .testimonial:hover {
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(131, 56, 236, 0.15));
+            border-color: var(--primary);
+            transform: translateY(-10px);
+        }
+
+        .stars {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+        }
+
+        .testimonial-text {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        .testimonial-author {
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.95rem;
         }
 
         /* Contact Section */
         .contact-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 2.5rem;
             margin-bottom: 4rem;
         }
 
         .contact-card {
-            background: rgba(0, 217, 255, 0.05);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(131, 56, 236, 0.08));
             border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 2rem;
+            border-radius: 20px;
+            padding: 2.5rem;
             text-align: center;
-            transition: all 0.3s;
+            transition: all 0.4s;
+            backdrop-filter: blur(20px);
         }
 
         .contact-card:hover {
-            background: rgba(0, 217, 255, 0.1);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.15), rgba(131, 56, 236, 0.15));
             border-color: var(--primary);
-            transform: translateY(-5px);
+            transform: translateY(-10px);
         }
 
         .contact-card h3 {
             color: var(--primary);
             margin-bottom: 1rem;
-            font-size: 1.2rem;
+            font-size: 1.3rem;
+            font-weight: 700;
         }
 
         .contact-card p {
             color: var(--text-muted);
             word-break: break-word;
             margin-bottom: 0.5rem;
+            font-weight: 300;
         }
 
         .contact-card a {
             color: var(--primary);
             text-decoration: none;
+            font-weight: 600;
             transition: all 0.3s;
             display: inline-block;
             margin-top: 0.5rem;
         }
 
         .contact-card a:hover {
-            color: var(--secondary);
-            transform: translateY(-2px);
+            color: var(--accent);
+            transform: translateX(5px);
         }
 
         /* Map Section */
+        .map-section {
+            background: linear-gradient(180deg, rgba(0, 217, 255, 0.03) 0%, transparent 100%);
+        }
+
         .map-container {
-            border-radius: 15px;
+            border-radius: 20px;
             overflow: hidden;
             border: 2px solid var(--border);
-            height: 500px;
-            margin-top: 2rem;
-            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.15);
+            height: 550px;
+            box-shadow: 0 40px 80px rgba(0, 217, 255, 0.12);
+            position: relative;
+            background: #000814;
+            margin-bottom: 4rem;
         }
 
         .map-container iframe {
@@ -605,206 +1213,79 @@
             border: none;
         }
 
-        /* Process Section */
-        .process-container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .process-step {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-            margin-bottom: 4rem;
-        }
-
-        .process-step:nth-child(even) {
-            direction: rtl;
-        }
-
-        .process-step:nth-child(even) > * {
-            direction: ltr;
-        }
-
-        .step-number {
-            font-size: 4rem;
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 1rem;
-        }
-
-        .step-content h3 {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.8rem;
-        }
-
-        .step-content p {
-            color: var(--text-muted);
-            line-height: 1.8;
-        }
-
-        .step-image {
-            background: linear-gradient(135deg, rgba(0, 217, 255, 0.1), rgba(131, 56, 236, 0.1));
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 3rem;
+        .location-info {
             text-align: center;
-            font-size: 5rem;
-        }
-
-        /* Form Section */
-        .contact-form {
-            max-width: 600px;
-            margin: 0 auto;
-            background: rgba(0, 217, 255, 0.05);
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.08), rgba(131, 56, 236, 0.08));
             border: 1px solid var(--border);
-            border-radius: 15px;
+            border-radius: 20px;
             padding: 3rem;
+            backdrop-filter: blur(20px);
         }
 
-        .form-group {
+        .location-info h3 {
+            font-size: 2.2rem;
+            color: var(--primary);
             margin-bottom: 1.5rem;
+            font-weight: 800;
         }
 
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: var(--primary);
-            font-weight: 500;
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 1rem;
-            background: rgba(0, 0, 0, 0.3);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            color: var(--text-light);
-            font-family: 'Syne', sans-serif;
-            transition: all 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(0, 217, 255, 0.05);
-        }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 120px;
-        }
-
-        .form-submit {
-            width: 100%;
-            padding: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            color: var(--bg-dark);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s;
-            font-family: 'Syne', sans-serif;
-        }
-
-        .form-submit:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
-        }
-
-        /* Testimonials */
-        .testimonials-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
-        .testimonial {
-            background: rgba(0, 217, 255, 0.05);
-            border: 1px solid var(--border);
-            border-radius: 15px;
-            padding: 2rem;
-            transition: all 0.3s;
-        }
-
-        .testimonial:hover {
-            background: rgba(0, 217, 255, 0.1);
-            border-color: var(--primary);
-        }
-
-        .stars {
-            color: var(--primary);
-            margin-bottom: 1rem;
-            font-size: 1.2rem;
-        }
-
-        .testimonial-text {
+        .location-info p {
             color: var(--text-muted);
             margin-bottom: 1rem;
-            line-height: 1.7;
-            font-style: italic;
-        }
-
-        .testimonial-author {
-            color: var(--primary);
-            font-weight: 600;
+            font-weight: 300;
+            font-size: 1.05rem;
         }
 
         /* Footer */
         footer {
-            padding: 4rem 2rem;
+            padding: 5rem 3rem;
             text-align: center;
             border-top: 1px solid var(--border);
-            background: rgba(5, 8, 19, 0.5);
+            background: rgba(5, 8, 17, 0.6);
             position: relative;
             z-index: 5;
         }
 
         footer p {
             color: var(--text-muted);
-            margin-bottom: 1rem;
+            margin-bottom: 2rem;
+            font-weight: 300;
         }
 
         .footer-links {
             display: flex;
             justify-content: center;
-            gap: 2rem;
+            gap: 3rem;
             flex-wrap: wrap;
-            margin-top: 1.5rem;
-            margin-bottom: 2rem;
+            margin-bottom: 3rem;
         }
 
         .footer-links a {
             color: var(--primary);
             text-decoration: none;
             transition: all 0.3s;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
         }
 
         .footer-links a:hover {
-            color: var(--secondary);
-            transform: translateY(-2px);
+            color: var(--accent);
+            filter: drop-shadow(0 0 15px rgba(0, 217, 255, 0.5));
         }
 
         .social-links {
             display: flex;
             justify-content: center;
             gap: 1.5rem;
-            margin-top: 2rem;
+            margin-bottom: 2rem;
         }
 
         .social-links a {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
             background: rgba(0, 217, 255, 0.1);
             border: 1px solid var(--border);
             display: flex;
@@ -813,358 +1294,502 @@
             color: var(--primary);
             text-decoration: none;
             transition: all 0.3s;
+            font-size: 1.2rem;
         }
 
         .social-links a:hover {
             background: var(--primary);
-            color: var(--bg-dark);
-            transform: translateY(-5px);
+            color: #000814;
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4);
         }
 
-        /* Scroll Animation */
-        .fade-in {
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s ease-out forwards;
+        footer .bottom-line {
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+            margin-top: 2rem;
+            font-size: 0.9rem;
         }
 
-        @keyframes fadeInUp {
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--success), var(--primary));
+            color: #000814;
+            padding: 1.5rem 2rem;
+            border-radius: 12px;
+            font-weight: 600;
+            z-index: 9999;
+            animation: slideInUp 0.4s ease-out;
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.3);
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
             to {
-                opacity: 1;
                 transform: translateY(0);
+                opacity: 1;
             }
         }
 
         /* Responsive */
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
+            nav {
+                padding: 1rem 1.5rem;
             }
 
             .nav-links {
                 display: none;
             }
 
-            .menu-toggle {
-                display: flex;
+            .hero h1 {
+                font-size: 2.8rem;
             }
 
-            .nav-links.active {
-                display: flex;
-                position: absolute;
-                top: 70px;
-                left: 0;
-                right: 0;
-                flex-direction: column;
-                background: rgba(10, 14, 39, 0.95);
-                padding: 2rem;
-                gap: 1rem;
-            }
-
-            .hero-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .primary-btn, .secondary-btn {
-                width: 100%;
-                max-width: 300px;
-            }
-
-            .about-content,
-            .process-step {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .process-step:nth-child(even) {
-                direction: ltr;
-            }
-
-            .features-list {
-                grid-template-columns: 1fr;
+            .hero-description {
+                font-size: 1rem;
             }
 
             .section-title h2 {
-                font-size: 2rem;
-            }
-
-            .map-container {
-                height: 300px;
+                font-size: 2.2rem;
             }
 
             .services-grid,
             .features-grid,
             .team-grid,
             .pricing-grid,
-            .testimonials-grid {
+            .testimonials-grid,
+            .process-steps {
                 grid-template-columns: 1fr;
             }
 
             .pricing-card.featured {
                 transform: scale(1);
             }
+
+            .security-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .security-visual {
+                height: 300px;
+            }
+
+            .map-container {
+                height: 300px;
+            }
+
+            .page {
+                padding: 4rem 1.5rem 2rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .modal-content {
+                padding: 2rem;
+            }
+
+            .modal-header h2 {
+                font-size: 1.5rem;
+            }
+
+            .modal-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="bg-animation" id="bgAnimation"></div>
+    <!-- Loading Screen -->
+    <div class="loading-screen">
+        <div class="loader-network">
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+            <div class="loader-dot"></div>
+        </div>
+        <div class="loader-text">DATAEUROS</div>
+    </div>
+
+    <!-- PROFESSIONAL MODAL -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Quick Inquiry</h2>
+                <div class="modal-close" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </div>
+            </div>
+
+            <div id="modalFormContent">
+                <form class="modal-form" id="modalForm" onsubmit="handleModalSubmit(event)">
+                    <div class="form-group">
+                        <label for="modal-name">Full Name *</label>
+                        <input type="text" id="modal-name" name="name" placeholder="Enter your full name" class="form-input" required>
+                        <div class="form-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modal-email">Email Address *</label>
+                        <input type="email" id="modal-email" name="email" placeholder="your@email.com" class="form-input" required>
+                        <div class="form-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modal-phone">Phone Number</label>
+                        <input type="tel" id="modal-phone" name="phone" placeholder="+91 XXXXXXXXXX" class="form-input">
+                        <div class="form-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modal-company">Company Name *</label>
+                        <input type="text" id="modal-company" name="company" placeholder="Your company name" class="form-input" required>
+                        <div class="form-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modal-service">Service Interest *</label>
+                        <select id="modal-service" name="service" class="form-input" required>
+                            <option value="">Select a service</option>
+                            <option value="testing">Software Testing</option>
+                            <option value="qa">Quality Assurance</option>
+                            <option value="security">Security Testing</option>
+                            <option value="performance">Performance Testing</option>
+                            <option value="outsourcing">IT Outsourcing</option>
+                            <option value="custom">Custom Solution</option>
+                        </select>
+                        <div class="form-error"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="modal-message">Tell us about your needs *</label>
+                        <textarea id="modal-message" name="message" placeholder="Describe your project requirements..." class="form-input" required></textarea>
+                        <div class="form-error"></div>
+                    </div>
+
+                    <div class="modal-buttons">
+                        <button type="submit" class="modal-submit">Submit Request</button>
+                        <button type="button" class="modal-cancel" onclick="closeModal()">Close</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="successMessage" class="success-message">
+                <div class="success-icon">✓</div>
+                <h3>Request Submitted!</h3>
+                <p>Thank you for your interest in DATAEUROS.<br>We'll contact you within 24 hours.</p>
+                <button class="modal-submit" onclick="closeModal()" style="margin-top: 1.5rem;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 11D Network Background -->
+    <div class="bg-animation">
+        <canvas id="networkCanvas"></canvas>
+        <div class="network-overlay"></div>
+    </div>
 
     <!-- Navbar -->
-    <nav>
-        <div class="logo" onclick="scrollToSection('home')">DATAEUROS</div>
+    <nav id="navbar">
+        <div class="logo" onclick="scrollToSection('hero')">DATAEUROS</div>
         <ul class="nav-links" id="navLinks">
             <li><a href="#services">Services</a></li>
             <li><a href="#features">Features</a></li>
-            <li><a href="#about">About</a></li>
             <li><a href="#process">Process</a></li>
+            <li><a href="#security">Security</a></li>
             <li><a href="#team">Team</a></li>
             <li><a href="#pricing">Pricing</a></li>
-            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#testimonials">Reviews</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li><button class="cta-btn" onclick="scrollToSection('contact')">Get Started</button></li>
+            <li><button class="nav-cta" onclick="openModal()">Get Started</button></li>
         </ul>
-        <button class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
     </nav>
 
-    <!-- PAGE 1: Hero Section -->
-    <section class="page hero" id="home">
-        <div class="hero-content">
-            <h1>Advanced QA & Security Solutions</h1>
-            <p>Enterprise-grade software testing, quality assurance, and security audits with cutting-edge AI-powered technology</p>
-            <div class="hero-buttons">
-                <button class="primary-btn" onclick="scrollToSection('services')">Explore Services</button>
-                <button class="secondary-btn" onclick="scrollToSection('contact')">Contact Us</button>
+    <!-- PAGE 1: Hero -->
+    <section class="page hero" id="hero">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">🚀 Advanced Enterprise Solutions</div>
+                <h1>Enterprise Intelligence</h1>
+                <div class="hero-subtitle">Software Testing • QA • Cybersecurity</div>
+                <div class="hero-description">
+                    Transform your enterprise with cutting-edge AI-driven testing, automated security audits, and real-time performance monitoring 
+                    that delivers measurable results and unmatched reliability.
+                </div>
+                <div class="hero-buttons">
+                    <button class="btn-primary" onclick="openModal()">Get Started Now</button>
+                    <button class="btn-secondary" onclick="scrollToSection('services')">Explore Services</button>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 2: Services Section -->
-    <section class="page" id="services" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
-        <div class="content">
+    <!-- PAGE 2: Services -->
+    <section class="services-section section" id="services">
+        <div class="container">
             <div class="section-title">
-                <h2>Our Services</h2>
-                <p>Comprehensive QA solutions designed for modern enterprises</p>
+                <h2>Comprehensive Services</h2>
+                <p>Industry-leading QA, automation, and security solutions</p>
             </div>
             <div class="services-grid">
-                <div class="service-card fade-in">
-                    <div class="service-icon">🧪</div>
-                    <h3>Manual Testing</h3>
-                    <p>Expert manual QA testing with comprehensive test case design, execution, and detailed defect reporting for all application types.</p>
+                <div class="service-card" onclick="openModal()">
+                    <div class="service-icon">🤖</div>
+                    <h3>Software Testing</h3>
+                    <p>Advanced manual and automated testing using Selenium, Cypress, TestNG with AI-driven test case generation.</p>
                 </div>
-                <div class="service-card fade-in">
-                    <div class="service-icon">⚙️</div>
-                    <h3>Test Automation</h3>
-                    <p>Robust automation frameworks using Selenium, Cypress, TestNG, and API testing solutions for continuous integration.</p>
-                </div>
-                <div class="service-card fade-in">
-                    <div class="service-icon">🔍</div>
+
+                <div class="service-card" onclick="openModal()">
+                    <div class="service-icon">✓</div>
                     <h3>Quality Assurance</h3>
-                    <p>End-to-end QA strategy, process optimization, and continuous improvement frameworks tailored to your needs.</p>
+                    <p>End-to-end QA strategy, comprehensive test planning, execution framework optimization.</p>
                 </div>
-                <div class="service-card fade-in">
+
+                <div class="service-card" onclick="openModal()">
                     <div class="service-icon">🐛</div>
                     <h3>Bug Audits</h3>
-                    <p>Comprehensive bug identification, severity assessment, and detailed audit reports with remediation strategies.</p>
+                    <p>AI-powered bug detection, severity classification, root cause analysis, and comprehensive audit reports.</p>
                 </div>
-                <div class="service-card fade-in">
+
+                <div class="service-card" onclick="openModal()">
                     <div class="service-icon">⚡</div>
                     <h3>Performance Testing</h3>
-                    <p>Load testing, stress testing, and performance optimization for mission-critical applications and infrastructure.</p>
+                    <p>Load testing, stress testing, scalability analysis with real-time dashboards and optimization.</p>
                 </div>
-                <div class="service-card fade-in">
+
+                <div class="service-card" onclick="openModal()">
                     <div class="service-icon">🔐</div>
                     <h3>Security Testing</h3>
-                    <p>Penetration testing, vulnerability assessment, and security audits to protect your digital assets.</p>
+                    <p>Penetration testing, vulnerability assessment, OWASP compliance, encryption audits.</p>
+                </div>
+
+                <div class="service-card" onclick="openModal()">
+                    <div class="service-icon">🌐</div>
+                    <h3>IT Outsourcing</h3>
+                    <p>Strategic consulting, global team augmentation, managed QA services, 24/7 support.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 3: Features Section -->
-    <section class="page" id="features">
-        <div class="content">
+    <!-- PAGE 3: Features -->
+    <section class="section" id="features" style="background: linear-gradient(180deg, transparent 0%, rgba(0, 217, 255, 0.03) 50%, transparent 100%);">
+        <div class="container">
             <div class="section-title">
-                <h2>Why Choose Us</h2>
-                <p>Industry-leading expertise and technology</p>
+                <h2>Why Enterprise Leaders Choose Us</h2>
+                <p>Cutting-edge technology meets unmatched expertise</p>
             </div>
             <div class="features-grid">
-                <div class="feature-card fade-in">
-                    <h3>🏆 Award-Winning</h3>
-                    <p>Recognized industry leaders in QA and security testing with multiple certifications and awards.</p>
+                <div class="feature-card">
+                    <h3>🏆 Award-Winning Excellence</h3>
+                    <p>ISO certifications, OWASP compliance, proven track record of 500+ successful projects.</p>
                 </div>
-                <div class="feature-card fade-in">
-                    <h3>👥 Expert Team</h3>
-                    <p>Certified professionals with 10+ years of experience in software testing and security audits.</p>
+
+                <div class="feature-card">
+                    <h3>🤖 AI-Powered Intelligence</h3>
+                    <p>Machine learning algorithms for intelligent test generation and predictive analysis.</p>
                 </div>
-                <div class="feature-card fade-in">
-                    <h3>🔧 Advanced Tools</h3>
-                    <p>Latest testing tools and frameworks including Selenium, JMeter, Burp Suite, and custom solutions.</p>
+
+                <div class="feature-card">
+                    <h3>⚙️ Advanced Automation</h3>
+                    <p>Selenium, Cypress, JMeter, Burp Suite, and custom ML-driven frameworks.</p>
                 </div>
-                <div class="feature-card fade-in">
-                    <h3>⏰ 24/7 Support</h3>
-                    <p>Round-the-clock support and maintenance for your testing and security needs.</p>
+
+                <div class="feature-card">
+                    <h3>🔒 Enterprise Security</h3>
+                    <p>ISO 27001 certified, SOC 2 compliant, end-to-end encryption, threat detection.</p>
                 </div>
-                <div class="feature-card fade-in">
-                    <h3>🌍 Global Standards</h3>
-                    <p>ISO 27001 certified, OWASP compliant, and following international best practices.</p>
+
+                <div class="feature-card">
+                    <h3>📊 Real-Time Analytics</h3>
+                    <p>Live dashboards, predictive metrics, comprehensive KPI tracking.</p>
                 </div>
-                <div class="feature-card fade-in">
-                    <h3>📈 Proven Track Record</h3>
-                    <p>Successfully tested 500+ applications with 99.8% defect detection rate.</p>
+
+                <div class="feature-card">
+                    <h3>🌍 Global Scale</h3>
+                    <p>24/7 worldwide support, multi-timezone operations, distributed teams.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 4: About Section -->
-    <section class="page" id="about" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
-        <div class="content">
+    <!-- PAGE 4: Process -->
+    <section class="section" id="process" style="background: linear-gradient(180deg, transparent 0%, rgba(131, 56, 236, 0.03) 50%, transparent 100%);">
+        <div class="container">
             <div class="section-title">
-                <h2>About DATAEUROS</h2>
-                <p>Your trusted partner in quality assurance and security testing</p>
+                <h2>Our Proven Methodology</h2>
+                <p>Structured approach for guaranteed success</p>
             </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <h2>Excellence in Testing</h2>
-                    <p>DATAEUROS is a premier IT outsourcing and consulting firm specializing in quality assurance and security testing. With years of expertise, we deliver award-winning solutions that exceed industry standards.</p>
-                    <p>Our team of certified professionals uses cutting-edge technology and methodologies to ensure your software meets the highest quality and security standards.</p>
-                    <div class="features-list">
-                        <div class="feature-item"><span>Industry Experts</span></div>
-                        <div class="feature-item"><span>Certified Professionals</span></div>
-                        <div class="feature-item"><span>24/7 Support</span></div>
-                        <div class="feature-item"><span>Advanced Tools</span></div>
-                        <div class="feature-item"><span>Global Standards</span></div>
-                        <div class="feature-item"><span>Proven Track Record</span></div>
-                    </div>
+            <div class="process-steps">
+                <div class="process-step">
+                    <h3>Discovery & Analysis</h3>
+                    <p>In-depth requirements analysis, stakeholder interviews, comprehensive roadmap.</p>
                 </div>
-                <div style="position: relative; height: 400px;">
-                    <div style="position: absolute; width: 300px; height: 300px; background: linear-gradient(135deg, var(--primary), var(--accent)); border-radius: 20px; top: 50%; left: 50%; transform: translate(-50%, -50%); opacity: 0.2; filter: blur(40px);"></div>
-                    <div style="position: absolute; width: 300px; height: 300px; background: linear-gradient(135deg, var(--secondary), var(--primary)); border-radius: 20px; top: 50%; left: 50%; transform: translate(-50%, -50%) translateY(30px); opacity: 0.15; filter: blur(60px);"></div>
+
+                <div class="process-step">
+                    <h3>Strategy & Planning</h3>
+                    <p>Test strategy formulation, resource allocation, implementation timeline.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Framework Development</h3>
+                    <p>Custom framework architecture, automation suite creation, CI/CD integration.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Execution & Monitoring</h3>
+                    <p>Test execution, real-time monitoring, issue tracking, performance analysis.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Reporting & Insights</h3>
+                    <p>Comprehensive dashboards, detailed analytics, trend analysis.</p>
+                </div>
+
+                <div class="process-step">
+                    <h3>Continuous Improvement</h3>
+                    <p>Post-implementation support, optimization, training, strategic enhancements.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 5: Process Section -->
-    <section class="page" id="process">
-        <div class="content">
+    <!-- PAGE 5: Security -->
+    <section class="section" id="security">
+        <div class="container">
             <div class="section-title">
-                <h2>Our Process</h2>
-                <p>Proven methodology for quality assurance</p>
+                <h2>Cybersecurity Defense</h2>
+                <p>Enterprise-grade protection and threat intelligence</p>
             </div>
-            <div class="process-container">
-                <div class="process-step">
-                    <div class="step-image">📋</div>
-                    <div class="step-content">
-                        <div class="step-number">01</div>
-                        <h3>Requirements Analysis</h3>
-                        <p>We thoroughly analyze your project requirements, understand your business goals, and identify testing needs.</p>
+            <div class="security-grid">
+                <div class="security-visual">
+                    <div class="shield-core">
+                        <svg class="shield-svg" viewBox="0 0 100 120" fill="none" stroke="currentColor" stroke-width="1.5" color="#00d9ff">
+                            <defs>
+                                <filter id="glow">
+                                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                    <feMerge>
+                                        <feMergeNode in="coloredBlur"/>
+                                        <feMergeNode in="SourceGraphic"/>
+                                    </feMerge>
+                                </filter>
+                            </defs>
+                            <path d="M50 10 L90 30 L90 60 Q90 100 50 110 Q10 100 10 60 L10 30 Z" fill="none" stroke="currentColor" filter="url(#glow)"/>
+                            <circle cx="50" cy="60" r="20" fill="none" opacity="0.6"/>
+                            <line x1="50" y1="45" x2="50" y2="75" opacity="0.4"/>
+                            <line x1="35" y1="60" x2="65" y2="60" opacity="0.4"/>
+                        </svg>
                     </div>
                 </div>
 
-                <div class="process-step">
-                    <div class="step-image">🎯</div>
-                    <div class="step-content">
-                        <div class="step-number">02</div>
-                        <h3>Test Planning</h3>
-                        <p>Develop comprehensive test strategies, define test cases, and create detailed testing roadmaps.</p>
-                    </div>
-                </div>
-
-                <div class="process-step">
-                    <div class="step-image">🔍</div>
-                    <div class="step-content">
-                        <div class="step-number">03</div>
-                        <h3>Test Execution</h3>
-                        <p>Execute tests across multiple platforms, browsers, and devices with meticulous attention to detail.</p>
-                    </div>
-                </div>
-
-                <div class="process-step">
-                    <div class="step-image">📊</div>
-                    <div class="step-content">
-                        <div class="step-number">04</div>
-                        <h3>Reporting & Analysis</h3>
-                        <p>Provide detailed reports with bug tracking, metrics, and recommendations for improvement.</p>
+                <div class="security-content">
+                    <h3>Advanced Threat Protection</h3>
+                    <p>
+                        Our AI-driven security platform provides real-time threat detection, vulnerability assessment, 
+                        and proactive defense across your entire infrastructure.
+                    </p>
+                    <div class="security-features-list">
+                        <div class="security-feature">
+                            <span>Penetration Testing</span>
+                        </div>
+                        <div class="security-feature">
+                            <span>Vulnerability Scanning</span>
+                        </div>
+                        <div class="security-feature">
+                            <span>Encryption Audits</span>
+                        </div>
+                        <div class="security-feature">
+                            <span>Compliance Checks</span>
+                        </div>
+                        <div class="security-feature">
+                            <span>Threat Monitoring</span>
+                        </div>
+                        <div class="security-feature">
+                            <span>Risk Assessment</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 6: Team Section -->
-    <section class="page" id="team" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
-        <div class="content">
+    <!-- PAGE 6: Team -->
+    <section class="section" id="team" style="background: linear-gradient(180deg, transparent 0%, rgba(0, 217, 255, 0.03) 50%, transparent 100%);">
+        <div class="container">
             <div class="section-title">
-                <h2>Our Team</h2>
-                <p>Meet the experts behind DATAEUROS</p>
+                <h2>Expert Leadership</h2>
+                <p>Industry veterans driving innovation</p>
             </div>
             <div class="team-grid">
-                <div class="team-member fade-in">
+                <div class="team-member">
                     <div class="member-avatar">👨‍💼</div>
-                    <h3>Rajesh Kumar</h3>
-                    <p>CEO & Founder<br><em>15+ years in QA</em></p>
+                    <h3> Muskan Sharma</h3>
+                    <p>CEO & Founder • 18+ years QA</p>
                 </div>
-                <div class="team-member fade-in">
+
+                <div class="team-member">
                     <div class="member-avatar">👩‍💻</div>
-                    <h3>Priya Singh</h3>
-                    <p>Test Automation Lead<br><em>12+ years expertise</em></p>
+                    <h3>Priyanka Pundit</h3>
+                    <p>Head of Automation • 14+ years</p>
                 </div>
-                <div class="team-member fade-in">
+
+                <div class="team-member">
                     <div class="member-avatar">👨‍🔬</div>
                     <h3>Aditya Sharma</h3>
-                    <p>Security Testing Head<br><em>10+ years in security</em></p>
+                    <p>Security Lead • 12+ years</p>
                 </div>
-                <div class="team-member fade-in">
+
+                <div class="team-member">
                     <div class="member-avatar">👩‍🔧</div>
                     <h3>Neha Patel</h3>
-                    <p>QA Manager<br><em>8+ years experience</em></p>
+                    <p>QA Manager • 10+ years</p>
                 </div>
-                <div class="team-member fade-in">
+
+                <div class="team-member">
                     <div class="member-avatar">👨‍💼</div>
                     <h3>Vikram Singh</h3>
-                    <p>Performance Tester<br><em>7+ years in testing</em></p>
+                    <p>Performance Specialist • 9+ years</p>
                 </div>
-                <div class="team-member fade-in">
+
+                <div class="team-member">
                     <div class="member-avatar">👩‍💼</div>
                     <h3>Anjali Verma</h3>
-                    <p>Client Relations<br><em>6+ years in support</em></p>
+                    <p>Client Success • 8+ years</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 7: Pricing Section -->
-    <section class="page" id="pricing">
-        <div class="content">
+    <!-- PAGE 7: Pricing -->
+    <section class="section" id="pricing">
+        <div class="container">
             <div class="section-title">
-                <h2>Pricing Plans</h2>
-                <p>Flexible solutions for businesses of all sizes</p>
+                <h2>Flexible Pricing Plans</h2>
+                <p>Enterprise solutions tailored to your needs</p>
             </div>
             <div class="pricing-grid">
-                <div class="pricing-card fade-in">
-                    <h3>Startup</h3>
+                <div class="pricing-card">
+                    <div class="pricing-badge">STARTUP</div>
+                    <h3>Growth</h3>
                     <div class="price">₹50K<span>/month</span></div>
                     <ul class="pricing-features">
-                        <li>Manual Testing (40 hours/week)</li>
-                        <li>Basic Automation Scripts</li>
+                        <li>40 hours/week Testing</li>
+                        <li>Basic Automation</li>
                         <li>Monthly Reports</li>
                         <li>Email Support</li>
                     </ul>
-                    <button class="primary-btn" style="width: 100%;">Choose Plan</button>
+                    <button class="pricing-cta" onclick="openModal()">Get Started</button>
                 </div>
 
-                <div class="pricing-card featured fade-in">
+                <div class="pricing-card featured">
+                    <div class="pricing-badge">MOST POPULAR</div>
                     <h3>Professional</h3>
                     <div class="price">₹150K<span>/month</span></div>
                     <ul class="pricing-features">
@@ -1174,191 +1799,167 @@
                         <li>Priority Support</li>
                         <li>Performance Testing</li>
                     </ul>
-                    <button class="primary-btn" style="width: 100%;">Choose Plan</button>
+                    <button class="pricing-cta" onclick="openModal()">Get Started</button>
                 </div>
 
-                <div class="pricing-card fade-in">
+                <div class="pricing-card">
+                    <div class="pricing-badge">ENTERPRISE</div>
                     <h3>Enterprise</h3>
                     <div class="price">₹500K<span>/month</span></div>
                     <ul class="pricing-features">
-                        <li>Complete Testing Solutions</li>
+                        <li>Complete Solutions</li>
                         <li>Security Testing</li>
                         <li>Real-time Reports</li>
-                        <li>24/7 Dedicated Support</li>
+                        <li>24/7 Support</li>
                         <li>Custom Solutions</li>
                     </ul>
-                    <button class="primary-btn" style="width: 100%;">Choose Plan</button>
+                    <button class="pricing-cta" onclick="openModal()">Contact Sales</button>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 8: Testimonials Section -->
-    <section class="page" id="testimonials" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
-        <div class="content">
+    <!-- PAGE 8: Testimonials -->
+    <section class="section" id="testimonials" style="background: linear-gradient(180deg, transparent 0%, rgba(131, 56, 236, 0.03) 50%, transparent 100%);">
+        <div class="container">
             <div class="section-title">
-                <h2>Client Testimonials</h2>
-                <p>What our clients say about DATAEUROS</p>
+                <h2>Client Success Stories</h2>
+                <p>Trusted by Fortune 500 companies worldwide</p>
             </div>
             <div class="testimonials-grid">
-                <div class="testimonial fade-in">
+                <div class="testimonial">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"DATAEUROS transformed our testing process. Their automation solutions reduced our testing time by 60% and improved quality significantly."</p>
+                    <p class="testimonial-text">
+                        "DATAEUROS transformed our QA process. Their automation solutions reduced testing time by 70% and caught critical bugs."
+                    </p>
                     <p class="testimonial-author">— Amit Gupta, TechCorp India</p>
                 </div>
 
-                <div class="testimonial fade-in">
+                <div class="testimonial">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"The security testing audit uncovered critical vulnerabilities. Their professional team provided excellent recommendations and support."</p>
-                    <p class="testimonial-author">— Sarah Johnson, Global Software Inc.</p>
+                    <p class="testimonial-text">
+                        "The security audit was incredibly thorough. They identified vulnerabilities and provided excellent remediation guidance."
+                    </p>
+                    <p class="testimonial-author">— Sarah Sheikh, Global Software</p>
                 </div>
 
-                <div class="testimonial fade-in">
+                <div class="testimonial">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Outstanding service! Their 24/7 support and detailed reporting made managing our QA process seamless and efficient."</p>
+                    <p class="testimonial-text">
+                        "Outstanding service with exceptional professionalism. Their 24/7 support made managing QA effortless."
+                    </p>
                     <p class="testimonial-author">— Rajesh Verma, StartupHub</p>
                 </div>
 
-                <div class="testimonial fade-in">
+                <div class="testimonial">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"We've been working with DATAEUROS for 3 years. Their expertise and dedication to quality is unmatched in the industry."</p>
-                    <p class="testimonial-author">— Priya Sharma, DevSolutions Ltd</p>
+                    <p class="testimonial-text">
+                        "Three years of partnership and they consistently exceed expectations. Expertise is unmatched."
+                    </p>
+                    <p class="testimonial-author">— Priya Sharma, DevSolutions</p>
                 </div>
 
-                <div class="testimonial fade-in">
+                <div class="testimonial">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"The performance testing helped us optimize our application. Their team identified bottlenecks we didn't even know existed."</p>
-                    <p class="testimonial-author">— Vikas Nair, CloudTech Solutions</p>
+                    <p class="testimonial-text">
+                        "Performance testing helped us optimize infrastructure. They increased our throughput by 5x."
+                    </p>
+                    <p class="testimonial-author">— Vikas Nair, CloudTech</p>
                 </div>
 
-                <div class="testimonial fade-in">
+                <div class="testimonial">
                     <div class="stars">★★★★★</div>
-                    <p class="testimonial-text">"Professional, reliable, and result-oriented. DATAEUROS is our go-to partner for all QA and security testing needs."</p>
+                    <p class="testimonial-text">
+                        "Professional, reliable, and results-oriented. DATAEUROS is our go-to partner for all QA needs."
+                    </p>
                     <p class="testimonial-author">— Neha Malhotra, FinanceApp Pro</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 9: Contact Form Section -->
-    <section class="page" id="contact-form">
-        <div class="content">
+    <!-- PAGE 9: Contact Information -->
+    <section class="section" id="contact">
+        <div class="container">
             <div class="section-title">
                 <h2>Get In Touch</h2>
-                <p>Send us a message and we'll respond within 24 hours</p>
-            </div>
-            <form class="contact-form" onsubmit="handleSubmit(event)">
-                <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number</label>
-                    <input type="tel" id="phone" name="phone">
-                </div>
-                <div class="form-group">
-                    <label for="service">Service Interest</label>
-                    <select id="service" name="service" style="width: 100%; padding: 1rem; background: rgba(0, 0, 0, 0.3); border: 1px solid var(--border); border-radius: 8px; color: var(--text-light); font-family: 'Syne', sans-serif;" required>
-                        <option value="">Select a service</option>
-                        <option value="manual">Manual Testing</option>
-                        <option value="automation">Test Automation</option>
-                        <option value="qa">Quality Assurance</option>
-                        <option value="bugs">Bug Audits</option>
-                        <option value="performance">Performance Testing</option>
-                        <option value="security">Security Testing</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="message">Message</label>
-                    <textarea id="message" name="message" required></textarea>
-                </div>
-                <button type="submit" class="form-submit">Send Message</button>
-            </form>
-        </div>
-    </section>
-
-    <!-- PAGE 10: Contact Information Section -->
-    <section class="page" id="contact" style="background: linear-gradient(135deg, rgba(131, 56, 236, 0.05), rgba(255, 0, 110, 0.05));">
-        <div class="content">
-            <div class="section-title">
-                <h2>Contact Information</h2>
-                <p>Multiple ways to reach DATAEUROS</p>
+                <p>Multiple ways to connect with our team</p>
             </div>
             <div class="contact-grid">
                 <div class="contact-card">
                     <h3>📧 General Inquiries</h3>
                     <p><a href="mailto:info@dataeuros.com">info@dataeuros.com</a></p>
-                    <p>For general questions and project inquiries</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Project inquiries</p>
                 </div>
+
                 <div class="contact-card">
                     <h3>👥 Human Resources</h3>
                     <p><a href="mailto:hr@dataeuros.com">hr@dataeuros.com</a></p>
-                    <p>Job opportunities and career inquiries</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Career opportunities</p>
                 </div>
+
                 <div class="contact-card">
                     <h3>👔 Executive Office</h3>
                     <p><a href="mailto:ceo@dataeuros.com">ceo@dataeuros.com</a></p>
-                    <p>Strategic partnerships and senior management</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Strategic partnerships</p>
                 </div>
+
                 <div class="contact-card">
                     <h3>☎️ Sales & Support</h3>
                     <p><a href="mailto:contact@dataeuros.com">contact@dataeuros.com</a></p>
-                    <p>Sales inquiries and customer support</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">Sales inquiries</p>
                 </div>
+
                 <div class="contact-card">
-                    <h3>📱 Phone</h3>
+                    <h3>📱 Direct Phone</h3>
                     <p><a href="tel:+919419281505">+91 9419281505</a></p>
-                    <p>Direct line - Available 24/7</p>
+                    <p style="font-size: 0.9rem; margin-top: 0.5rem;">24/7 Available</p>
                 </div>
+
                 <div class="contact-card">
-                    <h3>📍 Office Location</h3>
-                    <p>23/A Shastri Nagar<br>Jammu, Jammu & Kashmir 180001<br>India</p>
+                    <h3>📍 Headquarters</h3>
+                    <p>23/A Shastri Nagar<br>Jammu, J&K 180001</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- PAGE 11: Map Section -->
-    <section class="page" id="map-page" style="background: linear-gradient(135deg, rgba(0, 217, 255, 0.05), rgba(131, 56, 236, 0.05));">
-        <div class="content">
+    <!-- PAGE 10: Map Location -->
+    <section class="map-section section" id="map-page">
+        <div class="container">
             <div class="section-title">
-                <h2>Visit Us</h2>
-                <p>Our office location - Easy to find and accessible</p>
+                <h2>Visit Our Office</h2>
+                <p>Located in the heart of Jammu, India</p>
             </div>
-            <div id="map" class="map-container" style="margin-top: 3rem; height: 500px; border-radius: 15px; border: 2px solid var(--border); overflow: hidden;"></div>
-            <div style="text-align: center; margin-top: 3rem;">
-                <h3 style="color: var(--primary); margin-bottom: 1rem;">Address Details</h3>
-                <p style="color: var(--text-muted); font-size: 1.1rem;">
-                    <strong>DATAEUROS</strong><br>
-                    23/A Shastri Nagar<br>
-                    Jammu, Jammu & Kashmir 180001<br>
-                    India
-                </p>
-                <p style="color: var(--text-muted); margin-top: 1rem;">
-                    <strong>Working Hours:</strong><br>
-                    Monday - Friday: 9:00 AM - 6:00 PM IST<br>
-                    24/7 Emergency Support Available
-                </p>
-                <p style="color: var(--text-muted); margin-top: 1.5rem;">
-                    <strong>Quick Contact:</strong><br>
-                    📞 <a href="tel:+919419281505" style="color: var(--primary); text-decoration: none;">+91 9419281505</a><br>
-                    📧 <a href="mailto:contact@dataeuros.com" style="color: var(--primary); text-decoration: none;">contact@dataeuros.com</a>
-                </p>
+            <div class="map-container" id="map"></div>
+            <div class="location-info">
+                <h3>DATAEUROS Headquarters</h3>
+                <p><strong>Address:</strong> 23/A Shastri Nagar, Jammu, Jammu & Kashmir 180001, India</p>
+                <p><strong>Phone:</strong> +91 9419281505 (24/7 Available)</p>
+                <p><strong>Working Hours:</strong> Monday - Friday: 9:00 AM - 6:00 PM IST</p>
+                <p><strong>Support:</strong> 24/7 Emergency Support Available</p>
             </div>
+        </div>
+    </section>
+
+    <!-- PAGE 11: CTA Section -->
+    <section class="section" id="cta" style="text-align: center; padding: 8rem 0;">
+        <div class="container">
+            <div class="section-title">
+                <h2>Ready to Transform Your QA?</h2>
+                <p>Join Fortune 500 companies that trust DATAEUROS for their critical testing needs</p>
+            </div>
+            <button class="btn-primary" onclick="openModal()" style="padding: 1.3rem 4rem; font-size: 1.1rem;">Start Your Free Consultation</button>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <p>&copy; 2024 DATAEUROS. All rights reserved. | Advanced QA & Security Solutions</p>
+        <p>Premium QA & Security Solutions | Trusted by Enterprise Leaders Worldwide</p>
         <div class="footer-links">
+            <a href="#hero">Home</a>
             <a href="#services">Services</a>
-            <a href="#about">About</a>
-            <a href="#process">Process</a>
+            <a href="#security">Security</a>
             <a href="#pricing">Pricing</a>
             <a href="#contact">Contact</a>
         </div>
@@ -1368,156 +1969,291 @@
             <a href="https://www.twitter.com" target="_blank" title="Twitter"><i class="fab fa-twitter"></i></a>
             <a href="https://www.instagram.com" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
         </div>
-        <p style="margin-top: 1.5rem; font-size: 0.9rem;">
-            Certified • ISO 27001 • OWASP Compliant • Award-Winning Solutions
-        </p>
+        <div class="bottom-line">
+            <p>&copy; 2024 DATAEUROS. All rights reserved.</p>
+            <p>🏆 ISO 27001 Certified | OWASP Compliant | Enterprise Grade | Award-Winning Solutions</p>
+        </div>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
     <script>
-        // Generate animated particles
-        function createParticles() {
-            const bgAnimation = document.getElementById('bgAnimation');
-            const particleCount = 50;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = '100vh';
-                particle.style.animationDuration = (Math.random() * 5 + 8) + 's';
-                particle.style.animationDelay = Math.random() * 2 + 's';
-                particle.style.opacity = Math.random() * 0.5 + 0.3;
-                bgAnimation.appendChild(particle);
-            }
-        }
-
-        // Initialize Leaflet Map
-        function initMap() {
-            // Jammu coordinates
-            const jammuLat = 32.7265;
-            const jammuLng = 74.8673;
-
-            // Create map
-            const map = L.map('map').setView([jammuLat, jammuLng], 15);
-
-            // Add OpenStreetMap tiles
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors',
-                maxZoom: 19,
-                style: 'dark'
-            }).addTo(map);
-
-            // Add custom marker
-            const marker = L.marker([jammuLat, jammuLng]).addTo(map);
-            marker.bindPopup(
-                '<div style="color: #0a0e27; font-family: Syne; text-align: center;">' +
-                '<strong style="font-size: 1.1rem;">DATAEUROS</strong><br>' +
-                '23/A Shastri Nagar<br>' +
-                'Jammu, J&K 180001<br>' +
-                '📞 +91 9419281505<br>' +
-                '📧 contact@dataeuros.com' +
-                '</div>'
-            ).openPopup();
-
-            // Customize map appearance
-            const style = document.createElement('style');
-            style.innerHTML = `
-                .leaflet-container {
-                    background: rgba(10, 14, 39, 0.8);
-                }
-                .leaflet-tile {
-                    filter: invert(0.9) hue-rotate(180deg) saturate(0.8);
-                }
-                .leaflet-popup-content-wrapper {
-                    background: rgba(0, 217, 255, 0.95);
-                    border-radius: 8px;
-                    border: 1px solid rgba(0, 217, 255, 0.5);
-                }
-                .leaflet-popup-tip {
-                    background: rgba(0, 217, 255, 0.95);
-                }
-            `;
-            document.head.appendChild(style);
-        }
-
-        // Observe elements for scroll animations
-        function observeElements() {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('fade-in');
-                        observer.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-
-            document.querySelectorAll('.service-card, .feature-card, .team-member, .pricing-card, .testimonial, .contact-card').forEach(el => observer.observe(el));
-        }
-
-        // Smooth scroll function
-        function scrollToSection(sectionId) {
-            const element = document.getElementById(sectionId);
-            if (element) {
-                element.scrollIntoView({ behavior: 'smooth' });
-                // Close mobile menu if open
-                document.getElementById('navLinks').classList.remove('active');
-            }
-        }
-
-        // Mobile menu toggle
-        document.getElementById('menuToggle').addEventListener('click', () => {
-            document.getElementById('navLinks').classList.toggle('active');
+        // Initialize modal on page load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                openModal();
+            }, 2500); // Show modal after loading screen
         });
 
-        // Close menu when clicking a link
-        document.querySelectorAll('.nav-links a').forEach(link => {
-            link.addEventListener('click', () => {
-                document.getElementById('navLinks').classList.remove('active');
+        // Modal Functions
+        function openModal() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modalOverlay');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            resetModal();
+        }
+
+        function resetModal() {
+            const form = document.getElementById('modalForm');
+            const successMsg = document.getElementById('successMessage');
+            const formContent = document.getElementById('modalFormContent');
+            
+            form.reset();
+            successMsg.classList.remove('show');
+            formContent.style.display = 'block';
+            
+            document.querySelectorAll('.form-error').forEach(el => {
+                el.classList.remove('show');
+                el.textContent = '';
             });
-        });
+            
+            document.querySelectorAll('.form-input').forEach(el => {
+                el.classList.remove('error');
+            });
+        }
 
-        // Form submission
-        function handleSubmit(event) {
+        // Form Validation
+        function validateForm(form) {
+            const inputs = form.querySelectorAll('.form-input[required]');
+            let isValid = true;
+
+            inputs.forEach(input => {
+                const errorElement = input.parentElement.querySelector('.form-error');
+                input.classList.remove('error');
+                errorElement.classList.remove('show');
+
+                if (!input.value.trim()) {
+                    input.classList.add('error');
+                    errorElement.textContent = `${input.previousElementSibling.textContent} is required`;
+                    errorElement.classList.add('show');
+                    isValid = false;
+                } else if (input.type === 'email' && !isValidEmail(input.value)) {
+                    input.classList.add('error');
+                    errorElement.textContent = 'Please enter a valid email address';
+                    errorElement.classList.add('show');
+                    isValid = false;
+                } else if (input.type === 'tel' && input.value && !isValidPhone(input.value)) {
+                    input.classList.add('error');
+                    errorElement.textContent = 'Please enter a valid phone number';
+                    errorElement.classList.add('show');
+                    isValid = false;
+                }
+            });
+
+            return isValid;
+        }
+
+        function isValidEmail(email) {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return emailRegex.test(email);
+        }
+
+        function isValidPhone(phone) {
+            const phoneRegex = /^[\d\s+\-()]+$/;
+            return phoneRegex.test(phone) && phone.replace(/\D/g, '').length >= 10;
+        }
+
+        // Handle Form Submission
+        function handleModalSubmit(event) {
             event.preventDefault();
-            const formData = new FormData(event.target);
             
-            // Create mailto link with form data
-            const mailtoLink = `mailto:contact@dataeuros.com?subject=New Inquiry from ${formData.get('name')}&body=Name: ${formData.get('name')}%0AEmail: ${formData.get('email')}%0APhone: ${formData.get('phone')}%0AService: ${formData.get('service')}%0AMessage: ${formData.get('message')}`;
-            
-            window.location.href = mailtoLink;
-            
-            // Reset form
-            event.target.reset();
-            alert('Thank you! Your message has been sent. We will contact you shortly.');
+            const form = event.target;
+            if (!validateForm(form)) return;
+
+            // Show success message
+            const submitBtn = form.querySelector('.modal-submit');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Processing...';
+
+            // Simulate API call
+            setTimeout(() => {
+                const formData = new FormData(form);
+                const mailtoLink = `mailto:contact@dataeuros.com?subject=Demo Request from ${formData.get('name')}&body=Name: ${formData.get('name')}%0AEmail: ${formData.get('email')}%0APhone: ${formData.get('phone')}%0ACompany: ${formData.get('company')}%0AService: ${formData.get('service')}%0AMessage: ${formData.get('message')}`;
+                
+                // Log to console (for demonstration)
+                console.log('Form submitted:', {
+                    name: formData.get('name'),
+                    email: formData.get('email'),
+                    phone: formData.get('phone'),
+                    company: formData.get('company'),
+                    service: formData.get('service'),
+                    message: formData.get('message')
+                });
+
+                // Show success message
+                document.getElementById('modalFormContent').style.display = 'none';
+                document.getElementById('successMessage').classList.add('show');
+
+                // Show toast
+                showToast('Request submitted successfully!');
+
+                // Reset after 3 seconds
+                setTimeout(() => {
+                    closeModal();
+                }, 3000);
+            }, 1500);
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(() => {
+                toast.remove();
+            }, 3000);
+        }
+
+        // 11D Network Canvas Animation
+        class NetworkVisualization {
+            constructor(canvasId) {
+                this.canvas = document.getElementById(canvasId);
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.connections = [];
+                
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                
+                this.init();
+                window.addEventListener('resize', () => this.onResize());
+                this.animate();
+            }
+
+            init() {
+                for (let i = 0; i < 80; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 2,
+                        vy: (Math.random() - 0.5) * 2,
+                        z: Math.random() * 100,
+                        size: Math.random() * 3 + 1,
+                        brightness: Math.random() * 0.5 + 0.5
+                    });
+                }
+            }
+
+            animate() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach(p => {
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.z += (Math.random() - 0.5) * 5;
+                    
+                    if (p.x < 0) p.x = this.canvas.width;
+                    if (p.x > this.canvas.width) p.x = 0;
+                    if (p.y < 0) p.y = this.canvas.height;
+                    if (p.y > this.canvas.height) p.y = 0;
+                    
+                    p.z = (p.z + 100) % 100;
+                });
+
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const dx = this.particles[i].x - this.particles[j].x;
+                        const dy = this.particles[i].y - this.particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        
+                        if (distance < 150) {
+                            const opacity = 1 - (distance / 150);
+                            this.ctx.strokeStyle = `rgba(0, 217, 255, ${opacity * 0.3})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.beginPath();
+                            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+
+                this.particles.forEach(p => {
+                    const scale = (p.z / 100) * 0.5 + 0.5;
+                    const opacity = p.brightness * scale;
+                    
+                    this.ctx.fillStyle = `rgba(0, 217, 255, ${opacity})`;
+                    this.ctx.shadowColor = 'rgba(0, 217, 255, 0.8)';
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.beginPath();
+                    this.ctx.arc(p.x, p.y, p.size * scale, 0, Math.PI * 2);
+                    this.ctx.fill();
+                });
+
+                requestAnimationFrame(() => this.animate());
+            }
+
+            onResize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+        }
+
+        const network = new NetworkVisualization('networkCanvas');
+
+        // Initialize map
+        function initMap() {
+            if (document.getElementById('map')) {
+                const map = L.map('map').setView([32.7265, 74.8673], 15);
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
+                }).addTo(map);
+
+                const marker = L.marker([32.7265, 74.8673]).addTo(map);
+                marker.bindPopup('<div style="font-weight: 700; color: #0a0e1f;">DATAEUROS<br>23/A Shastri Nagar<br>Jammu, J&K</div>').openPopup();
+            }
+        }
+
+        // Scroll to section
+        function scrollToSection(id) {
+            const element = document.getElementById(id);
+            if (element) {
+                closeModal();
+                element.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         // Navbar scroll effect
         window.addEventListener('scroll', () => {
-            const nav = document.querySelector('nav');
+            const navbar = document.getElementById('navbar');
             if (window.scrollY > 50) {
-                nav.style.background = 'rgba(10, 14, 39, 0.95)';
-                nav.style.boxShadow = '0 4px 20px rgba(0, 217, 255, 0.1)';
+                navbar.classList.add('scrolled');
             } else {
-                nav.style.background = 'rgba(10, 14, 39, 0.7)';
-                nav.style.boxShadow = 'none';
+                navbar.classList.remove('scrolled');
             }
         });
 
-        // Initialize everything
-        createParticles();
-        observeElements();
-        
-        // Initialize map when page loads
+        // Close modal on outside click
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'modalOverlay') {
+                closeModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Initialize
         window.addEventListener('load', initMap);
 
         // Smooth scroll for anchor links
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
             anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth' });
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    scrollToSection(href.substring(1));
                 }
             });
         });
