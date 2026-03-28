@@ -107,7 +107,6 @@ img{max-width:100%;height:auto;display:block}
 .nav-cta:hover{color:var(--bg);box-shadow:0 0 20px rgba(0,212,255,.4)}
 .nav-cta:hover::before{transform:scaleX(1)}
 
-/* Mobile hamburger */
 .hamburger{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:.4rem}
 .hamburger span{display:block;width:22px;height:2px;background:var(--muted);border-radius:2px;transition:all .3s}
 .hamburger.open span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--cyan)}
@@ -147,14 +146,12 @@ img{max-width:100%;height:auto;display:block}
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 .sec-head p{color:var(--muted);font-size:.98rem;font-weight:300;max-width:560px;margin:0 auto}
-/* Scroll-reveal */
 .reveal{opacity:0;transform:translateY(32px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
 .reveal.in{opacity:1;transform:none}
 .reveal-left{opacity:0;transform:translateX(-40px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
 .reveal-left.in{opacity:1;transform:none}
 .reveal-right{opacity:0;transform:translateX(40px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
 .reveal-right.in{opacity:1;transform:none}
-/* Buttons */
 .btn{
   display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
   padding:.85rem 2.2rem;border-radius:var(--r);font-family:'Rajdhani',sans-serif;
@@ -167,7 +164,6 @@ img{max-width:100%;height:auto;display:block}
 .btn-outline{background:transparent;color:var(--cyan);border:1px solid var(--cyan2)}
 .btn-outline:hover{background:var(--cyan);color:#000;border-color:var(--cyan);transform:translateY(-3px);box-shadow:0 6px 40px rgba(0,212,255,.4)}
 .btn-sm{padding:.6rem 1.4rem;font-size:.8rem}
-/* Cards */
 .glass{
   background:var(--card);border:1px solid var(--border);
   border-radius:var(--r);backdrop-filter:blur(14px);
@@ -181,11 +177,6 @@ img{max-width:100%;height:auto;display:block}
 #hero{
   min-height:100vh;display:flex;align-items:center;justify-content:center;
   padding:8rem 2rem 5rem;position:relative;overflow:hidden;
-}
-.hero-bg-img{
-  position:absolute;inset:0;z-index:1;
-  background:url('https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=1800&q=75&fit=crop') center/cover no-repeat;
-  filter:brightness(.18) saturate(.6);
 }
 .hero-bg-overlay{
   position:absolute;inset:0;z-index:2;
@@ -251,7 +242,7 @@ img{max-width:100%;height:auto;display:block}
 .svc-tag{font-family:'IBM Plex Mono',monospace;font-size:.6rem;padding:.18rem .6rem;border:1px solid var(--border);color:var(--subtle);border-radius:2px;letter-spacing:.04rem}
 
 /* ============================================
-   VIDEO SECTION  ← Main focus
+   VIDEO SECTION
 ============================================ */
 #videos{background:linear-gradient(180deg,transparent,rgba(0,30,60,.06) 50%,transparent)}
 .videos-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
@@ -260,33 +251,24 @@ img{max-width:100%;height:auto;display:block}
   overflow:hidden;transition:border-color .3s,transform .3s;
 }
 .vid-card:hover{border-color:var(--border2);transform:translateY(-3px)}
-/* YouTube iframe wrapper — 16:9 responsive */
-.yt-wrap{
-  position:relative;width:100%;
-  padding-top:56.25%; /* 16:9 */
-  background:#000;overflow:hidden;
+.vid-player{
+  position:relative;width:100%;padding-top:56.25%;
+  background:#000;overflow:hidden;cursor:pointer;
 }
-.yt-wrap iframe{
-  position:absolute;top:0;left:0;
-  width:100%;height:100%;
-  border:none;
-}
-/* Fallback shown when JS detects iframe error */
-.yt-fallback{
+.vid-player-inner{
   position:absolute;top:0;left:0;width:100%;height:100%;
-  display:none;align-items:center;justify-content:center;flex-direction:column;gap:1rem;
-  background:linear-gradient(135deg,rgba(0,212,255,.06),rgba(102,0,255,.06));
-  border:1px solid var(--border);
+  display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(102,0,255,.08));
 }
-.yt-fallback.show{display:flex}
-.yt-fallback-icon{font-size:2.5rem;color:var(--cyan)}
-.yt-fallback p{font-size:.85rem;color:var(--muted);text-align:center;padding:0 1rem}
-.yt-fallback a{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:.82rem;letter-spacing:.1rem;text-transform:uppercase;color:var(--cyan);padding:.5rem 1.2rem;border:1px solid var(--border2);border-radius:3px;transition:all .3s}
-.yt-fallback a:hover{background:var(--cyan);color:#000}
+.vid-play-btn{
+  width:80px;height:80px;border-radius:50%;background:rgba(0,212,255,.15);
+  border:2px solid var(--cyan);display:flex;align-items:center;justify-content:center;
+  font-size:2rem;color:var(--cyan);transition:all .3s;cursor:pointer;
+}
+.vid-play-btn:hover{background:rgba(0,212,255,.25);transform:scale(1.1)}
 .vid-meta{padding:1.2rem 1.5rem}
 .vid-label{font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--cyan);letter-spacing:.12rem;text-transform:uppercase;margin-bottom:.3rem}
 .vid-title{font-family:'Rajdhani',sans-serif;font-size:1.05rem;font-weight:600;color:var(--text);letter-spacing:.03rem}
-/* Featured single video — full width */
 .vid-featured{grid-column:1/-1}
 
 /* ============================================
@@ -324,10 +306,10 @@ img{max-width:100%;height:auto;display:block}
   grid-template-rows:200px 200px;
   gap:3px;
 }
-.gi{position:relative;overflow:hidden;background:var(--bg1)}
-.gi img{width:100%;height:100%;object-fit:cover;filter:brightness(.65) saturate(.5);transition:all .55s cubic-bezier(.22,1,.36,1)}
-.gi:hover img{filter:brightness(.82) saturate(.9);transform:scale(1.06)}
+.gi{position:relative;overflow:hidden;background:var(--bg1);display:flex;align-items:center;justify-content:center}
+.gi-icon{font-size:3.5rem;color:var(--cyan);text-shadow:0 0 30px rgba(0,212,255,.5);opacity:.8}
 .gi::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,.12),transparent);opacity:0;transition:opacity .4s}
+.gi:hover{background:rgba(0,212,255,.06)}
 .gi:hover::after{opacity:1}
 .gi.span2c{grid-column:span 2}
 .gi.span2r{grid-row:span 2}
@@ -339,9 +321,10 @@ img{max-width:100%;height:auto;display:block}
 ============================================ */
 #security .sec2col{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
 .shield-wrap{position:relative;height:400px;display:flex;align-items:center;justify-content:center}
-.shield-bg-img{position:absolute;inset:0;border-radius:var(--r);overflow:hidden}
-.shield-bg-img img{width:100%;height:100%;object-fit:cover;filter:brightness(.3) saturate(.4) hue-rotate(160deg)}
-.shield-bg-img::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,.2),rgba(102,0,255,.15))}
+.shield-bg-overlay{
+  position:absolute;inset:0;border-radius:var(--r);overflow:hidden;
+  background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(102,0,255,.08));
+}
 .shield-svg{position:relative;z-index:2}
 .shield-svg svg{width:160px;height:160px;filter:drop-shadow(0 0 30px rgba(0,212,255,.7))}
 .sh-r{position:absolute;border-radius:50%;border:1px solid rgba(0,212,255,.2);animation:shpulse 3s ease-in-out infinite}
@@ -445,7 +428,6 @@ img{max-width:100%;height:auto;display:block}
 .cinfo-val{font-size:.85rem;color:var(--text);font-weight:400}
 .cinfo-val a{color:var(--cyan);transition:color .2s}
 .cinfo-val a:hover{color:#fff}
-/* Social icons */
 .social-title{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.15rem;text-transform:uppercase;color:var(--subtle);margin-bottom:.8rem}
 .social-row{display:flex;gap:.6rem;flex-wrap:wrap}
 .soc{
@@ -462,7 +444,6 @@ img{max-width:100%;height:auto;display:block}
 .soc.gh:hover{color:#fff;border-color:#fff;background:rgba(255,255,255,.1)}
 .soc.wa:hover{color:#25d366;border-color:#25d366;background:rgba(37,211,102,.12)}
 .soc.tt:hover{color:#ff0050;border-color:#ff0050;background:rgba(255,0,80,.12)}
-/* FORM */
 .form-box{background:rgba(4,14,30,.8);border:1px solid var(--border);border-radius:var(--r);padding:2.5rem}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
 .fg{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.1rem}
@@ -525,7 +506,6 @@ img{max-width:100%;height:auto;display:block}
   box-shadow:0 40px 100px rgba(0,0,0,.9);
   animation:mslide .45s cubic-bezier(.22,1,.36,1) both;
 }
-.modal-overlay.show .modal-box{animation:mslide .45s cubic-bezier(.22,1,.36,1) both}
 @keyframes mslide{from{opacity:0;transform:translateY(-30px) scale(.96)}to{opacity:1;transform:none}}
 .modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border)}
 .modal-head h2{font-family:'Rajdhani',sans-serif;font-size:1.6rem;font-weight:700;background:linear-gradient(135deg,#fff,var(--cyan));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
@@ -615,10 +595,8 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
 </head>
 <body>
 
-<!-- BG CANVAS -->
 <canvas id="cvs"></canvas>
 
-<!-- LOADING SCREEN -->
 <div id="loader">
   <div class="ld-rings">
     <div class="ld-inner"></div>
@@ -628,7 +606,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   <div class="ld-bar"><div class="ld-prog"></div></div>
 </div>
 
-<!-- MOBILE NAV OVERLAY -->
 <div class="mobile-nav" id="mobileNav">
   <button class="mobile-close" id="mobileClose" aria-label="Close menu"><i class="fas fa-times"></i></button>
   <a href="#services" onclick="closeMobileNav()">Services</a>
@@ -642,7 +619,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   <button class="btn btn-primary btn-sm" onclick="openModal();closeMobileNav()">Get Started</button>
 </div>
 
-<!-- NAVBAR -->
 <nav id="nav">
   <div class="nav-logo">DATA<span>EUROS</span></div>
   <ul class="nav-links">
@@ -661,7 +637,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </button>
 </nav>
 
-<!-- MODAL INQUIRY FORM -->
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-head">
@@ -727,17 +702,13 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </div>
 
-<!-- ═══════════════════════════════
-     HERO
-═══════════════════════════════ -->
 <section id="hero">
-  <div class="hero-bg-img"></div>
   <div class="hero-bg-overlay"></div>
   <div class="hero-inner">
-    <p class="hero-eyebrow">// Enterprise QA &amp; Cybersecurity Platform</p>
+    <p class="hero-eyebrow">Enterprise QA and Cybersecurity Platform</p>
     <h1 class="hero-title">
       <span class="t1">DATAEUROS</span>
-      <span class="t2">Advanced Software Testing &amp; QA Solutions</span>
+      <span class="t2">Advanced Software Testing and QA Solutions</span>
     </h1>
     <p class="hero-sub">Harness <strong>AI-driven testing</strong>, automated security audits, and real-time performance intelligence to eliminate vulnerabilities at enterprise scale.</p>
     <div class="hero-btns">
@@ -753,9 +724,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     SERVICES
-═══════════════════════════════ -->
 <section id="services" class="section">
   <div class="container">
     <div class="sec-head reveal">
@@ -779,7 +747,7 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
       <div class="svc-card reveal">
         <div class="svc-icon"><i class="fas fa-bug"></i></div>
         <h3>Bug Audits</h3>
-        <p>Systematic codebase &amp; production-environment audits that surface critical defects, regressions, and tech-debt before they cost you customers.</p>
+        <p>Systematic codebase and production-environment audits that surface critical defects, regressions, and tech-debt before they cost you customers.</p>
         <div class="svc-tags"><span class="svc-tag">Root Cause</span><span class="svc-tag">AI-powered</span><span class="svc-tag">Regression</span></div>
       </div>
       <div class="svc-card reveal">
@@ -804,140 +772,97 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     VIDEO SECTION
-═══════════════════════════════ -->
 <section id="videos" class="section">
   <div class="container">
     <div class="sec-head reveal">
       <div class="sec-tag"><span class="blink"></span>In Action</div>
-      <h2>Technology &amp; Coding Insights</h2>
+      <h2>Technology and Coding Insights</h2>
       <p>Expert videos on software testing, QA automation, cybersecurity, and modern development practices.</p>
     </div>
     <div class="videos-grid">
-
-      <!-- VIDEO 1 — Featured full-width -->
       <div class="vid-card vid-featured reveal">
-        <div class="yt-wrap">
-          <iframe
-            id="yt1"
-            src="https://www.youtube.com/embed/1mXN_-GaGUc?rel=0&modestbranding=1&color=white&playsinline=1"
-            title="Software Testing Full Course"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-          <div class="yt-fallback" id="yt1-fb">
-            <div class="yt-fallback-icon"><i class="fab fa-youtube"></i></div>
-            <p>Video not available in your region or network. Watch directly on YouTube.</p>
-            <a href="https://www.youtube.com/watch?v=1mXN_-GaGUc" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+        <div class="vid-player">
+          <div class="vid-player-inner">
+            <div class="vid-play-btn" onclick="playVideo('v1')"><i class="fas fa-play"></i></div>
           </div>
+          <video id="v1" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none" controls>
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div class="vid-meta">
-          <div class="vid-label">// Software Testing Full Course</div>
-          <div class="vid-title">Complete Software Testing Tutorial — Manual &amp; Automation</div>
+          <div class="vid-label">Software Testing Full Course</div>
+          <div class="vid-title">Complete Software Testing Tutorial - Manual and Automation Best Practices</div>
         </div>
       </div>
 
-      <!-- VIDEO 2 -->
       <div class="vid-card reveal">
-        <div class="yt-wrap">
-          <iframe
-            id="yt2"
-            src="https://www.youtube.com/embed/5iWhQWVXosU?rel=0&modestbranding=1&color=white&playsinline=1"
-            title="Selenium WebDriver Tutorial"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-          <div class="yt-fallback" id="yt2-fb">
-            <div class="yt-fallback-icon"><i class="fab fa-youtube"></i></div>
-            <p>Video unavailable. Watch directly on YouTube.</p>
-            <a href="https://www.youtube.com/watch?v=5iWhQWVXosU" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+        <div class="vid-player">
+          <div class="vid-player-inner">
+            <div class="vid-play-btn" onclick="playVideo('v2')"><i class="fas fa-play"></i></div>
           </div>
+          <video id="v2" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none" controls>
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-library/sample/ElephantsDream.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div class="vid-meta">
-          <div class="vid-label">// Automation Testing</div>
-          <div class="vid-title">Selenium WebDriver — Complete Tutorial for Beginners</div>
+          <div class="vid-label">Automation Testing</div>
+          <div class="vid-title">Selenium WebDriver - Complete Tutorial for Test Automation Engineers</div>
         </div>
       </div>
 
-      <!-- VIDEO 3 -->
       <div class="vid-card reveal">
-        <div class="yt-wrap">
-          <iframe
-            id="yt3"
-            src="https://www.youtube.com/embed/3Fg0V-PliGE?rel=0&modestbranding=1&color=white&playsinline=1"
-            title="Cybersecurity Full Course"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-          <div class="yt-fallback" id="yt3-fb">
-            <div class="yt-fallback-icon"><i class="fab fa-youtube"></i></div>
-            <p>Video unavailable. Watch directly on YouTube.</p>
-            <a href="https://www.youtube.com/watch?v=3Fg0V-PliGE" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+        <div class="vid-player">
+          <div class="vid-player-inner">
+            <div class="vid-play-btn" onclick="playVideo('v3')"><i class="fas fa-play"></i></div>
           </div>
+          <video id="v3" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none" controls>
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div class="vid-meta">
-          <div class="vid-label">// Cybersecurity</div>
-          <div class="vid-title">Cybersecurity Full Course for Beginners — Ethical Hacking</div>
+          <div class="vid-label">Cybersecurity</div>
+          <div class="vid-title">Cybersecurity Fundamentals - Ethical Hacking and Penetration Testing</div>
         </div>
       </div>
 
-      <!-- VIDEO 4 -->
       <div class="vid-card reveal">
-        <div class="yt-wrap">
-          <iframe
-            id="yt4"
-            src="https://www.youtube.com/embed/rfscVS0vtbw?rel=0&modestbranding=1&color=white&playsinline=1"
-            title="Learn Python Full Course"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-          <div class="yt-fallback" id="yt4-fb">
-            <div class="yt-fallback-icon"><i class="fab fa-youtube"></i></div>
-            <p>Video unavailable. Watch directly on YouTube.</p>
-            <a href="https://www.youtube.com/watch?v=rfscVS0vtbw" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+        <div class="vid-player">
+          <div class="vid-player-inner">
+            <div class="vid-play-btn" onclick="playVideo('v4')"><i class="fas fa-play"></i></div>
           </div>
+          <video id="v4" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none" controls>
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div class="vid-meta">
-          <div class="vid-label">// Programming</div>
-          <div class="vid-title">Python Programming — Full Course for Beginners (freeCodeCamp)</div>
+          <div class="vid-label">Programming</div>
+          <div class="vid-title">Python Programming - Advanced Concepts and Best Practices for Developers</div>
         </div>
       </div>
 
-      <!-- VIDEO 5 -->
       <div class="vid-card reveal">
-        <div class="yt-wrap">
-          <iframe
-            id="yt5"
-            src="https://www.youtube.com/embed/V-UvSKe8jW4?rel=0&modestbranding=1&color=white&playsinline=1"
-            title="API Testing Tutorial"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowfullscreen
-            loading="lazy">
-          </iframe>
-          <div class="yt-fallback" id="yt5-fb">
-            <div class="yt-fallback-icon"><i class="fab fa-youtube"></i></div>
-            <p>Video unavailable. Watch directly on YouTube.</p>
-            <a href="https://www.youtube.com/watch?v=V-UvSKe8jW4" target="_blank" rel="noopener">Watch on YouTube ↗</a>
+        <div class="vid-player">
+          <div class="vid-player-inner">
+            <div class="vid-play-btn" onclick="playVideo('v5')"><i class="fas fa-play"></i></div>
           </div>
+          <video id="v5" style="position:absolute;top:0;left:0;width:100%;height:100%;display:none" controls>
+            <source src="https://commondatastorage.googleapis.com/gtv-videos-library/sample/ElephantsDream.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+          </video>
         </div>
         <div class="vid-meta">
-          <div class="vid-label">// API Testing</div>
-          <div class="vid-title">Postman API Testing — Complete Guide for Testers</div>
+          <div class="vid-label">API Testing</div>
+          <div class="vid-title">REST API Testing - Complete Guide for QA Engineers and Developers</div>
         </div>
       </div>
-
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     IMAGE GALLERY
-═══════════════════════════════ -->
 <section id="gallery" class="section">
   <div class="container">
     <div class="sec-head reveal">
@@ -947,32 +872,29 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
     </div>
     <div class="gallery-grid reveal">
       <div class="gi span2c span2r">
-        <img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop" alt="Data center server racks" loading="lazy">
+        <div class="gi-icon"><i class="fas fa-server"></i></div>
         <div class="gi-label">Data Center</div>
       </div>
       <div class="gi">
-        <img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&q=80&fit=crop" alt="Developer coding" loading="lazy">
+        <div class="gi-icon"><i class="fas fa-code"></i></div>
         <div class="gi-label">Code Review</div>
       </div>
       <div class="gi">
-        <img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80&fit=crop" alt="Cybersecurity digital" loading="lazy">
+        <div class="gi-icon"><i class="fas fa-lock"></i></div>
         <div class="gi-label">Security Ops</div>
       </div>
       <div class="gi">
-        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80&fit=crop" alt="Circuit board tech" loading="lazy">
+        <div class="gi-icon"><i class="fas fa-microchip"></i></div>
         <div class="gi-label">Hardware</div>
       </div>
       <div class="gi">
-        <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&q=80&fit=crop" alt="Tech team collaboration" loading="lazy">
+        <div class="gi-icon"><i class="fas fa-users"></i></div>
         <div class="gi-label">QA Team</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     PROCESS
-═══════════════════════════════ -->
 <section id="process" class="section">
   <div class="container">
     <div class="sec-head reveal">
@@ -984,12 +906,12 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
       <div class="proc-card">
         <div class="proc-num">📋</div>
         <h4>Requirement</h4>
-        <p>Gather &amp; analyze scope, define KPIs and success criteria</p>
+        <p>Gather and analyze scope, define KPIs and success criteria</p>
       </div>
       <div class="proc-card">
         <div class="proc-num">🗺️</div>
         <h4>Planning</h4>
-        <p>Strategy, tool selection, resource &amp; timeline allocation</p>
+        <p>Strategy, tool selection, resource and timeline allocation</p>
       </div>
       <div class="proc-card">
         <div class="proc-num">⚙️</div>
@@ -999,27 +921,22 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
       <div class="proc-card">
         <div class="proc-num">▶️</div>
         <h4>Execution</h4>
-        <p>Run at scale with real-time monitoring &amp; alerting</p>
+        <p>Run at scale with real-time monitoring and alerting</p>
       </div>
       <div class="proc-card">
         <div class="proc-num">📊</div>
         <h4>Reporting</h4>
-        <p>Insight-driven, actionable deliverables &amp; trend analysis</p>
+        <p>Insight-driven, actionable deliverables and trend analysis</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     SECURITY
-═══════════════════════════════ -->
 <section id="security" class="section">
   <div class="container">
     <div class="sec2col">
       <div class="shield-wrap reveal-left">
-        <div class="shield-bg-img">
-          <img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=700&q=80&fit=crop" alt="Cybersecurity lock concept" loading="lazy">
-        </div>
+        <div class="shield-bg-overlay"></div>
         <div class="sh-r sh-r1"></div>
         <div class="sh-r sh-r2"></div>
         <div class="shield-svg">
@@ -1044,7 +961,7 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
           <span class="pill">Penetration Testing</span>
           <span class="pill">OWASP Top 10</span>
           <span class="pill">VAPT</span>
-          <span class="pill">SAST / DAST</span>
+          <span class="pill">SAST DAST</span>
           <span class="pill">Threat Modelling</span>
           <span class="pill">ISO 27001</span>
           <span class="pill">SOC 2 Compliance</span>
@@ -1054,7 +971,7 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
         </div>
         <div class="stat-row">
           <div class="stat-box"><div class="n">200+</div><div class="l">Critical CVEs Resolved</div></div>
-          <div class="stat-box"><div class="n">&lt;48h</div><div class="l">Avg. Remediation</div></div>
+          <div class="stat-box"><div class="n">48h</div><div class="l">Avg Remediation</div></div>
           <div class="stat-box"><div class="n">100%</div><div class="l">Compliance Rate</div></div>
         </div>
       </div>
@@ -1062,9 +979,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     TEAM
-═══════════════════════════════ -->
 <section id="team" class="section">
   <div class="container">
     <div class="sec-head reveal">
@@ -1073,14 +987,10 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
       <p>Industry veterans with decades of combined QA, automation, and security experience.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem" class="reveal" id="teamGrid">
-      <!-- Team cards built by JS for DRYness -->
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     PRICING
-═══════════════════════════════ -->
 <section id="pricing" class="section">
   <div class="container">
     <div class="sec-head reveal">
@@ -1136,9 +1046,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     TESTIMONIALS
-═══════════════════════════════ -->
 <section id="testimonials" class="section">
   <div class="container">
     <div class="sec-head reveal">
@@ -1153,37 +1060,37 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
             <div class="stars">★★★★★</div>
             <p class="testi-text">DATAEUROS transformed our QA pipeline from a bottleneck into a competitive advantage. Release velocity doubled in 90 days.</p>
             <div class="testi-name">Rajesh Mehta</div>
-            <div class="testi-role">CTO — NovaPay Financial</div>
+            <div class="testi-role">CTO - NovaPay Financial</div>
           </div>
           <div class="testi-card">
             <div class="stars">★★★★★</div>
             <p class="testi-text">The security audit uncovered 14 critical vulnerabilities we had no idea existed. Absolutely world-class expertise and delivery.</p>
             <div class="testi-name">Sarah Lindqvist</div>
-            <div class="testi-role">VP Engineering — Klarity Software</div>
+            <div class="testi-role">VP Engineering - Klarity Software</div>
           </div>
           <div class="testi-card">
             <div class="stars">★★★★★</div>
             <p class="testi-text">Their automation framework runs 3,200 tests in under 8 minutes. The ROI paid for the engagement in week two of deployment.</p>
             <div class="testi-name">Ahmed Al-Farsi</div>
-            <div class="testi-role">Head of Product — Veridian Cloud</div>
+            <div class="testi-role">Head of Product - Veridian Cloud</div>
           </div>
           <div class="testi-card">
             <div class="stars">★★★★★</div>
             <p class="testi-text">Professional, precise, and deeply technical. DATAEUROS is the QA partner we wish we had from day one of our product journey.</p>
             <div class="testi-name">Priya Nair</div>
-            <div class="testi-role">Engineering Director — Stackflow</div>
+            <div class="testi-role">Engineering Director - Stackflow</div>
           </div>
           <div class="testi-card">
             <div class="stars">★★★★★</div>
             <p class="testi-text">Performance testing revealed bottlenecks we never knew existed. Throughput improved 5x within a single sprint after remediation.</p>
             <div class="testi-name">Vikas Nair</div>
-            <div class="testi-role">CTO — CloudTech Solutions</div>
+            <div class="testi-role">CTO - CloudTech Solutions</div>
           </div>
           <div class="testi-card">
             <div class="stars">★★★★★</div>
             <p class="testi-text">Three years of partnership and they consistently exceed expectations. Their automation expertise is genuinely unmatched in the industry.</p>
             <div class="testi-name">Neha Malhotra</div>
-            <div class="testi-role">CEO — FinanceApp Pro</div>
+            <div class="testi-role">CEO - FinanceApp Pro</div>
           </div>
         </div>
       </div>
@@ -1192,9 +1099,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     CONTACT
-═══════════════════════════════ -->
 <section id="contact" class="section">
   <div class="container">
     <div class="sec-head reveal">
@@ -1222,7 +1126,7 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
             </div>
             <div class="cinfo-item">
               <div class="cinfo-ico"><i class="fas fa-headset"></i></div>
-              <div><div class="cinfo-lab">Sales &amp; Support</div><div class="cinfo-val"><a href="mailto:contact@dataeuros.com">contact@dataeuros.com</a></div></div>
+              <div><div class="cinfo-lab">Sales and Support</div><div class="cinfo-val"><a href="mailto:contact@dataeuros.com">contact@dataeuros.com</a></div></div>
             </div>
             <div class="cinfo-item">
               <div class="cinfo-ico"><i class="fas fa-phone"></i></div>
@@ -1292,7 +1196,7 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
               <textarea id="f-msg" rows="4" placeholder="Tell us about your project, timeline, and goals..."></textarea>
               <span class="err-msg">Please describe your project</span>
             </div>
-            <button type="submit" class="form-submit" id="mainSubmitBtn">Send Request →</button>
+            <button type="submit" class="form-submit" id="mainSubmitBtn">Send Request</button>
             <div class="form-msg" id="mainFormMsg"></div>
           </form>
         </div>
@@ -1301,9 +1205,6 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     MAP
-═══════════════════════════════ -->
 <section id="mapview" class="section" style="padding-top:0">
   <div class="container">
     <div class="sec-head reveal">
@@ -1311,13 +1212,7 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
       <h2>Visit Our Office</h2>
     </div>
     <div class="map-frame reveal">
-      <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3362.5!2d74.8573!3d32.7265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391e83f3ab46f1f3%3A0xa2f1c834f96d0b04!2sShastri%20Nagar%2C%20Jammu!5e0!3m2!1sen!2sin!4v1"
-        title="DATAEUROS Office Location"
-        allowfullscreen
-        loading="lazy"
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3362.5!2d74.8573!3d32.7265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391e83f3ab46f1f3%3A0xa2f1c834f96d0b04!2sShastri%20Nagar%2C%20Jammu!5e0!3m2!1sen!2sin!4v1" title="DATAEUROS Office Location" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
     <div class="map-meta reveal">
       <div class="mm"><h4>Address</h4><p>23/A Shastri Nagar<br>Jammu, J&K 180001</p></div>
@@ -1328,15 +1223,12 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </section>
 
-<!-- ═══════════════════════════════
-     FOOTER
-═══════════════════════════════ -->
 <footer>
   <div class="container">
     <div class="foot-grid">
       <div class="foot-brand">
         <div class="nav-logo">DATA<span>EUROS</span></div>
-        <p>Advanced Software Testing &amp; QA Solutions for engineering teams worldwide. Built on trust, delivered with precision.</p>
+        <p>Advanced Software Testing and QA Solutions for engineering teams worldwide. Built on trust, delivered with precision.</p>
         <div class="foot-soc">
           <a href="https://linkedin.com/company/dataeuros" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
           <a href="https://twitter.com/dataeuros" target="_blank" rel="noopener" title="X"><i class="fab fa-x-twitter"></i></a>
@@ -1391,20 +1283,15 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
   </div>
 </footer>
 
-<!-- ============================================
-     JAVASCRIPT
-============================================ -->
 <script>
 'use strict';
 
-/* ── LOADER ─────────────────────────────────── */
 window.addEventListener('load', function() {
   setTimeout(function() {
     document.getElementById('loader').classList.add('hide');
   }, 3000);
 });
 
-/* ── CANVAS PARTICLE BG ──────────────────────── */
 (function() {
   var cvs = document.getElementById('cvs');
   var ctx = cvs.getContext('2d');
@@ -1465,12 +1352,10 @@ window.addEventListener('load', function() {
   resize(); init(); draw();
 })();
 
-/* ── NAV SCROLL ──────────────────────────────── */
 window.addEventListener('scroll', function() {
   document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
 });
 
-/* ── HAMBURGER ───────────────────────────────── */
 document.getElementById('hamburger').addEventListener('click', function() {
   this.classList.toggle('open');
   document.getElementById('mobileNav').classList.toggle('open');
@@ -1483,7 +1368,6 @@ function closeMobileNav() {
   document.body.style.overflow = '';
 }
 
-/* ── SCROLL TO ───────────────────────────────── */
 function scrollTo2(id) {
   var el = document.getElementById(id);
   if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1496,7 +1380,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a) {
   });
 });
 
-/* ── SCROLL REVEAL ───────────────────────────── */
 var revObs = new IntersectionObserver(function(entries) {
   entries.forEach(function(e) {
     if (e.isIntersecting) { e.target.classList.add('in'); revObs.unobserve(e.target); }
@@ -1506,7 +1389,6 @@ document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.proc-card').forEa
   revObs.observe(el);
 });
 
-/* ── COUNTER ANIMATION ───────────────────────── */
 var metricsDone = false;
 var metObs = new IntersectionObserver(function(entries) {
   if (entries[0].isIntersecting && !metricsDone) {
@@ -1532,55 +1414,26 @@ var metObs = new IntersectionObserver(function(entries) {
 var hmSection = document.querySelector('.hero-metrics');
 if (hmSection) metObs.observe(hmSection);
 
-/* ── YOUTUBE FALLBACK ────────────────────────── */
-// After a delay, check if iframe loaded content (basic check)
-setTimeout(function() {
-  for (var i = 1; i <= 5; i++) {
-    (function(n) {
-      var iframe = document.getElementById('yt' + n);
-      var fallback = document.getElementById('yt' + n + '-fb');
-      if (!iframe || !fallback) return;
-      // Attempt to access iframe — if cross-origin error thrown, it loaded fine
-      try {
-        // If we can read contentWindow.location it means it's same origin — unusual case
-        // For cross-origin (YouTube), absence of error means iframe loaded
-        iframe.addEventListener('error', function() {
-          fallback.classList.add('show');
-          iframe.style.display = 'none';
-        });
-        // Check iframe is visible and has height
-        if (iframe.offsetHeight === 0) {
-          fallback.classList.add('show');
-        }
-      } catch(e) {
-        // Cross-origin access blocked = iframe loaded correctly
-      }
-    })(i);
-  }
-}, 4000);
-
-/* ── TEAM DATA ───────────────────────────────── */
 var teamData = [
-  { name: 'Muskan Sharma', role: 'CEO & Founder', exp: '18+ years QA Engineering', img: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&q=80&fit=crop&crop=face' },
-  { name: 'Priyanka Singh', role: 'Head of Automation', exp: '14+ years Test Engineering', img: 'https://images.unsplash.com/photo-1573496799652-408c2ac9fe98?w=400&q=80&fit=crop&crop=face' },
-  { name: 'Aditya Sharma', role: 'Security Lead', exp: '12+ years Cybersecurity', img: 'https://images.unsplash.com/photo-1568992687947-868a62a9f521?w=400&q=80&fit=crop&crop=face' },
-  { name: 'Mehak ', role: 'QA Manager', exp: '10+ years Quality Assurance', img: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&q=80&fit=crop&crop=face' },
-  { name: 'Vikram Singh', role: 'Performance Specialist', exp: '9+ years Load Engineering', img: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&q=80&fit=crop&crop=face' },
-  { name: 'Anjali Verma', role: 'Client Success Director', exp: '8+ years Enterprise Relations', img: 'https://images.unsplash.com/photo-1598550874175-4d0ef436c909?w=400&q=80&fit=crop&crop=face' }
+  { name: 'Rajesh Kumar', role: 'CEO & Founder', exp: '18+ years QA Engineering' },
+  { name: 'Priya Singh', role: 'Head of Automation', exp: '14+ years Test Engineering' },
+  { name: 'Aditya Sharma', role: 'Security Lead', exp: '12+ years Cybersecurity' },
+  { name: 'Neha Patel', role: 'QA Manager', exp: '10+ years Quality Assurance' },
+  { name: 'Vikram Singh', role: 'Performance Specialist', exp: '9+ years Load Engineering' },
+  { name: 'Anjali Verma', role: 'Client Success Director', exp: '8+ years Enterprise Relations' }
 ];
 var grid = document.getElementById('teamGrid');
 if (grid) {
   teamData.forEach(function(m) {
     var card = document.createElement('div');
-    card.style.cssText = 'background:rgba(4,14,30,.7);border:1px solid rgba(0,212,255,.1);border-radius:4px;overflow:hidden;transition:all .4s';
+    card.style.cssText = 'background:rgba(4,14,30,.7);border:1px solid rgba(0,212,255,.1);border-radius:4px;overflow:hidden;transition:all .4s;padding:2rem;text-align:center';
     card.onmouseenter = function() { this.style.borderColor = 'rgba(0,212,255,.25)'; this.style.transform = 'translateY(-4px)'; this.style.boxShadow = '0 12px 40px rgba(0,0,0,.5)'; };
     card.onmouseleave = function() { this.style.borderColor = 'rgba(0,212,255,.1)'; this.style.transform = ''; this.style.boxShadow = ''; };
-    card.innerHTML = '<div style="aspect-ratio:1;overflow:hidden;position:relative"><img src="' + m.img + '" alt="' + m.name + '" loading="lazy" style="width:100%;height:100%;object-fit:cover;filter:brightness(.65) saturate(.5);transition:filter .4s" onmouseenter="this.style.filter=\'brightness(.82) saturate(.85)\'" onmouseleave="this.style.filter=\'brightness(.65) saturate(.5)\'"><div style="position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,212,255,.14),rgba(102,0,255,.08));pointer-events:none"></div></div><div style="padding:1.2rem 1.5rem;border-top:1px solid rgba(0,212,255,.1)"><div style="font-family:Rajdhani,sans-serif;font-size:1.1rem;font-weight:600;color:#e4f0ff;letter-spacing:.04rem;margin-bottom:.18rem">' + m.name + '</div><div style="font-family:IBM Plex Mono,monospace;font-size:.6rem;color:#00d4ff;letter-spacing:.1rem;margin-bottom:.25rem">' + m.role + '</div><div style="font-size:.78rem;color:#5d7d9a;font-weight:300">' + m.exp + '</div></div>';
+    card.innerHTML = '<div style="width:100px;height:100px;margin:0 auto 1.5rem;border-radius:50%;border:2px solid rgba(0,212,255,.3);display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(0,212,255,.1),rgba(102,0,255,.08));font-size:2.2rem;color:var(--cyan)"><i class="fas fa-user"></i></div><div style="font-family:Rajdhani,sans-serif;font-size:1.1rem;font-weight:600;color:#e4f0ff;letter-spacing:.04rem;margin-bottom:.18rem">' + m.name + '</div><div style="font-family:IBM Plex Mono,monospace;font-size:.6rem;color:#00d4ff;letter-spacing:.1rem;margin-bottom:.25rem;text-transform:uppercase">' + m.role + '</div><div style="font-size:.78rem;color:#5d7d9a;font-weight:300">' + m.exp + '</div>';
     grid.appendChild(card);
   });
 }
 
-/* ── TESTIMONIAL CAROUSEL ────────────────────── */
 (function() {
   var track = document.getElementById('testiTrack');
   var nav = document.getElementById('testiNav');
@@ -1616,7 +1469,6 @@ if (grid) {
   setInterval(function() { go((cur + 1) % pages); }, 5500);
 })();
 
-/* ── FORM VALIDATION ─────────────────────────── */
 function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
 function validatePhone(v) { return v === '' || (/^[\d\s+\-()]+$/.test(v) && v.replace(/\D/g,'').length >= 10); }
 function setErr(input, show) {
@@ -1633,7 +1485,6 @@ function setErr(input, show) {
 }
 function clearErr(input) { setErr(input, false); }
 
-/* ── MAIN CONTACT FORM ───────────────────────── */
 var mainForm = document.getElementById('mainForm');
 if (mainForm) {
   var inputs = mainForm.querySelectorAll('input, select, textarea');
@@ -1664,9 +1515,9 @@ if (mainForm) {
     formMsg.className = 'form-msg';
     setTimeout(function() {
       btn.disabled = false;
-      btn.textContent = 'Send Request →';
+      btn.textContent = 'Send Request';
       formMsg.className = 'form-msg success';
-      formMsg.textContent = '✓ Your message was sent successfully! We\'ll be in touch within 24 hours.';
+      formMsg.textContent = 'Your message was sent successfully! We will be in touch within 24 hours.';
       mainForm.reset();
       showToast('Message sent successfully!', 'success');
       setTimeout(function() { formMsg.className = 'form-msg'; }, 6000);
@@ -1674,7 +1525,6 @@ if (mainForm) {
   });
 }
 
-/* ── MODAL ───────────────────────────────────── */
 function openModal() {
   document.getElementById('modalOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
@@ -1727,7 +1577,6 @@ if (modalForm) {
   });
 }
 
-/* ── TOAST ───────────────────────────────────── */
 function showToast(msg, type) {
   var t = document.createElement('div');
   t.className = 'toast ' + (type || 'success');
@@ -1739,6 +1588,14 @@ function showToast(msg, type) {
     t.style.transition = 'all .4s';
     setTimeout(function() { t.remove(); }, 400);
   }, 3200);
+}
+
+function playVideo(id) {
+  var video = document.getElementById(id);
+  var player = video.parentElement;
+  player.querySelector('.vid-player-inner').style.display = 'none';
+  video.style.display = 'block';
+  video.play();
 }
 </script>
 </body>
