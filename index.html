@@ -3,1090 +3,915 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DATAEUROS — Enterprise QA & Cybersecurity</title>
+<title>DATAEUROS — Elite Enterprise QA & Cybersecurity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Exo+2:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300&family=IBM+Plex+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
-/* ═══════════════════════════════════════════════
-   ROOT & RESET
-═══════════════════════════════════════════════ */
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#000508;--bg1:#010b14;--bg2:#020e1c;
-  --c:#00e5ff;--c2:#00b8cc;--c3:#004d66;
-  --v:#7000ff;--g:#00ff9d;--r:#ff2d55;--a:#ff9500;
-  --text:#dff2ff;--muted:#4a7a96;--subtle:#1e3d52;
-  --border:rgba(0,229,255,0.09);--border2:rgba(0,229,255,0.22);
-  --card:rgba(1,15,28,0.75);
-  --r4:4px;--r8:8px;
+  --bg:#020408;--bg1:#03070f;--bg2:#05101a;
+  --c1:#00e5ff;--c2:#0090a8;--c3:#003344;
+  --acc1:#39ff14;--acc2:#ff6b00;--acc3:#ff2244;
+  --acc4:#b44fff;
+  --text:#e8f4ff;--muted:#6a8fab;--subtle:#2a4560;
+  --border:rgba(0,229,255,.1);--border2:rgba(0,229,255,.22);
+  --card:rgba(3,7,15,.85);--glow:rgba(0,229,255,.18);
+  --font-display:'Syne',sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --font-body:'DM Sans',sans-serif;
 }
 html{scroll-behavior:smooth}
-body{font-family:'Exo 2',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.65;cursor:none}
+body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;cursor:none}
 a{text-decoration:none;color:inherit}
-button{cursor:none;font-family:inherit}
+button{cursor:none;font-family:inherit;border:none;outline:none}
 img{display:block;max-width:100%}
+::selection{background:rgba(0,229,255,.3);color:#fff}
 
-/* ═══════════════════════════════════════════════
-   CUSTOM CURSOR
-═══════════════════════════════════════════════ */
-#cursor-dot{position:fixed;width:8px;height:8px;border-radius:50%;background:var(--c);pointer-events:none;z-index:999999;transform:translate(-50%,-50%);box-shadow:0 0 15px var(--c),0 0 30px rgba(0,229,255,.4);transition:width .2s,height .2s,background .2s}
-#cursor-ring{position:fixed;width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,229,255,.35);pointer-events:none;z-index:999998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .3s}
-body:has(a:hover) #cursor-dot,body:has(button:hover) #cursor-dot{width:14px;height:14px;background:var(--g)}
-body:has(a:hover) #cursor-ring,body:has(button:hover) #cursor-ring{width:60px;height:60px;border-color:rgba(0,255,157,.4)}
+/* ══════════════════════════════════════════════
+   CUSTOM CURSOR — ORBITAL DESIGN
+══════════════════════════════════════════════ */
+#cur-core{position:fixed;width:12px;height:12px;border-radius:50%;background:var(--c1);pointer-events:none;z-index:999999;transform:translate(-50%,-50%);mix-blend-mode:screen;box-shadow:0 0 20px var(--c1),0 0 60px rgba(0,229,255,.4);transition:transform .12s,width .15s,height .15s}
+#cur-orbit{position:fixed;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(0,229,255,.4);pointer-events:none;z-index:999998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .25s}
+#cur-trail{position:fixed;pointer-events:none;z-index:999997}
+.cur-trail-dot{position:fixed;width:4px;height:4px;border-radius:50%;background:var(--c1);pointer-events:none;z-index:999996;transform:translate(-50%,-50%);opacity:.4}
+body:has(a:hover) #cur-core,body:has(button:hover) #cur-core{transform:translate(-50%,-50%) scale(2.2);background:var(--acc1);box-shadow:0 0 30px var(--acc1)}
+body:has(a:hover) #cur-orbit,body:has(button:hover) #cur-orbit{width:64px;height:64px;border-color:rgba(57,255,20,.5)}
 
-/* ═══════════════════════════════════════════════
-   CINEMATIC INTRO SCREEN
-═══════════════════════════════════════════════ */
-#intro{
-  position:fixed;inset:0;z-index:100000;
-  background:var(--bg);display:flex;flex-direction:column;
-  align-items:center;justify-content:center;overflow:hidden;
-}
-#intro.exit{animation:introExit .8s ease-in-out forwards}
-@keyframes introExit{to{opacity:0;transform:scale(1.04);visibility:hidden}}
-.intro-canvas{position:absolute;inset:0}
-.intro-center{position:relative;z-index:2;text-align:center}
-.intro-logo-wrap{position:relative;display:inline-block;margin-bottom:2rem}
-.intro-logo{
-  font-family:'Orbitron',sans-serif;font-size:clamp(2.5rem,8vw,5.5rem);font-weight:900;
-  letter-spacing:.15em;
-  background:linear-gradient(135deg,#fff 0%,var(--c) 50%,var(--v) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  opacity:0;animation:logoReveal 1.2s cubic-bezier(.22,1,.36,1) .4s forwards;
-  position:relative;
-}
-.intro-logo::after{
-  content:'DATAEUROS';
-  position:absolute;inset:0;
-  background:linear-gradient(135deg,#fff 0%,var(--c) 50%,var(--v) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  filter:blur(20px);opacity:.5;
-  animation:logoReveal 1.2s cubic-bezier(.22,1,.36,1) .4s forwards;
-}
-@keyframes logoReveal{
-  0%{opacity:0;transform:scaleX(.6) translateY(30px)}
-  60%{opacity:1;transform:scaleX(1.03) translateY(-2px)}
-  100%{opacity:1;transform:scaleX(1) translateY(0)}
-}
-.intro-tagline{
-  font-family:'IBM Plex Mono',monospace;font-size:clamp(.65rem,2vw,.9rem);
-  color:var(--c);letter-spacing:.35em;text-transform:uppercase;
-  opacity:0;animation:fadeUp .8s ease .9s forwards;
-}
-.intro-bar-wrap{width:300px;height:2px;background:rgba(0,229,255,.1);border-radius:2px;margin:2.5rem auto 0;overflow:hidden;opacity:0;animation:fadeUp .6s ease 1.1s forwards}
-.intro-bar{height:100%;background:linear-gradient(90deg,var(--c),var(--v));width:0;border-radius:2px}
-.intro-pct{font-family:'IBM Plex Mono',monospace;font-size:.7rem;color:var(--muted);margin-top:.6rem;letter-spacing:.1rem;opacity:0;animation:fadeUp .6s ease 1.2s forwards}
-.intro-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+/* ══════════════════════════════════════════════
+   ULTRA CINEMATIC INTRO
+══════════════════════════════════════════════ */
+#intro{position:fixed;inset:0;z-index:100000;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
+#intro-canvas{position:absolute;inset:0;width:100%;height:100%}
+.intro-content{position:relative;z-index:10;text-align:center;pointer-events:none}
+.intro-eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.45em;color:rgba(0,229,255,.6);text-transform:uppercase;margin-bottom:2rem;opacity:0;animation:iUp .8s .4s forwards}
+.intro-brand{font-family:var(--font-display);font-size:clamp(4rem,14vw,11rem);font-weight:800;letter-spacing:-.04em;line-height:.9;opacity:0;animation:iBrand 1.4s .7s cubic-bezier(.19,1,.22,1) forwards;position:relative}
+.intro-brand .d1{display:block;background:linear-gradient(90deg,#fff 0%,var(--c1) 55%,var(--acc1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 80px rgba(0,229,255,.6))}
+.intro-brand .d2{display:block;color:rgba(0,229,255,.15);font-size:.35em;letter-spacing:.6em;-webkit-text-fill-color:rgba(0,229,255,.15);font-weight:400;font-family:var(--font-mono);margin-top:.8em}
+@keyframes iBrand{0%{opacity:0;filter:blur(60px);transform:scaleY(.3)}50%{opacity:.9;filter:blur(5px)}100%{opacity:1;filter:blur(0);transform:scaleY(1)}}
+@keyframes iUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
-/* ═══════════════════════════════════════════════
-   FLOATING PARTICLES BG (permanent)
-═══════════════════════════════════════════════ */
-#bg-canvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+.intro-progress{width:min(500px,80vw);margin:3.5rem auto 0;opacity:0;animation:iUp .7s 1.2s forwards}
+.intro-track{height:2px;background:rgba(0,229,255,.1);border-radius:2px;overflow:hidden;position:relative}
+.intro-track::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,229,255,.3),transparent);animation:scanTrack 2s linear infinite}
+@keyframes scanTrack{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.intro-fill{height:100%;background:linear-gradient(90deg,var(--c1),var(--acc1));border-radius:2px;width:0;box-shadow:0 0 20px var(--c1);transition:width .06s linear}
+.intro-stats{display:flex;justify-content:space-between;margin-top:.9rem}
+.intro-stat{font-family:var(--font-mono);font-size:.6rem;color:rgba(0,229,255,.45);letter-spacing:.1em}
+#intro-pct{font-family:var(--font-mono);font-size:4rem;font-weight:700;color:rgba(0,229,255,.08);position:absolute;bottom:2rem;right:3rem;letter-spacing:-.03em}
 
-/* ═══════════════════════════════════════════════
-   GRID PERSPECTIVE BG
-═══════════════════════════════════════════════ */
-#grid-canvas{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.45}
+.intro-phases{display:flex;gap:3rem;margin-top:2.5rem;justify-content:center}
+.intro-phase{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;color:rgba(0,229,255,.25);text-transform:uppercase;transition:color .3s;display:flex;align-items:center;gap:.5rem}
+.intro-phase.active{color:var(--acc1)}
+.intro-phase::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
+#intro.fade-out{animation:introOut 1s cubic-bezier(.4,0,.2,1) forwards}
+@keyframes introOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.06);visibility:hidden}}
 
-/* ═══════════════════════════════════════════════
-   SCANLINE
-═══════════════════════════════════════════════ */
-.scanline{position:fixed;inset:0;z-index:2;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px)}
+/* ══════════════════════════════════════════════
+   BACKGROUND — DEEP SPACE + GRID
+══════════════════════════════════════════════ */
+#bg-deep{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 120% 80% at 50% 30%,rgba(0,40,80,.35) 0%,transparent 70%)}
+#bg-stars{position:fixed;inset:0;z-index:0}
+#bg-grid{position:fixed;inset:0;z-index:1;opacity:.25;background-image:linear-gradient(rgba(0,229,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.08) 1px,transparent 1px);background-size:60px 60px}
+#bg-vignette{position:fixed;inset:0;z-index:2;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(0,0,0,.7) 100%);pointer-events:none}
+.noise{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");background-repeat:repeat;background-size:200px 200px}
+.scanline{position:fixed;inset:0;z-index:4;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px)}
 
-/* ═══════════════════════════════════════════════
-   NAVBAR
-═══════════════════════════════════════════════ */
-#nav{
-  position:fixed;top:0;left:0;right:0;z-index:1000;
-  padding:1.1rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:1rem;
-  border-bottom:1px solid transparent;transition:all .4s;
-}
-#nav.scrolled{background:rgba(0,5,8,.92);backdrop-filter:blur(24px);border-bottom-color:var(--border);box-shadow:0 4px 60px rgba(0,0,0,.8),0 0 1px rgba(0,229,255,.08)}
-.nav-logo{font-family:'Orbitron',sans-serif;font-size:1.2rem;font-weight:800;letter-spacing:.15rem;color:var(--c);text-shadow:0 0 20px rgba(0,229,255,.5);cursor:none;white-space:nowrap}
-.nav-logo span{color:rgba(0,229,255,.3)}
-.nav-links{display:flex;align-items:center;gap:1.6rem;list-style:none}
-.nav-links a{font-size:.72rem;font-weight:600;letter-spacing:.12rem;text-transform:uppercase;color:var(--muted);transition:color .2s;white-space:nowrap;position:relative}
-.nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--c);transition:width .3s;box-shadow:0 0 6px var(--c)}
-.nav-links a:hover{color:var(--c)}
-.nav-links a:hover::after{width:100%}
-.nav-intern-btn{
-  padding:.5rem 1.2rem;background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(112,0,255,.12));
-  border:1px solid rgba(112,0,255,.4);color:#bf7fff;
-  font-family:'Orbitron',sans-serif;font-weight:700;font-size:.62rem;letter-spacing:.12rem;text-transform:uppercase;
-  border-radius:var(--r4);transition:all .3s;white-space:nowrap;cursor:none;
-}
-.nav-intern-btn:hover{background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(112,0,255,.25));border-color:rgba(112,0,255,.7);color:#d4a0ff;box-shadow:0 0 20px rgba(112,0,255,.3)}
-.nav-cta{
-  padding:.5rem 1.5rem;background:transparent;
-  border:1px solid var(--c2);border-radius:var(--r4);
-  color:var(--c);font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.1rem;text-transform:uppercase;
-  transition:all .3s;white-space:nowrap;cursor:none;position:relative;overflow:hidden;
-}
-.nav-cta::before{content:'';position:absolute;inset:0;background:var(--c);transform:scaleX(0);transform-origin:left;transition:transform .3s;z-index:-1}
-.nav-cta:hover{color:var(--bg)}
-.nav-cta:hover::before{transform:scaleX(1)}
-/* Hamburger */
-.hbg{display:none;flex-direction:column;gap:5px;background:none;border:none;padding:.4rem;cursor:none}
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+#nav{position:fixed;top:0;left:0;right:0;z-index:2000;padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
+#nav.solid{background:rgba(2,4,8,.94);backdrop-filter:blur(40px);border-bottom:1px solid var(--border);box-shadow:0 0 60px rgba(0,0,0,.8)}
+.logo{font-family:var(--font-display);font-size:1.5rem;font-weight:800;letter-spacing:-.02em;cursor:none;display:flex;align-items:center;gap:.5rem}
+.logo-mark{width:32px;height:32px;border:2px solid var(--c1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:var(--font-mono);color:var(--c1);position:relative;overflow:hidden}
+.logo-mark::before{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,var(--c1),var(--acc1));opacity:.15}
+.logo-txt{background:linear-gradient(90deg,#fff 0%,var(--c1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.logo-txt span{-webkit-text-fill-color:rgba(0,229,255,.3);color:rgba(0,229,255,.3)}
+
+.nav-center{display:flex;align-items:center;gap:.3rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:50px;padding:.4rem .6rem}
+.nav-link{padding:.5rem 1.2rem;border-radius:50px;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:all .3s;font-weight:500}
+.nav-link:hover{color:var(--c1);background:rgba(0,229,255,.1)}
+
+.nav-right{display:flex;align-items:center;gap:1rem}
+.nav-status{display:flex;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.6rem;color:var(--acc1);letter-spacing:.1em;opacity:.7}
+.nav-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc1);box-shadow:0 0 10px var(--acc1);animation:pulse 2s ease-in-out infinite}
+.cta-nav{padding:.7rem 1.8rem;background:linear-gradient(135deg,var(--c1),rgba(0,229,255,.8));color:#000;font-family:var(--font-display);font-weight:700;font-size:.75rem;letter-spacing:.05em;border-radius:50px;transition:all .35s;box-shadow:0 0 30px rgba(0,229,255,.25);cursor:none}
+.cta-nav:hover{transform:translateY(-3px);box-shadow:0 8px 50px rgba(0,229,255,.5)}
+.hbg{display:none;flex-direction:column;gap:5px;background:none;padding:.5rem;cursor:none}
 .hbg span{width:22px;height:2px;background:var(--muted);border-radius:2px;transition:all .3s;display:block}
-.hbg.open span:nth-child(1){transform:translateY(7px) rotate(45deg);background:var(--c)}
-.hbg.open span:nth-child(2){opacity:0}
-.hbg.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);background:var(--c)}
-.mob-nav{display:none;position:fixed;inset:0;z-index:999;background:rgba(0,5,8,.97);backdrop-filter:blur(24px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+
+/* MOBILE NAV */
+.mob-nav{display:none;position:fixed;inset:0;z-index:1999;background:rgba(2,4,8,.97);backdrop-filter:blur(40px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
 .mob-nav.open{display:flex}
-.mob-nav a,.mob-nav button{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:700;letter-spacing:.15rem;text-transform:uppercase;color:var(--muted);background:none;border:none;transition:color .2s;cursor:none}
-.mob-nav a:hover,.mob-nav button:hover{color:var(--c)}
-.mob-close{position:absolute;top:1.5rem;right:2rem;background:none;border:none;color:var(--muted);font-size:1.4rem;cursor:none;transition:color .2s}
-.mob-close:hover{color:var(--c)}
+.mob-nav a,.mob-nav button{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--muted);background:none;border:none;transition:color .2s;cursor:none}
+.mob-nav a:hover,.mob-nav button:hover{color:var(--c1)}
+.mob-close{position:absolute;top:2rem;right:2.5rem;background:none;color:var(--muted);font-size:1.8rem;cursor:none;transition:color .2s}
 
-/* ═══════════════════════════════════════════════
-   SHARED
-═══════════════════════════════════════════════ */
-.sec{position:relative;z-index:10;padding:7rem 0}
-.con{max-width:1320px;margin:0 auto;padding:0 2.5rem}
-.sh{text-align:center;margin-bottom:4rem}
-.stag{display:inline-flex;align-items:center;gap:.45rem;padding:.3rem .9rem;border:1px solid var(--border2);border-radius:2px;font-family:'IBM Plex Mono',monospace;font-size:.65rem;letter-spacing:.18rem;text-transform:uppercase;color:var(--c);background:rgba(0,229,255,.04);margin-bottom:1rem;position:relative}
-.stag::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c)}
-.blink{width:5px;height:5px;border-radius:50%;background:var(--c);animation:blink 2s ease-in-out infinite;box-shadow:0 0 8px var(--c)}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.1}}
-.sh h2{font-family:'Orbitron',sans-serif;font-size:clamp(1.8rem,3.5vw,3rem);font-weight:700;letter-spacing:-.01em;line-height:1.15;margin-bottom:.8rem;background:linear-gradient(135deg,#fff 0%,var(--c) 65%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sh p{color:var(--muted);font-size:.95rem;font-weight:300;max-width:540px;margin:0 auto}
-/* Reveal */
-.rv{opacity:0;transform:translateY(32px);transition:opacity .75s cubic-bezier(.22,1,.36,1),transform .75s cubic-bezier(.22,1,.36,1)}
-.rv.in{opacity:1;transform:none}
-.rvl{opacity:0;transform:translateX(-36px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
-.rvl.in{opacity:1;transform:none}
-.rvr{opacity:0;transform:translateX(36px);transition:opacity .7s cubic-bezier(.22,1,.36,1),transform .7s cubic-bezier(.22,1,.36,1)}
-.rvr.in{opacity:1;transform:none}
-/* Btn */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;padding:.85rem 2rem;border-radius:var(--r4);font-family:'Orbitron',sans-serif;font-weight:700;font-size:.72rem;letter-spacing:.12rem;text-transform:uppercase;border:none;transition:all .28s cubic-bezier(.34,1.56,.64,1);cursor:none}
-.btn:active{transform:scale(.97)!important}
-.btn-p{background:linear-gradient(135deg,var(--c),var(--v));color:#000;box-shadow:0 0 30px rgba(0,229,255,.25)}
-.btn-p:hover{transform:translateY(-3px);box-shadow:0 6px 50px rgba(0,229,255,.45)}
-.btn-o{background:transparent;color:var(--c);border:1px solid var(--c2)}
-.btn-o:hover{background:var(--c);color:#000;transform:translateY(-3px);box-shadow:0 6px 40px rgba(0,229,255,.35)}
-.btn-v{background:linear-gradient(135deg,rgba(112,0,255,.15),rgba(0,229,255,.1));color:#bf7fff;border:1px solid rgba(112,0,255,.4)}
-.btn-v:hover{background:linear-gradient(135deg,rgba(112,0,255,.35),rgba(0,229,255,.2));border-color:rgba(112,0,255,.7);transform:translateY(-3px);box-shadow:0 6px 40px rgba(112,0,255,.35)}
-/* Glass */
-.glass{background:var(--card);border:1px solid var(--border);border-radius:var(--r8);backdrop-filter:blur(16px);transition:border-color .3s,transform .3s,box-shadow .3s}
-.glass:hover{border-color:var(--border2);box-shadow:0 10px 50px rgba(0,0,0,.5)}
-
-/* ═══════════════════════════════════════════════
-   HERO
-═══════════════════════════════════════════════ */
-#hero{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:9rem 2.5rem 5rem;position:relative;overflow:hidden}
-.hero-glow{position:absolute;top:30%;left:50%;transform:translateX(-50%);width:800px;height:800px;background:radial-gradient(circle,rgba(0,229,255,.08) 0%,rgba(112,0,255,.05) 40%,transparent 70%);filter:blur(60px);animation:heroGlowPulse 6s ease-in-out infinite}
-@keyframes heroGlowPulse{0%,100%{transform:translateX(-50%) scale(.85);opacity:.6}50%{transform:translateX(-50%) scale(1.15);opacity:1}}
-.hero-in{text-align:center;max-width:1050px;position:relative;z-index:5}
-.hero-badge{
-  display:inline-flex;align-items:center;gap:.6rem;
-  padding:.5rem 1.4rem;border:1px solid var(--border2);border-radius:50px;
-  font-family:'IBM Plex Mono',monospace;font-size:.68rem;letter-spacing:.2rem;text-transform:uppercase;color:var(--c);
-  background:rgba(0,229,255,.05);margin-bottom:2rem;
-  opacity:0;animation:fadeUp .8s .2s forwards;
+/* ══════════════════════════════════════════════
+   INQUIRY MODAL — ULTRA PREMIUM
+══════════════════════════════════════════════ */
+.iq-modal{position:fixed;inset:0;z-index:90000;display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
+.iq-modal.show{opacity:1;visibility:visible}
+.iq-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(30px)}
+.iq-box{
+  position:relative;z-index:2;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;
+  background:linear-gradient(145deg,rgba(3,10,25,.97) 0%,rgba(2,7,18,.97) 100%);
+  border:1px solid rgba(0,229,255,.2);border-radius:16px;
+  padding:0;overflow:hidden;
+  box-shadow:0 0 0 1px rgba(0,229,255,.05),0 40px 120px rgba(0,0,0,.9),0 0 100px rgba(0,229,255,.12);
+  animation:modalIn .55s cubic-bezier(.34,1.56,.64,1);
 }
-.hero-badge::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--g);box-shadow:0 0 10px var(--g);animation:blink 1.5s ease-in-out infinite}
-.hero-h1{font-family:'Orbitron',sans-serif;font-size:clamp(3rem,9vw,7.5rem);font-weight:900;letter-spacing:-.02em;line-height:1;margin-bottom:1.4rem;opacity:0;animation:fadeUp 1s .4s forwards}
-.hero-h1 .l1{display:block;background:linear-gradient(120deg,#fff 0%,#7fffff 40%,var(--c) 70%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 40px rgba(0,229,255,.3))}
-.hero-h1 .l2{display:block;font-weight:300;font-size:.28em;letter-spacing:.3em;-webkit-text-fill-color:rgba(0,229,255,.35);color:rgba(0,229,255,.35);margin-top:.5em;font-family:'IBM Plex Mono',monospace}
-.hero-sub{font-size:1.05rem;color:var(--muted);font-weight:300;line-height:1.9;max-width:650px;margin:0 auto 2.8rem;opacity:0;animation:fadeUp .9s .7s forwards}
-.hero-sub strong{color:var(--text);font-weight:500}
-.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fadeUp .8s .95s forwards}
-/* Animated CODE ticker under hero */
-.code-ticker{
-  margin-top:3.5rem;padding:1rem 1.5rem;
-  background:rgba(0,0,0,.5);border:1px solid var(--border);border-radius:var(--r4);
-  font-family:'IBM Plex Mono',monospace;font-size:.72rem;color:rgba(0,229,255,.7);
-  white-space:nowrap;overflow:hidden;position:relative;
-  opacity:0;animation:fadeUp .8s 1.2s forwards;
-}
-.code-ticker::before{content:'// ';color:var(--v);font-weight:500}
-#tickerText{display:inline;border-right:2px solid var(--c);animation:cursorBlink .7s ease-in-out infinite}
-@keyframes cursorBlink{0%,100%{border-color:var(--c)}50%{border-color:transparent}}
-/* Counter metrics */
-.hero-metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:var(--r4);overflow:hidden;margin-top:4rem;background:rgba(0,229,255,.02);backdrop-filter:blur(12px);opacity:0;animation:fadeUp .8s 1.4s forwards}
-.hm{padding:1.5rem 1rem;border-right:1px solid var(--border);text-align:center}
-.hm:last-child{border-right:none}
-.hm-val{font-family:'Orbitron',sans-serif;font-size:1.8rem;font-weight:800;color:var(--c);line-height:1;text-shadow:0 0 16px rgba(0,229,255,.4)}
-.hm-lab{font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:var(--subtle);letter-spacing:.12rem;text-transform:uppercase;margin-top:.35rem}
-
-/* ═══════════════════════════════════════════════
-   AI ANIMATED VIDEO SECTION (Canvas-based)
-═══════════════════════════════════════════════ */
-#aivis{background:linear-gradient(180deg,transparent,rgba(0,20,40,.06) 50%,transparent)}
-.aiv-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
-.aiv-card{border:1px solid var(--border);border-radius:var(--r8);overflow:hidden;position:relative;background:#000}
-.aiv-card.featured{grid-column:1/-1}
-.aiv-canvas-wrap{position:relative;width:100%;padding-top:56.25%}
-.aiv-canvas-wrap canvas{position:absolute;top:0;left:0;width:100%;height:100%}
-.aiv-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 60%,rgba(0,5,10,.9) 100%);pointer-events:none;z-index:2}
-.aiv-label{position:absolute;bottom:1rem;left:1.2rem;z-index:3;pointer-events:none}
-.aiv-label .tag{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--c);letter-spacing:.15rem;text-transform:uppercase;background:rgba(0,5,10,.7);padding:.22rem .6rem;border:1px solid var(--border2);border-radius:2px;display:inline-block;margin-bottom:.3rem}
-.aiv-label .ttl{font-family:'Orbitron',sans-serif;font-size:.88rem;font-weight:700;color:var(--text);letter-spacing:.04rem}
-.aiv-badge{position:absolute;top:.8rem;right:.8rem;z-index:3;background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(112,0,255,.1));border:1px solid var(--border2);border-radius:2px;padding:.2rem .6rem;font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--c);letter-spacing:.1rem}
-/* YouTube embed section */
-.yt-row{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1.5rem}
-.yt-card{border:1px solid var(--border);border-radius:var(--r8);overflow:hidden;background:#000;transition:border-color .3s,transform .3s}
-.yt-card:hover{border-color:var(--border2);transform:translateY(-3px)}
-.yt-wrap{position:relative;width:100%;padding-top:56.25%}
-.yt-wrap iframe{position:absolute;top:0;left:0;width:100%;height:100%;border:none}
-.yt-meta{padding:1rem 1.2rem;border-top:1px solid var(--border)}
-.yt-tag{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--c);letter-spacing:.12rem;text-transform:uppercase;margin-bottom:.3rem}
-.yt-ttl{font-family:'Orbitron',sans-serif;font-size:.82rem;font-weight:600;color:var(--text)}
-
-/* ═══════════════════════════════════════════════
-   SERVICES
-═══════════════════════════════════════════════ */
-#services{background:linear-gradient(180deg,transparent,rgba(0,15,30,.07) 50%,transparent)}
-.svc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
-.svc{
-  background:rgba(1,12,24,.65);border:1px solid var(--border);
-  padding:2.2rem 2rem;position:relative;overflow:hidden;
-  transition:all .4s;
-}
-.svc::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.05),transparent);opacity:0;transition:opacity .4s}
-.svc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);transform:scaleX(0);transition:transform .5s}
-.svc:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 15px 50px rgba(0,0,0,.6)}
-.svc:hover::before{opacity:1}
-.svc:hover::after{transform:scaleX(1)}
-.svc-ic{width:46px;height:46px;border-radius:var(--r4);display:flex;align-items:center;justify-content:center;background:rgba(0,229,255,.08);border:1px solid var(--border2);margin-bottom:1.2rem;font-size:1.3rem;color:var(--c)}
-.svc h3{font-family:'Orbitron',sans-serif;font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.6rem;letter-spacing:.04rem}
-.svc p{font-size:.85rem;color:var(--muted);font-weight:300;line-height:1.8}
-.svc-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.9rem}
-.chip{font-family:'IBM Plex Mono',monospace;font-size:.58rem;padding:.15rem .55rem;border:1px solid var(--border);color:var(--subtle);border-radius:2px}
-
-/* ═══════════════════════════════════════════════
-   INTERNSHIP SECTION
-═══════════════════════════════════════════════ */
-#internship{background:linear-gradient(180deg,transparent,rgba(112,0,255,.04) 50%,transparent);position:relative;overflow:hidden}
-#internship::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:600px;background:radial-gradient(circle,rgba(112,0,255,.08),transparent 70%);filter:blur(60px);pointer-events:none}
-.intern-hero{text-align:center;padding:0 1rem;position:relative;z-index:2}
-.intern-hero h2{font-family:'Orbitron',sans-serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:900;margin-bottom:1rem;background:linear-gradient(135deg,#fff,#bf7fff,var(--v));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.intern-hero p{color:var(--muted);max-width:600px;margin:0 auto 3rem;font-size:.95rem;font-weight:300;line-height:1.8}
-.intern-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-bottom:4rem}
-.intern-card{
-  background:rgba(112,0,255,.04);border:1px solid rgba(112,0,255,.2);border-radius:var(--r8);
-  padding:2.2rem 2rem;transition:all .4s;position:relative;overflow:hidden;
-}
-.intern-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--v),transparent);transform:scaleX(0);transition:transform .5s}
-.intern-card:hover{border-color:rgba(112,0,255,.45);transform:translateY(-5px);box-shadow:0 15px 50px rgba(112,0,255,.15)}
-.intern-card:hover::after{transform:scaleX(1)}
-.intern-role{font-family:'Orbitron',sans-serif;font-size:.88rem;font-weight:700;color:#bf7fff;margin-bottom:.6rem}
-.intern-duration{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:rgba(191,127,255,.6);letter-spacing:.12rem;margin-bottom:.8rem}
-.intern-card p{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.75;margin-bottom:1.2rem}
-.intern-perks{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem}
-.perk{font-family:'IBM Plex Mono',monospace;font-size:.58rem;padding:.15rem .6rem;border:1px solid rgba(191,127,255,.25);color:rgba(191,127,255,.8);border-radius:2px}
-.intern-apply-btn{
-  width:100%;padding:.7rem;background:linear-gradient(135deg,rgba(112,0,255,.2),rgba(0,229,255,.1));
-  border:1px solid rgba(112,0,255,.4);border-radius:var(--r4);
-  color:#bf7fff;font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.12rem;text-transform:uppercase;
-  transition:all .3s;cursor:none;
-}
-.intern-apply-btn:hover{background:linear-gradient(135deg,rgba(112,0,255,.45),rgba(0,229,255,.2));border-color:rgba(112,0,255,.7);color:#d4a0ff;box-shadow:0 0 30px rgba(112,0,255,.3)}
-/* CTA banner */
-.intern-cta{
-  background:linear-gradient(135deg,rgba(112,0,255,.08),rgba(0,229,255,.06));
-  border:1px solid rgba(112,0,255,.25);border-radius:var(--r8);
-  padding:3rem 2.5rem;display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap;
-}
-.intern-cta h3{font-family:'Orbitron',sans-serif;font-size:1.6rem;font-weight:800;color:#d4a0ff}
-.intern-cta p{color:var(--muted);font-size:.9rem;font-weight:300;margin-top:.4rem}
-
-/* ═══════════════════════════════════════════════
-   INTERNSHIP POPUP MODAL
-═══════════════════════════════════════════════ */
-#internModal,.inquiry-modal{
-  position:fixed;inset:0;z-index:80000;
-  background:rgba(0,0,0,.9);backdrop-filter:blur(16px);
-  display:flex;align-items:center;justify-content:center;padding:1rem;
-  opacity:0;visibility:hidden;transition:opacity .35s,visibility .35s;
-}
-#internModal.show,.inquiry-modal.show{opacity:1;visibility:visible}
-.ibox{
-  background:linear-gradient(135deg,rgba(112,0,255,.08),rgba(0,229,255,.05));
-  border:1px solid rgba(112,0,255,.35);border-radius:var(--r8);
-  padding:2.5rem;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;
-  backdrop-filter:blur(30px);box-shadow:0 40px 100px rgba(0,0,0,.9),0 0 60px rgba(112,0,255,.15);
-  animation:boxSlide .45s cubic-bezier(.22,1,.36,1) both;
-}
-.inquiry-box{
-  background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(112,0,255,.05));
-  border:1px solid var(--border2);border-radius:var(--r8);
-  padding:2.5rem;width:100%;max-width:560px;max-height:92vh;overflow-y:auto;
-  backdrop-filter:blur(30px);box-shadow:0 40px 100px rgba(0,0,0,.9),0 0 60px rgba(0,229,255,.1);
-  animation:boxSlide .45s cubic-bezier(.22,1,.36,1) both;
-}
-@keyframes boxSlide{from{opacity:0;transform:translateY(-30px) scale(.96)}to{opacity:1;transform:none}}
-.modal-hd{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.8rem;padding-bottom:1.2rem;border-bottom:1px solid var(--border)}
-.modal-hd h2{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:800}
-.modal-hd h2.purple{background:linear-gradient(135deg,#fff,#bf7fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.modal-hd h2.cyan{background:linear-gradient(135deg,#fff,var(--c));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.modal-hd p{font-family:'IBM Plex Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:.08rem;margin-top:.3rem}
-.mcls{width:36px;height:36px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;background:none;color:var(--muted);font-size:.9rem;cursor:none;transition:all .3s;flex-shrink:0}
-.mcls:hover{border-color:var(--c);color:var(--c);background:rgba(0,229,255,.08);transform:rotate(90deg)}
-/* Form fields */
-.fg{display:flex;flex-direction:column;gap:.45rem;margin-bottom:1.1rem}
-.fg label{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.12rem;text-transform:uppercase;color:var(--c)}
-.fg.purple label{color:#bf7fff}
+@keyframes modalIn{from{opacity:0;transform:translateY(-50px) scale(.88);filter:blur(20px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+.iq-header{padding:2.5rem 2.5rem 1.5rem;background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(57,255,20,.04));border-bottom:1px solid var(--border);position:relative;overflow:hidden}
+.iq-header::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(0,229,255,.12),transparent 70%);pointer-events:none}
+.iq-tag{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.3em;color:var(--acc1);text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
+.iq-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc1);box-shadow:0 0 10px var(--acc1);animation:pulse 1.5s ease-in-out infinite}
+.iq-title{font-family:var(--font-display);font-size:1.9rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,#fff 0%,var(--c1) 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+.iq-sub{font-size:.85rem;color:var(--muted);margin-top:.5rem;font-weight:300}
+.iq-close{position:absolute;top:1.5rem;right:1.5rem;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:none;transition:all .3s}
+.iq-close:hover{border-color:var(--c1);color:var(--c1);background:rgba(0,229,255,.1);transform:rotate(90deg)}
+.iq-body{padding:2rem 2.5rem 2.5rem;overflow-y:auto}
+.fg{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem}
+.fg label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--c1);font-weight:600}
 .fg input,.fg select,.fg textarea{
-  padding:.72rem .95rem;background:rgba(0,0,0,.5);
-  border:1px solid var(--border);border-radius:var(--r4);
-  color:var(--text);font-family:'Exo 2',sans-serif;font-size:.88rem;font-weight:300;
+  padding:.85rem 1rem;background:rgba(0,0,0,.5);
+  border:1px solid rgba(0,229,255,.12);border-radius:8px;
+  color:var(--text);font-family:var(--font-body);font-size:.9rem;font-weight:400;
   transition:all .3s;outline:none;width:100%;
 }
-.fg input::placeholder,.fg textarea::placeholder{color:var(--subtle)}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--c2);background:rgba(0,229,255,.04);box-shadow:0 0 0 3px rgba(0,229,255,.07)}
-.fg.purple input:focus,.fg.purple select:focus,.fg.purple textarea:focus{border-color:rgba(112,0,255,.5);background:rgba(112,0,255,.04);box-shadow:0 0 0 3px rgba(112,0,255,.08)}
-.fg input.err{border-color:var(--r)!important}
-.fg .errt{font-size:.68rem;color:var(--r);display:none}
-.fg .errt.show{display:block}
-.fg textarea{resize:vertical;min-height:100px}
-.fg select option{background:#010b14}
+.fg select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300e5ff' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(106,143,171,.4)}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--c1);background:rgba(0,229,255,.04);box-shadow:0 0 0 3px rgba(0,229,255,.1)}
 .fg2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.fsub{width:100%;padding:.9rem;font-family:'Orbitron',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:.14rem;text-transform:uppercase;border:none;border-radius:var(--r4);cursor:none;transition:all .3s;margin-top:.5rem}
-.fsub-p{background:linear-gradient(135deg,#bf7fff,var(--v));color:#fff;box-shadow:0 0 30px rgba(112,0,255,.3)}
-.fsub-p:hover{box-shadow:0 4px 50px rgba(112,0,255,.55);transform:translateY(-2px)}
-.fsub-c{background:linear-gradient(135deg,var(--c),var(--v));color:#000;box-shadow:0 0 30px rgba(0,229,255,.25)}
-.fsub-c:hover{box-shadow:0 4px 50px rgba(0,229,255,.45);transform:translateY(-2px)}
-.fsub:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.msuccess{display:none;text-align:center;padding:2rem 0}
-.msuccess.show{display:block;animation:fadeUp .4s forwards}
-.msuccess-ico{width:72px;height:72px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.8rem;margin:0 auto 1.2rem;box-shadow:0 0 40px rgba(0,255,157,.35)}
-.msuccess-ico.g{background:linear-gradient(135deg,var(--g),var(--c))}
-.msuccess-ico.p{background:linear-gradient(135deg,#bf7fff,var(--v))}
-.msuccess h3{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:800;margin-bottom:.6rem}
-.msuccess p{font-size:.88rem;color:var(--muted);font-weight:300;line-height:1.7}
+.iq-divider{height:1px;background:var(--border);margin:1.5rem 0;position:relative}
+.iq-divider::before{content:'OR CHOOSE SERVICE';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(3,10,25,.97);padding:0 1rem;font-family:var(--font-mono);font-size:.55rem;letter-spacing:.2em;color:var(--subtle)}
+.service-pills{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
+.sp{padding:.45rem 1rem;border:1px solid var(--border);border-radius:50px;font-family:var(--font-mono);font-size:.62rem;color:var(--muted);cursor:none;transition:all .3s;background:none;letter-spacing:.05em}
+.sp:hover,.sp.sel{border-color:var(--c1);color:var(--c1);background:rgba(0,229,255,.08)}
+.iq-submit{
+  width:100%;padding:1.1rem;border-radius:10px;
+  background:linear-gradient(135deg,var(--c1) 0%,rgba(0,200,220,1) 50%,var(--acc1) 100%);
+  background-size:200% 100%;background-position:0% 0%;
+  color:#000;font-family:var(--font-display);font-weight:800;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;
+  cursor:none;transition:all .4s;box-shadow:0 0 50px rgba(0,229,255,.3);margin-top:.5rem;
+  position:relative;overflow:hidden;
+}
+.iq-submit::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--acc1) 0%,var(--c1) 100%);opacity:0;transition:opacity .4s}
+.iq-submit:hover{transform:translateY(-3px);box-shadow:0 10px 70px rgba(0,229,255,.5);background-position:100% 0%}
+.iq-submit:hover::after{opacity:1}
+.iq-submit span{position:relative;z-index:1}
+.iq-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.iq-success{text-align:center;padding:3rem 2rem;display:none}
+.iq-success.show{display:block;animation:iUp .5s forwards}
+.success-ring{width:90px;height:90px;margin:0 auto 1.5rem;border-radius:50%;background:linear-gradient(135deg,var(--acc1),var(--c1));display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 0 60px rgba(57,255,20,.4);animation:ringPop .7s cubic-bezier(.34,1.56,.64,1)}
+@keyframes ringPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.iq-success h3{font-family:var(--font-display);font-size:1.8rem;font-weight:800;color:var(--acc1);margin-bottom:.8rem}
+.iq-success p{color:var(--muted);font-weight:300;line-height:1.8}
 
-/* ═══════════════════════════════════════════════
-   PROCESS
-═══════════════════════════════════════════════ */
-#process{background:linear-gradient(180deg,transparent,rgba(0,15,30,.07) 50%,transparent)}
-.proc-grid{display:grid;grid-template-columns:repeat(5,1fr);position:relative}
-.proc-grid::before{content:'';position:absolute;top:40px;left:8%;right:8%;height:1px;background:linear-gradient(90deg,transparent,var(--c3),var(--c),var(--c3),transparent);z-index:0}
-.proc-step{text-align:center;padding:0 .8rem;position:relative;z-index:1}
-.proc-n{width:80px;height:80px;margin:0 auto 1.4rem;border:1px solid var(--border2);border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--bg);font-size:1.6rem;transition:all .4s}
-.proc-step:hover .proc-n{border-color:var(--c);box-shadow:0 0 25px rgba(0,229,255,.25)}
-.proc-step h4{font-family:'Orbitron',sans-serif;font-size:.78rem;font-weight:700;letter-spacing:.05rem;color:var(--text);margin-bottom:.4rem}
-.proc-step p{font-size:.75rem;color:var(--muted);font-weight:300;line-height:1.6}
+/* ══════════════════════════════════════════════
+   SHARED
+══════════════════════════════════════════════ */
+.sec{position:relative;z-index:10;padding:9rem 0}
+.con{max-width:1440px;margin:0 auto;padding:0 4rem}
+.sh{text-align:center;margin-bottom:5rem}
+.etag{display:inline-flex;align-items:center;gap:.6rem;padding:.45rem 1.2rem;border:1px solid rgba(57,255,20,.3);border-radius:50px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acc1);background:rgba(57,255,20,.06);margin-bottom:1.8rem;font-weight:600}
+.etag-dot{width:6px;height:6px;border-radius:50%;background:var(--acc1);box-shadow:0 0 10px var(--acc1);animation:pulse 2s ease-in-out infinite}
+.sh h2{font-family:var(--font-display);font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:1.2rem;background:linear-gradient(135deg,#ffffff 0%,var(--c1) 60%,var(--acc1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sh p{color:var(--muted);font-size:1rem;font-weight:300;max-width:600px;margin:0 auto;line-height:1.9}
+.rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.2,.85,.4,1),transform .9s cubic-bezier(.2,.85,.4,1)}
+.rv.in{opacity:1;transform:none}
+.rv-left{opacity:0;transform:translateX(-50px);transition:opacity .9s .1s ease,transform .9s .1s ease}
+.rv-left.in{opacity:1;transform:none}
+.rv-right{opacity:0;transform:translateX(50px);transition:opacity .9s .2s ease,transform .9s .2s ease}
+.rv-right.in{opacity:1;transform:none}
 
-/* ═══════════════════════════════════════════════
-   SECURITY
-═══════════════════════════════════════════════ */
-#security .s2{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:center}
-.shield-vis{position:relative;height:420px;display:flex;align-items:center;justify-content:center}
-.shield-bg{position:absolute;inset:0;border-radius:var(--r8);overflow:hidden}
-.shield-bg img{width:100%;height:100%;object-fit:cover;filter:brightness(.25) saturate(.4) hue-rotate(160deg)}
-.shield-bg::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.18),rgba(112,0,255,.14))}
-.shield-rings{position:absolute;inset:0;display:flex;align-items:center;justify-content:center}
-.sring{position:absolute;border-radius:50%;border:1px solid rgba(0,229,255,.18);animation:sringpulse 3.5s ease-in-out infinite}
-.sring:nth-child(2){animation-delay:.9s;border-color:rgba(0,229,255,.1)}
-.sring:nth-child(3){animation-delay:1.8s;border-color:rgba(0,229,255,.06)}
-@keyframes sringpulse{0%{transform:scale(.85);opacity:0}50%{opacity:1}100%{transform:scale(1.2);opacity:0}}
-.shield-svg-c{position:relative;z-index:2}
-.shield-svg-c svg{width:160px;height:160px;filter:drop-shadow(0 0 30px rgba(0,229,255,.65))}
-.sec-c h2{font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:800;line-height:1.25;margin-bottom:1rem}
-.sec-c h2 em{color:var(--c);font-style:normal}
-.sec-c p{color:var(--muted);font-size:.9rem;font-weight:300;line-height:1.85;margin-bottom:1.5rem}
-.pill-g{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.8rem}
-.pill{padding:.35rem .95rem;border:1px solid var(--border2);font-family:'IBM Plex Mono',monospace;font-size:.62rem;color:var(--text);letter-spacing:.06rem;border-radius:2px;background:rgba(0,229,255,.03);transition:all .28s;cursor:default}
-.pill:hover{border-color:var(--c);color:var(--c);background:rgba(0,229,255,.07)}
-.sec-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem}
-.sstat{text-align:center;padding:.9rem .5rem;background:rgba(0,229,255,.03);border:1px solid var(--border);border-radius:2px}
-.sstat .n{font-family:'Orbitron',sans-serif;font-size:1.5rem;font-weight:800;color:var(--c);line-height:1}
-.sstat .l{font-size:.68rem;color:var(--muted);font-weight:300;margin-top:.25rem}
+.btn{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 2.5rem;border-radius:50px;font-family:var(--font-display);font-weight:700;font-size:.8rem;letter-spacing:.03em;text-transform:uppercase;transition:all .4s;cursor:none;border:none}
+.btn-p{background:linear-gradient(135deg,var(--c1),var(--acc1));color:#000;box-shadow:0 0 50px rgba(0,229,255,.3)}
+.btn-p:hover{transform:translateY(-5px);box-shadow:0 15px 80px rgba(0,229,255,.5)}
+.btn-o{background:transparent;color:var(--c1);border:1.5px solid rgba(0,229,255,.4)}
+.btn-o:hover{background:rgba(0,229,255,.1);border-color:var(--c1);transform:translateY(-5px)}
 
-/* ═══════════════════════════════════════════════
-   GALLERY
-═══════════════════════════════════════════════ */
-#gallery .ggrid{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:180px 180px;gap:3px}
-.gi{position:relative;overflow:hidden;background:var(--bg1)}
-.gi img{width:100%;height:100%;object-fit:cover;filter:brightness(.55) saturate(.45);transition:all .55s cubic-bezier(.22,1,.36,1)}
-.gi:hover img{filter:brightness(.8) saturate(.85);transform:scale(1.07)}
-.gi::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.12),transparent);opacity:0;transition:opacity .4s}
-.gi:hover::after{opacity:1}
-.gi.s2c{grid-column:span 2}
-.gi.s2r{grid-row:span 2}
-.gi-lbl{position:absolute;bottom:.6rem;left:.7rem;font-family:'IBM Plex Mono',monospace;font-size:.55rem;color:rgba(0,229,255,.9);letter-spacing:.1rem;text-transform:uppercase;background:rgba(0,5,10,.75);padding:.18rem .5rem;border-radius:2px;opacity:0;transition:opacity .3s}
-.gi:hover .gi-lbl{opacity:1}
+/* ══════════════════════════════════════════════
+   HERO — FULL CINEMATIC
+══════════════════════════════════════════════ */
+#hero{min-height:100vh;display:grid;place-items:center;padding:10rem 4rem 6rem;position:relative;overflow:hidden}
+.hero-bg-canvas{position:absolute;inset:0;z-index:0}
+.hero-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(120px)}
+.hero-orb-1{width:900px;height:900px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(0,80,160,.35) 0%,transparent 70%)}
+.hero-orb-2{width:500px;height:500px;bottom:0;left:10%;background:radial-gradient(circle,rgba(0,229,255,.1) 0%,transparent 70%);animation:orbFloat 12s ease-in-out infinite}
+.hero-orb-3{width:400px;height:400px;bottom:10%;right:5%;background:radial-gradient(circle,rgba(57,255,20,.08) 0%,transparent 70%);animation:orbFloat 15s ease-in-out infinite reverse}
+@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-40px)}}
+.hero-in{text-align:center;max-width:1200px;position:relative;z-index:5}
+.hero-badge{display:inline-flex;align-items:center;gap:1rem;padding:.7rem 2rem;border:1px solid rgba(0,229,255,.2);border-radius:50px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--c1);background:rgba(0,229,255,.06);margin-bottom:2.5rem;backdrop-filter:blur(10px);opacity:0;animation:iUp .8s .4s forwards}
+.hero-badge-dot{width:8px;height:8px;border-radius:50%;background:var(--acc1);box-shadow:0 0 15px var(--acc1);animation:pulse 1.5s ease-in-out infinite}
+.hero-h1{font-family:var(--font-display);font-size:clamp(4rem,12vw,10rem);font-weight:800;letter-spacing:-.05em;line-height:.9;margin-bottom:2rem;opacity:0;animation:iUp 1s .6s cubic-bezier(.19,1,.22,1) forwards}
+.hero-h1 .line1{display:block;background:linear-gradient(125deg,#fff 0%,rgba(0,229,255,.9) 50%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 6s linear 2s infinite}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.hero-h1 .line2{display:block;color:rgba(0,229,255,.18);-webkit-text-fill-color:rgba(0,229,255,.18);font-size:.28em;letter-spacing:.5em;font-family:var(--font-mono);font-weight:400;margin-top:.8em}
+.hero-desc{font-size:1.1rem;font-weight:300;color:var(--muted);max-width:700px;margin:0 auto 3rem;line-height:2;opacity:0;animation:iUp .9s .85s forwards}
+.hero-desc strong{color:var(--text);font-weight:500}
+.hero-ctas{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:iUp .8s 1.05s forwards}
 
-/* ═══════════════════════════════════════════════
-   TESTIMONIALS
-═══════════════════════════════════════════════ */
-#testimonials{background:linear-gradient(180deg,transparent,rgba(0,15,30,.06) 50%,transparent)}
-.tslider{overflow:hidden}
-.ttrack{display:flex;gap:1.5rem;transition:transform .55s cubic-bezier(.22,1,.36,1)}
-.tcard{min-width:calc(33.333% - 1rem);background:var(--card);border:1px solid var(--border);border-radius:var(--r8);padding:2rem;flex-shrink:0;transition:border-color .3s}
-.tcard:hover{border-color:var(--border2)}
-.tstars{color:var(--c);font-size:.85rem;letter-spacing:.15rem;margin-bottom:1.1rem;text-shadow:0 0 8px rgba(0,229,255,.4)}
-.ttext{color:var(--muted);font-size:.85rem;font-weight:300;line-height:1.9;font-style:italic;margin-bottom:1.3rem}
-.ttext::before{content:'"';font-size:2rem;color:rgba(0,229,255,.2);font-family:'Orbitron',sans-serif;line-height:1;display:block;margin-bottom:.3rem}
-.tname{font-family:'Orbitron',sans-serif;font-size:.85rem;font-weight:700;color:var(--text)}
-.trole{font-family:'IBM Plex Mono',monospace;font-size:.58rem;color:var(--subtle);letter-spacing:.08rem;margin-top:.15rem}
-.tnav{display:flex;justify-content:center;gap:.6rem;margin-top:2rem}
-.tdot{width:6px;height:6px;border-radius:50%;background:var(--border2);cursor:none;border:none;transition:all .3s}
-.tdot.on{background:var(--c);box-shadow:0 0 8px var(--c);width:22px;border-radius:3px}
+.hero-terminal{
+  margin-top:4rem;max-width:720px;margin-left:auto;margin-right:auto;
+  background:rgba(0,0,0,.7);border:1px solid var(--border);border-radius:12px;overflow:hidden;
+  backdrop-filter:blur(20px);opacity:0;animation:iUp .9s 1.3s forwards;
+  box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 0 1px rgba(0,229,255,.05);
+}
+.term-bar{padding:.7rem 1.2rem;background:rgba(0,229,255,.05);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem}
+.term-dot{width:10px;height:10px;border-radius:50%}
+.term-dot:nth-child(1){background:#ff5f57}
+.term-dot:nth-child(2){background:#febc2e}
+.term-dot:nth-child(3){background:#28c840}
+.term-title{font-family:var(--font-mono);font-size:.65rem;color:var(--muted);margin-left:auto;letter-spacing:.1em}
+.term-body{padding:1.2rem 1.5rem;font-family:var(--font-mono);font-size:.8rem;min-height:60px;line-height:1.8}
+.term-prompt{color:var(--acc1)}
+.term-cmd{color:var(--c1)}
+.term-out{color:var(--muted)}
+.term-cursor{display:inline-block;width:8px;height:14px;background:var(--c1);vertical-align:text-bottom;animation:blink .8s ease-in-out infinite}
 
-/* ═══════════════════════════════════════════════
-   PRICING
-═══════════════════════════════════════════════ */
-#pricing{background:linear-gradient(180deg,transparent,rgba(0,15,30,.07) 50%,transparent)}
-.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;align-items:start}
-.pcard{background:rgba(1,12,24,.7);border:1px solid var(--border);border-radius:var(--r8);padding:2.2rem 2rem;transition:all .4s;position:relative;overflow:hidden}
-.pcard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c),transparent);transform:scaleX(0);transform-origin:center;transition:transform .4s}
-.pcard:hover::before{transform:scaleX(1)}
-.pcard:hover{border-color:var(--border2);transform:translateY(-5px);box-shadow:0 15px 50px rgba(0,0,0,.5)}
-.pcard.hot{border-color:var(--border2);box-shadow:0 0 40px rgba(0,229,255,.08)}
-.pbadge{position:absolute;top:.9rem;right:.9rem;font-family:'IBM Plex Mono',monospace;font-size:.55rem;letter-spacing:.1rem;padding:.18rem .65rem;background:rgba(0,229,255,.1);border:1px solid var(--border2);border-radius:2px;color:var(--c)}
-.ptier{font-family:'IBM Plex Mono',monospace;font-size:.62rem;letter-spacing:.18rem;color:var(--c);margin-bottom:.7rem}
-.pname{font-family:'Orbitron',sans-serif;font-size:1.3rem;font-weight:800;color:var(--text);margin-bottom:.5rem}
-.pval{font-family:'Orbitron',sans-serif;font-size:2.2rem;font-weight:900;color:var(--c);margin-bottom:1.5rem;line-height:1}
-.pval small{font-size:.85rem;color:var(--muted);font-weight:300}
-.pdiv{height:1px;background:var(--border);margin-bottom:1.5rem}
-.plist{list-style:none;display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
-.plist li{font-size:.82rem;color:var(--muted);font-weight:300;display:flex;align-items:center;gap:.7rem}
-.plist li i{color:var(--c);font-size:.65rem}
-.pbtn{width:100%;padding:.8rem;background:transparent;border:1px solid var(--border2);color:var(--c);font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.12rem;text-transform:uppercase;border-radius:var(--r4);transition:all .3s;cursor:none}
-.pbtn:hover{background:var(--c);color:#000;border-color:var(--c);box-shadow:0 0 24px rgba(0,229,255,.35)}
-.pcard.hot .pbtn{background:linear-gradient(135deg,var(--c),var(--v));color:#000;border-color:transparent}
-.pcard.hot .pbtn:hover{box-shadow:0 4px 40px rgba(0,229,255,.5);transform:translateY(-2px)}
+.hero-metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:4rem;backdrop-filter:blur(20px);background:rgba(0,0,0,.4);opacity:0;animation:iUp 1s 1.55s forwards}
+.hm{padding:2rem 1rem;border-right:1px solid var(--border);text-align:center;position:relative;overflow:hidden;transition:background .3s}
+.hm:hover{background:rgba(0,229,255,.05)}
+.hm:last-child{border-right:none}
+.hm-val{font-family:var(--font-display);font-size:2.8rem;font-weight:800;color:var(--c1);line-height:1;letter-spacing:-.03em}
+.hm-unit{font-size:.5em;color:var(--acc1)}
+.hm-lbl{font-family:var(--font-mono);font-size:.6rem;color:var(--subtle);letter-spacing:.18em;text-transform:uppercase;margin-top:.5rem}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
-/* ═══════════════════════════════════════════════
+/* ══════════════════════════════════════════════
+   AI TECH VISUALIZATIONS (6 PANELS)
+══════════════════════════════════════════════ */
+#aivis{background:linear-gradient(180deg,transparent,rgba(0,20,50,.15) 50%,transparent);overflow:hidden}
+.viz-intro{text-align:center;margin-bottom:4rem}
+.viz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.viz-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative;background:rgba(2,5,15,.9);transition:all .5s;cursor:none}
+.viz-card:hover{border-color:rgba(0,229,255,.35);transform:translateY(-10px);box-shadow:0 25px 80px rgba(0,0,0,.8),0 0 60px rgba(0,229,255,.15)}
+.viz-card.featured{grid-column:span 2}
+.viz-wrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden}
+.viz-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.viz-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(2,5,15,.98) 100%);pointer-events:none;z-index:2}
+.viz-info{padding:1.5rem}
+.viz-tag{font-family:var(--font-mono);font-size:.6rem;color:var(--c1);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
+.viz-tag::before{content:'//'}
+.viz-title{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.viz-desc{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.7}
+.viz-live{position:absolute;top:1rem;left:1rem;z-index:5;display:flex;align-items:center;gap:.4rem;background:rgba(0,0,0,.8);padding:.3rem .8rem;border:1px solid rgba(0,229,255,.2);border-radius:50px;font-family:var(--font-mono);font-size:.55rem;color:var(--acc1);letter-spacing:.1em;backdrop-filter:blur(10px)}
+.viz-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--acc1);box-shadow:0 0 8px var(--acc1);animation:pulse 1.5s ease-in-out infinite}
+
+/* ══════════════════════════════════════════════
+   SERVICES — BENTO GRID
+══════════════════════════════════════════════ */
+#services{overflow:hidden}
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:260px;gap:1.2rem}
+.bcard{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:14px;padding:2.2rem;overflow:hidden;position:relative;transition:all .5s;cursor:none}
+.bcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.06),transparent 60%);opacity:0;transition:opacity .5s}
+.bcard:hover{border-color:rgba(0,229,255,.3);transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(0,229,255,.1)}
+.bcard:hover::before{opacity:1}
+.bcard.span2{grid-column:span 2}
+.bcard.span3{grid-column:span 3}
+.bcard.tall{grid-row:span 2}
+.bcard-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),transparent);transform:scaleX(0);transition:transform .6s}
+.bcard:hover .bcard-accent{transform:scaleX(1)}
+.bcard-icon{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(57,255,20,.06));border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--c1);margin-bottom:1.4rem}
+.bcard h3{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:.6rem;letter-spacing:-.01em}
+.bcard p{font-size:.85rem;color:var(--muted);font-weight:300;line-height:1.85}
+.bcard-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.2rem}
+.chip{font-family:var(--font-mono);font-size:.58rem;padding:.2rem .65rem;border:1px solid var(--border);color:var(--subtle);border-radius:4px;background:rgba(0,229,255,.02);transition:all .3s;font-weight:600}
+.chip:hover{border-color:var(--c1);color:var(--c1)}
+
+/* FEATURED BENTO CARD STYLES */
+.bcard-featured{background:linear-gradient(135deg,rgba(0,60,120,.3),rgba(0,30,60,.4));border-color:rgba(0,229,255,.25)}
+.bcard-stat{position:absolute;bottom:2rem;right:2rem;text-align:right}
+.bcard-stat-val{font-family:var(--font-display);font-size:3rem;font-weight:800;color:var(--c1);opacity:.25;line-height:1}
+.bcard-stat-lbl{font-family:var(--font-mono);font-size:.55rem;color:var(--subtle);letter-spacing:.18em}
+
+/* ══════════════════════════════════════════════
+   IT OUTSOURCING SECTION
+══════════════════════════════════════════════ */
+#outsourcing{background:linear-gradient(180deg,transparent,rgba(0,30,80,.12) 50%,transparent)}
+.out-layout{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
+.out-visual{position:relative}
+.out-globe-wrap{width:100%;aspect-ratio:1;position:relative}
+#globe-canvas{width:100%;height:100%}
+.out-text{}
+.out-models{display:grid;gap:1rem;margin-top:2.5rem}
+.out-model{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:10px;padding:1.5rem 1.8rem;transition:all .4s;cursor:none}
+.out-model:hover{border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.04);transform:translateX(6px)}
+.out-model-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.out-model-name{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--text)}
+.out-model-badge{font-family:var(--font-mono);font-size:.58rem;padding:.2rem .7rem;border-radius:50px;letter-spacing:.08em;font-weight:600}
+.badge-pop{background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);color:var(--acc1)}
+.badge-hot{background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);color:var(--acc2)}
+.badge-ent{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--c1)}
+.out-model p{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.7}
+.out-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:3rem}
+.out-stat{text-align:center;padding:1.5rem 1rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:10px}
+.out-stat-val{font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--c1);line-height:1}
+.out-stat-lbl{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);letter-spacing:.15em;margin-top:.4rem;text-transform:uppercase}
+
+/* ══════════════════════════════════════════════
+   INTERNSHIP SECTION
+══════════════════════════════════════════════ */
+#internship{overflow:hidden;position:relative}
+#internship::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:1000px;height:1000px;background:radial-gradient(circle,rgba(0,229,255,.06),transparent 70%);filter:blur(80px);pointer-events:none}
+.intern-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
+.icard{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:14px;padding:2.2rem;position:relative;overflow:hidden;transition:all .5s;cursor:none}
+.icard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),transparent);transform:scaleX(0);transition:transform .6s}
+.icard:hover{border-color:rgba(0,229,255,.3);transform:translateY(-8px);box-shadow:0 20px 70px rgba(0,229,255,.12)}
+.icard:hover::before{transform:scaleX(1)}
+.icard-no{position:absolute;top:1.5rem;right:1.8rem;font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:rgba(0,229,255,.05);line-height:1}
+.icard-role{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--c1);margin-bottom:.5rem}
+.icard-dur{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;margin-bottom:1rem;text-transform:uppercase}
+.icard p{font-size:.85rem;color:var(--muted);font-weight:300;line-height:1.85;margin-bottom:1.2rem}
+.icard-perks{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem}
+.perk{font-family:var(--font-mono);font-size:.6rem;padding:.22rem .7rem;border:1px solid var(--border);color:var(--subtle);border-radius:4px;font-weight:600}
+.icard-apply{width:100%;padding:.85rem;background:none;border:1px solid rgba(0,229,255,.2);border-radius:8px;color:var(--c1);font-family:var(--font-display);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;transition:all .3s;cursor:none}
+.icard-apply:hover{background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(57,255,20,.06));border-color:var(--c1);box-shadow:0 0 30px rgba(0,229,255,.2)}
+
+/* ══════════════════════════════════════════════
+   CLIENTS & TRUST SIGNALS
+══════════════════════════════════════════════ */
+#trust{overflow:hidden}
+.trust-inner{border:1px solid var(--border);border-radius:16px;padding:3rem 4rem;background:rgba(3,7,18,.6);backdrop-filter:blur(20px)}
+.trust-top{display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.trust-logos{display:flex;align-items:center;gap:3rem;flex-wrap:wrap}
+.trust-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:rgba(106,143,171,.4);letter-spacing:-.01em;transition:color .3s;cursor:none}
+.trust-logo:hover{color:var(--muted)}
+.trust-divider{width:1px;height:3rem;background:var(--border)}
+.trust-certs{display:flex;gap:1rem}
+.cert{padding:.4rem 1rem;border:1px solid rgba(0,229,255,.2);border-radius:50px;font-family:var(--font-mono);font-size:.58rem;color:var(--c1);letter-spacing:.1em;font-weight:600}
+
+/* ══════════════════════════════════════════════
    CONTACT
-═══════════════════════════════════════════════ */
-#contact .cwrap{display:grid;grid-template-columns:1fr 1.4fr;gap:3.5rem;align-items:start}
-.ci h2{font-family:'Orbitron',sans-serif;font-size:2rem;font-weight:800;line-height:1.2;margin-bottom:.8rem}
-.ci>p{color:var(--muted);font-size:.9rem;font-weight:300;line-height:1.85;margin-bottom:2rem}
-.clist{display:flex;flex-direction:column;gap:.9rem;margin-bottom:2rem}
-.crow{display:flex;align-items:flex-start;gap:1rem;padding:1rem;border:1px solid var(--border);border-radius:var(--r4);background:rgba(0,229,255,.02);transition:all .3s}
-.crow:hover{border-color:var(--border2);background:rgba(0,229,255,.04)}
-.cico{width:36px;height:36px;border-radius:var(--r4);flex-shrink:0;background:rgba(0,229,255,.1);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:.88rem;color:var(--c)}
-.clab{font-family:'IBM Plex Mono',monospace;font-size:.56rem;letter-spacing:.1rem;text-transform:uppercase;color:var(--subtle);margin-bottom:.15rem}
-.cval{font-size:.85rem;color:var(--text)}
-.cval a{color:var(--c);transition:color .2s}
-.cval a:hover{color:#fff}
-/* Social */
-.soctit{font-family:'IBM Plex Mono',monospace;font-size:.6rem;letter-spacing:.15rem;text-transform:uppercase;color:var(--subtle);margin-bottom:.7rem}
-.socrow{display:flex;gap:.55rem;flex-wrap:wrap}
-.soca{width:38px;height:38px;border:1px solid var(--border);border-radius:var(--r4);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.88rem;transition:all .3s;background:rgba(0,229,255,.02)}
-.soca:hover{transform:translateY(-3px)}
-.soca.li:hover{color:#0a66c2;border-color:#0a66c2;background:rgba(10,102,194,.12)}
-.soca.tw:hover{color:#1d9bf0;border-color:#1d9bf0;background:rgba(29,155,240,.12)}
-.soca.fb:hover{color:#1877f2;border-color:#1877f2;background:rgba(24,119,242,.12)}
-.soca.ig:hover{color:#e1306c;border-color:#e1306c;background:rgba(225,48,108,.12)}
-.soca.yt:hover{color:#ff0000;border-color:#ff0000;background:rgba(255,0,0,.12)}
-.soca.gh:hover{color:#fff;border-color:#fff;background:rgba(255,255,255,.1)}
-.soca.wa:hover{color:#25d366;border-color:#25d366;background:rgba(37,211,102,.12)}
-.soca.tt:hover{color:#ff0050;border-color:#ff0050;background:rgba(255,0,80,.12)}
-/* Form */
-.cform{background:rgba(1,12,24,.8);border:1px solid var(--border);border-radius:var(--r8);padding:2.2rem}
-.frow{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.fsub2{width:100%;padding:.88rem;background:linear-gradient(135deg,var(--c),var(--v));color:#000;font-family:'Orbitron',sans-serif;font-weight:800;font-size:.7rem;letter-spacing:.13rem;text-transform:uppercase;border:none;border-radius:var(--r4);cursor:none;transition:all .3s;box-shadow:0 0 24px rgba(0,229,255,.2)}
-.fsub2:hover{transform:translateY(-2px);box-shadow:0 6px 50px rgba(0,229,255,.4)}
-.fmsg{margin-top:1rem;padding:.85rem 1rem;border-radius:var(--r4);font-size:.82rem;font-weight:500;display:none;text-align:center}
-.fmsg.ok{display:block;background:rgba(0,255,157,.08);border:1px solid rgba(0,255,157,.3);color:var(--g)}
-.fmsg.er{display:block;background:rgba(255,45,85,.08);border:1px solid rgba(255,45,85,.3);color:var(--r)}
+══════════════════════════════════════════════ */
+#contact{overflow:hidden}
+.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.contact-left h2{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:1;background:linear-gradient(135deg,#fff 0%,var(--c1) 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.5rem}
+.contact-left p{color:var(--muted);font-weight:300;line-height:1.9;font-size:.95rem}
+.contact-items{display:flex;flex-direction:column;gap:1.2rem;margin-top:2.5rem}
+.ci{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.5rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:10px;transition:all .3s;cursor:none}
+.ci:hover{border-color:rgba(0,229,255,.25);background:rgba(0,229,255,.07)}
+.ci-ico{width:40px;height:40px;border-radius:8px;background:rgba(0,229,255,.1);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--c1);flex-shrink:0}
+.ci-lbl{font-family:var(--font-mono);font-size:.6rem;color:var(--subtle);letter-spacing:.12em;text-transform:uppercase}
+.ci-val{font-size:.9rem;color:var(--text);font-weight:500;margin-top:.2rem}
+.contact-right{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:14px;padding:2.5rem;overflow:hidden}
+.contact-form-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:var(--text);margin-bottom:1.5rem;letter-spacing:-.02em}
 
-/* ═══════════════════════════════════════════════
-   MAP
-═══════════════════════════════════════════════ */
-#mapview .mframe{border:1px solid var(--border);border-radius:var(--r8);overflow:hidden;height:440px;background:var(--bg1)}
-#mapview .mframe iframe{width:100%;height:100%;border:none;filter:invert(90%) hue-rotate(180deg) saturate(.3) brightness(.75)}
-#mapview .minfo{display:grid;grid-template-columns:repeat(4,1fr);gap:2px;margin-top:2px}
-#mapview .mc{padding:1.2rem 1rem;background:rgba(1,12,24,.7);border:1px solid var(--border);text-align:center}
-#mapview .mc h4{font-family:'Orbitron',sans-serif;font-size:.75rem;font-weight:700;color:var(--c);letter-spacing:.05rem;margin-bottom:.3rem}
-#mapview .mc p{font-size:.75rem;color:var(--muted);font-weight:300;line-height:1.5}
-
-/* ═══════════════════════════════════════════════
+/* ══════════════════════════════════════════════
    FOOTER
-═══════════════════════════════════════════════ */
-footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;z-index:10}
-.fgrid{display:grid;grid-template-columns:1.8fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:3rem}
-.fbrand .nav-logo{display:inline-block;margin-bottom:.8rem;font-size:1.3rem}
-.fbrand p{color:var(--muted);font-size:.8rem;font-weight:300;line-height:1.8;max-width:210px;margin-bottom:1.1rem}
-.fsoc{display:flex;gap:.5rem;flex-wrap:wrap}
-.fsoc a{width:32px;height:32px;border:1px solid var(--border);border-radius:var(--r4);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:.78rem;transition:all .3s}
-.fsoc a:hover{border-color:var(--c);color:var(--c);background:rgba(0,229,255,.08)}
-.fcol h5{font-family:'IBM Plex Mono',monospace;font-size:.58rem;letter-spacing:.18rem;text-transform:uppercase;color:var(--subtle);margin-bottom:1rem}
-.fcol ul{list-style:none;display:flex;flex-direction:column;gap:.6rem}
-.fcol ul li a{color:var(--muted);font-size:.8rem;font-weight:300;transition:color .2s}
-.fcol ul li a:hover{color:var(--c)}
-.fbot{border-top:1px solid var(--border);padding-top:1.8rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-.fbot p{color:var(--subtle);font-size:.68rem;font-family:'IBM Plex Mono',monospace}
-.fbadges{display:flex;gap:.5rem;flex-wrap:wrap}
-.fbadge{font-family:'IBM Plex Mono',monospace;font-size:.53rem;padding:.18rem .6rem;border:1px solid var(--border2);color:var(--c);border-radius:2px}
+══════════════════════════════════════════════ */
+footer{border-top:1px solid var(--border);padding:5rem 4rem 2.5rem;position:relative;z-index:10}
+.footer-grid{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3.5rem}
+.footer-brand p{color:var(--muted);font-size:.85rem;font-weight:300;line-height:1.85;max-width:300px;margin-top:1rem}
+.footer-col-title{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--subtle);margin-bottom:1.2rem;font-weight:700}
+.footer-links{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.footer-links a{font-size:.85rem;color:var(--muted);transition:color .2s}
+.footer-links a:hover{color:var(--c1)}
+.footer-bottom{border-top:1px solid var(--border);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-family:var(--font-mono);font-size:.65rem;color:var(--subtle);letter-spacing:.1em}
+.footer-badges{display:flex;gap:.6rem}
+.fbadge{font-family:var(--font-mono);font-size:.6rem;padding:.25rem .8rem;border:1px solid rgba(0,229,255,.2);color:var(--c1);border-radius:4px;font-weight:700;letter-spacing:.08em}
 
-/* ═══════════════════════════════════════════════
-   TOAST
-═══════════════════════════════════════════════ */
-.toast{position:fixed;bottom:2rem;right:2rem;z-index:99998;padding:1rem 1.5rem;border-radius:var(--r4);font-size:.82rem;font-weight:600;animation:toastIn .4s cubic-bezier(.22,1,.36,1);box-shadow:0 8px 30px rgba(0,0,0,.6);pointer-events:none;font-family:'IBM Plex Mono',monospace;letter-spacing:.05rem}
-.toast.ok{background:linear-gradient(135deg,var(--g),var(--c));color:#000}
-.toast.er{background:linear-gradient(135deg,var(--r),#aa1133);color:#fff}
-@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-/* ═══════════════════════════════════════════════
+/* ══════════════════════════════════════════════
    RESPONSIVE
-═══════════════════════════════════════════════ */
-@media(max-width:1100px){
-  .svc-grid{grid-template-columns:repeat(2,1fr)}
-  .aiv-grid{grid-template-columns:1fr}.aiv-card.featured{grid-column:auto}
-  .yt-row{grid-template-columns:1fr}
-  .intern-cards{grid-template-columns:1fr 1fr}
-  #security .s2{grid-template-columns:1fr;gap:3rem}
-  .pgrid{grid-template-columns:repeat(2,1fr)}
-  .proc-grid{grid-template-columns:repeat(3,1fr);gap:2rem}
-  .proc-grid::before{display:none}
-  #contact .cwrap{grid-template-columns:1fr}
-  .fgrid{grid-template-columns:1fr 1fr}
-  #gallery .ggrid{grid-template-columns:repeat(3,1fr);grid-template-rows:160px 160px}
+══════════════════════════════════════════════ */
+@media(max-width:1200px){
+  .bento{grid-template-columns:repeat(2,1fr)}.bcard.span3{grid-column:span 2}
+  .out-layout{grid-template-columns:1fr;gap:4rem}.out-globe-wrap{max-width:420px;margin:0 auto}
+  .viz-grid{grid-template-columns:1fr 1fr}.viz-card.featured{grid-column:1/-1}
+  .con{padding:0 2.5rem}
 }
-@media(max-width:768px){
-  .nav-links,.nav-intern-btn,.nav-cta{display:none}
-  .hbg{display:flex}
+@media(max-width:900px){
+  .nav-center{display:none}.hbg{display:flex}
+  .intern-grid{grid-template-columns:1fr 1fr}
+  .bento{grid-template-columns:1fr}.bcard.span2,.bcard.span3{grid-column:1}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .contact-layout{grid-template-columns:1fr}
   .hero-metrics{grid-template-columns:repeat(2,1fr)}
-  .hm:nth-child(2){border-right:none}
-  .hm:nth-child(3){border-top:1px solid var(--border)}
-  .hm:nth-child(4){border-top:1px solid var(--border);border-right:none}
-  .svc-grid{grid-template-columns:1fr}
-  .intern-cards{grid-template-columns:1fr}
-  .intern-cta{flex-direction:column;text-align:center}
-  .pgrid{grid-template-columns:1fr}
-  .proc-grid{grid-template-columns:repeat(2,1fr)}
-  .tcard{min-width:100%}
-  .frow{grid-template-columns:1fr}
-  .fgrid{grid-template-columns:1fr}
-  #gallery .ggrid{grid-template-columns:repeat(2,1fr);grid-template-rows:auto}
-  .gi.s2c,.gi.s2r{grid-column:auto;grid-row:auto}
-  #mapview .minfo{grid-template-columns:repeat(2,1fr)}
-  .fg2{grid-template-columns:1fr}
-  .con{padding:0 1.25rem}
-  .sec{padding:5rem 0}
+  .hero-metrics .hm:nth-child(2){border-right:none}
+  .hero-metrics .hm:nth-child(3){border-right:1px solid var(--border);border-top:1px solid var(--border)}
+  .hero-metrics .hm:nth-child(4){border-top:1px solid var(--border)}
 }
-@media(max-width:480px){
-  .hero-h1{font-size:2.8rem}
-  .hero-metrics{grid-template-columns:1fr 1fr}
-  .ibox,.inquiry-box{padding:1.5rem}
-  .code-ticker{font-size:.62rem}
+@media(max-width:640px){
+  .intern-grid{grid-template-columns:1fr}
+  .viz-grid{grid-template-columns:1fr}.viz-card.featured{grid-column:1}
+  .hero-h1{font-size:3.5rem}.con{padding:0 1.5rem}.sec{padding:6rem 0}
+  .hero-metrics{grid-template-columns:repeat(2,1fr)}
+  footer{padding:3rem 1.5rem 2rem}
+  .trust-inner{padding:2rem 1.5rem}
+  .fg2{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 
-<!-- CUSTOM CURSOR -->
-<div id="cursor-dot"></div>
-<div id="cursor-ring"></div>
+<!-- CURSOR -->
+<div id="cur-core"></div>
+<div id="cur-orbit"></div>
 
-<!-- ═══════════════════════════════
-     CINEMATIC INTRO
-═══════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     ULTRA CINEMATIC INTRO
+═══════════════════════════════════════ -->
 <div id="intro">
-  <canvas id="intro-cvs" style="position:absolute;inset:0;width:100%;height:100%"></canvas>
-  <div class="intro-center">
-    <div class="intro-logo-wrap">
-      <div class="intro-logo">DATAEUROS</div>
+  <canvas id="intro-canvas"></canvas>
+  <div class="intro-content">
+    <div class="intro-eyebrow">Initializing Enterprise Systems</div>
+    <div class="intro-brand">
+      <span class="d1">DATAEUROS</span>
+      <span class="d2">Enterprise QA &amp; Cybersecurity</span>
     </div>
-    <div class="intro-tagline">Enterprise QA &amp; Cybersecurity Solutions</div>
-    <div class="intro-bar-wrap"><div class="intro-bar" id="introBar"></div></div>
-    <div class="intro-pct" id="introPct">0%</div>
+    <div class="intro-progress">
+      <div class="intro-track"><div class="intro-fill" id="intro-fill"></div></div>
+      <div class="intro-stats">
+        <span class="intro-stat" id="intro-phase-txt">LOADING CORE SYSTEMS</span>
+        <span class="intro-stat" id="intro-pct-sm">0%</span>
+      </div>
+    </div>
+    <div class="intro-phases">
+      <div class="intro-phase active" id="ph1">Security Modules</div>
+      <div class="intro-phase" id="ph2">AI Pipeline</div>
+      <div class="intro-phase" id="ph3">QA Engine</div>
+      <div class="intro-phase" id="ph4">Dashboard</div>
+    </div>
   </div>
+  <div id="intro-pct">0%</div>
 </div>
 
-<!-- BACKGROUND CANVASES -->
-<canvas id="bg-canvas"></canvas>
-<canvas id="grid-canvas"></canvas>
+<!-- BACKGROUNDS -->
+<div id="bg-deep"></div>
+<canvas id="bg-stars"></canvas>
+<div id="bg-grid"></div>
+<div id="bg-vignette"></div>
+<div class="noise"></div>
 <div class="scanline"></div>
 
-<!-- ═══════════════════════════════
-     MOBILE NAV
-═══════════════════════════════ -->
+<!-- MOBILE NAV -->
 <div class="mob-nav" id="mobNav">
   <button class="mob-close" id="mobClose"><i class="fas fa-times"></i></button>
   <a href="#services" onclick="closeMob()">Services</a>
-  <a href="#aivis" onclick="closeMob()">Videos</a>
+  <a href="#aivis" onclick="closeMob()">Technology</a>
+  <a href="#outsourcing" onclick="closeMob()">IT Outsourcing</a>
   <a href="#internship" onclick="closeMob()">Internships</a>
-  <a href="#security" onclick="closeMob()">Security</a>
-  <a href="#pricing" onclick="closeMob()">Pricing</a>
   <a href="#contact" onclick="closeMob()">Contact</a>
-  <button onclick="openInternModal();closeMob()">Apply Now</button>
+  <button onclick="openIQ();closeMob()">Get Started</button>
 </div>
 
-<!-- ═══════════════════════════════
-     NAVBAR
-═══════════════════════════════ -->
+<!-- NAVBAR -->
 <nav id="nav">
-  <div class="nav-logo">DATA<span>EUROS</span></div>
-  <ul class="nav-links">
-    <li><a href="#services">Services</a></li>
-    <li><a href="#aivis">Videos</a></li>
-    <li><a href="#internship">Internships</a></li>
-    <li><a href="#process">Process</a></li>
-    <li><a href="#security">Security</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#testimonials">Reviews</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <button class="nav-intern-btn" onclick="openInternModal()">🎓 Apply Internship</button>
-  <button class="nav-cta" onclick="openInquiry()">Get Started</button>
-  <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
+  <div class="logo">
+    <div class="logo-mark">DE</div>
+    <span class="logo-txt">DATA<span>EUROS</span></span>
+  </div>
+  <div class="nav-center">
+    <a href="#services" class="nav-link">Services</a>
+    <a href="#aivis" class="nav-link">Technology</a>
+    <a href="#outsourcing" class="nav-link">IT Outsourcing</a>
+    <a href="#internship" class="nav-link">Internships</a>
+    <a href="#contact" class="nav-link">Contact</a>
+  </div>
+  <div class="nav-right">
+    <div class="nav-status">SYSTEMS LIVE</div>
+    <button class="cta-nav" onclick="openIQ()">Get Started →</button>
+    <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
+  </div>
 </nav>
 
-<!-- ═══════════════════════════════
-     INTERNSHIP MODAL
-═══════════════════════════════ -->
-<div id="internModal">
-  <div class="ibox">
-    <div class="modal-hd">
-      <div>
-        <h2 class="purple">🎓 Internship Application</h2>
-        <p>Join DATAEUROS — Shape the future of QA</p>
+<!-- ═══════════════════════════════════════
+     INQUIRY MODAL — ULTRA PREMIUM
+═══════════════════════════════════════ -->
+<div class="iq-modal" id="iqModal">
+  <div class="iq-backdrop" onclick="closeIQ()"></div>
+  <div class="iq-box">
+    <div class="iq-header">
+      <div class="iq-tag">Secure Enterprise Inquiry</div>
+      <div class="iq-title">Let's Build<br>Something Elite</div>
+      <div class="iq-sub">2-Hour response guarantee · NDA on request</div>
+      <button class="iq-close" onclick="closeIQ()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="iq-body">
+      <div id="iqFormWrap">
+        <form id="iqForm" novalidate>
+          <div class="fg2">
+            <div class="fg"><label>Full Name *</label><input id="q-name" type="text" placeholder="Your full name"></div>
+            <div class="fg"><label>Work Email *</label><input id="q-email" type="email" placeholder="you@company.com"></div>
+          </div>
+          <div class="fg2">
+            <div class="fg"><label>Phone</label><input id="q-phone" type="tel" placeholder="+91 9999 999999"></div>
+            <div class="fg"><label>Company *</label><input id="q-company" type="text" placeholder="Your company"></div>
+          </div>
+          <div class="fg">
+            <label>Team Size</label>
+            <select id="q-size">
+              <option value="">Select team size</option>
+              <option>1–10 (Startup)</option><option>10–50 (SMB)</option><option>50–200 (Mid-Market)</option><option>200+ (Enterprise)</option>
+            </select>
+          </div>
+          <div class="fg">
+            <label>Service Interest *</label>
+            <select id="q-service">
+              <option value="">Select a service</option>
+              <option>Software Testing & QA</option><option>Automation Testing</option><option>Security / Penetration Testing</option>
+              <option>Performance Testing</option><option>IT Outsourcing</option><option>DevOps Consulting</option>
+              <option>Bug Audit</option><option>Full QA Partnership</option>
+            </select>
+          </div>
+          <div class="service-pills">
+            <button type="button" class="sp" onclick="setPill(this,'Software Testing')">Software Testing</button>
+            <button type="button" class="sp" onclick="setPill(this,'Automation')">Automation</button>
+            <button type="button" class="sp" onclick="setPill(this,'Security Testing')">Security Testing</button>
+            <button type="button" class="sp" onclick="setPill(this,'Performance')">Performance</button>
+            <button type="button" class="sp" onclick="setPill(this,'IT Outsourcing')">IT Outsourcing</button>
+            <button type="button" class="sp" onclick="setPill(this,'DevOps')">DevOps</button>
+          </div>
+          <div class="fg"><label>Project Details *</label><textarea id="q-msg" rows="3" placeholder="Describe your project, challenges, goals..."></textarea></div>
+          <button type="submit" class="iq-submit"><span>Send Secure Inquiry →</span></button>
+        </form>
       </div>
-      <button class="mcls" onclick="closeInternModal()"><i class="fas fa-times"></i></button>
-    </div>
-    <div id="internFormWrap">
-      <form id="internForm" novalidate>
-        <div class="fg2">
-          <div class="fg purple"><label>Full Name *</label><input type="text" id="i-name" placeholder="Your full name"><span class="errt">Required</span></div>
-          <div class="fg purple"><label>Email *</label><input type="email" id="i-email" placeholder="you@example.com"><span class="errt">Valid email required</span></div>
-        </div>
-        <div class="fg2">
-          <div class="fg purple"><label>Phone *</label><input type="tel" id="i-phone" placeholder="+91 XXXXXXXXXX"><span class="errt">Valid phone required</span></div>
-          <div class="fg purple"><label>College / University *</label><input type="text" id="i-college" placeholder="Institution name"><span class="errt">Required</span></div>
-        </div>
-        <div class="fg2">
-          <div class="fg purple">
-            <label>Internship Role *</label>
-            <select id="i-role">
-              <option value="">Select role</option>
-              <option>QA Engineering Intern</option>
-              <option>Automation Testing Intern</option>
-              <option>Security Testing Intern</option>
-              <option>Performance Testing Intern</option>
-              <option>Full Stack Dev Intern</option>
-              <option>Data Science Intern</option>
-            </select>
-            <span class="errt">Please select a role</span>
-          </div>
-          <div class="fg purple">
-            <label>Duration *</label>
-            <select id="i-dur">
-              <option value="">Select duration</option>
-              <option>1 Month</option>
-              <option>2 Months</option>
-              <option>3 Months</option>
-              <option>6 Months</option>
-            </select>
-            <span class="errt">Please select duration</span>
-          </div>
-        </div>
-        <div class="fg purple"><label>Year of Study *</label>
-          <select id="i-year">
-            <option value="">Select year</option>
-            <option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>Graduated</option>
-          </select>
-          <span class="errt">Required</span>
-        </div>
-        <div class="fg purple"><label>LinkedIn / GitHub Profile</label><input type="url" id="i-link" placeholder="https://linkedin.com/in/..."></div>
-        <div class="fg purple"><label>Why DATAEUROS? *</label><textarea id="i-why" rows="3" placeholder="Tell us why you want to intern with us and what you hope to learn..."></textarea><span class="errt">Please write at least 20 characters</span></div>
-        <div class="fg purple"><label>Skills / Tech Stack</label><input type="text" id="i-skills" placeholder="e.g. Python, Selenium, Java, JavaScript..."></div>
-        <button type="submit" class="fsub fsub-p">Submit Application</button>
-      </form>
-    </div>
-    <div class="msuccess" id="internSuccess">
-      <div class="msuccess-ico p">🎓</div>
-      <h3 style="color:#bf7fff;font-family:'Orbitron',sans-serif">Application Submitted!</h3>
-      <p>Thank you for applying to DATAEUROS Internship Program.<br>Our team will review your application and contact you within 3–5 business days.<br><br><strong style="color:#bf7fff">Check your email for confirmation.</strong></p>
-      <button class="btn btn-v" style="margin-top:1.5rem;cursor:none" onclick="closeInternModal()">Close</button>
+      <div class="iq-success" id="iqSuccess">
+        <div class="success-ring">✓</div>
+        <h3>Inquiry Received!</h3>
+        <p>Our senior team will reach out within 2 hours. Check your inbox for a confirmation.</p>
+        <button class="btn btn-o" style="margin-top:2rem" onclick="closeIQ()">Close</button>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════
-     INQUIRY MODAL
-═══════════════════════════════ -->
-<div class="inquiry-modal" id="inquiryModal">
-  <div class="inquiry-box">
-    <div class="modal-hd">
-      <div>
-        <h2 class="cyan">Quick Inquiry</h2>
-        <p>Get in touch — we respond within 2 hours</p>
-      </div>
-      <button class="mcls" onclick="closeInquiry()"><i class="fas fa-times"></i></button>
-    </div>
-    <div id="inquiryFormWrap">
-      <form id="inquiryForm" novalidate>
-        <div class="fg2">
-          <div class="fg"><label>Full Name *</label><input type="text" id="q-name" placeholder="Your name"><span class="errt">Required</span></div>
-          <div class="fg"><label>Email *</label><input type="email" id="q-email" placeholder="you@company.com"><span class="errt">Valid email required</span></div>
-        </div>
-        <div class="fg2">
-          <div class="fg"><label>Phone</label><input type="tel" id="q-phone" placeholder="+91 ..."></div>
-          <div class="fg"><label>Company *</label><input type="text" id="q-company" placeholder="Company name"><span class="errt">Required</span></div>
-        </div>
-        <div class="fg">
-          <label>Service Interest *</label>
-          <select id="q-service">
-            <option value="">Select a service</option>
-            <option>Software Testing</option><option>Quality Assurance</option><option>Bug Audits</option>
-            <option>Performance Testing</option><option>Security Testing</option><option>IT Outsourcing</option>
-          </select>
-          <span class="errt">Please select a service</span>
-        </div>
-        <div class="fg"><label>Project Details *</label><textarea id="q-msg" rows="3" placeholder="Describe your project..."></textarea><span class="errt">Please add details</span></div>
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin-top:.5rem">
-          <button type="submit" class="fsub fsub-c">Send Request</button>
-          <button type="button" onclick="closeInquiry()" style="padding:.9rem;background:transparent;border:1px solid var(--border2);color:var(--c);font-family:'Orbitron',sans-serif;font-weight:700;font-size:.65rem;letter-spacing:.12rem;text-transform:uppercase;border-radius:var(--r4);transition:all .3s;cursor:none">Close</button>
-        </div>
-      </form>
-    </div>
-    <div class="msuccess" id="inquirySuccess">
-      <div class="msuccess-ico g">✓</div>
-      <h3 style="color:var(--g);font-family:'Orbitron',sans-serif">Request Sent!</h3>
-      <p>Thank you! Our team will contact you within 24 hours.<br><strong style="color:var(--c)">Check your email for confirmation.</strong></p>
-      <button class="btn btn-o" style="margin-top:1.5rem;cursor:none" onclick="closeInquiry()">Close</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═══════════════════════════════ HERO ═══════════════════════════════ -->
+<!-- ═══════════════════════════════════════
+     HERO
+═══════════════════════════════════════ -->
 <section id="hero">
-  <div class="hero-glow"></div>
+  <canvas class="hero-bg-canvas" id="hero-canvas"></canvas>
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
   <div class="hero-in">
-    <div class="hero-badge"><span></span>// Live System — 99.9% Uptime Guaranteed</div>
+    <div class="hero-badge"><div class="hero-badge-dot"></div>99.9% System Uptime · Live</div>
     <h1 class="hero-h1">
-      <span class="l1">DATAEUROS</span>
-      <span class="l2">Advanced Software Testing & QA Solutions</span>
+      <span class="line1">DATAEUROS</span>
+      <span class="line2">Enterprise QA &amp; Cybersecurity Platform</span>
     </h1>
-    <p class="hero-sub">Harness <strong>AI-driven testing</strong>, automated security audits, and real-time performance intelligence. We eliminate vulnerabilities before they eliminate your customers.</p>
-    <div class="hero-btns">
-      <button class="btn btn-p" onclick="scrollTo2('services')">Explore Solutions</button>
-      <button class="btn btn-o" onclick="openInquiry()">Request Demo</button>
-      <button class="btn btn-v" onclick="openInternModal()">🎓 Apply for Internship</button>
+    <p class="hero-desc">AI-powered testing, automated security audits, real-time performance intelligence. We eliminate vulnerabilities before they ever reach your users. <strong>Built for enterprises that refuse to compromise.</strong></p>
+    <div class="hero-ctas">
+      <button class="btn btn-p" onclick="scrollSec('#services')">Explore Solutions <i class="fas fa-arrow-right"></i></button>
+      <button class="btn btn-o" onclick="openIQ()">Request Demo</button>
     </div>
-    <div class="code-ticker"><span id="tickerText"></span></div>
+    <div class="hero-terminal">
+      <div class="term-bar">
+        <div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div>
+        <span class="term-title">dataeuros-cli v3.1.0</span>
+      </div>
+      <div class="term-body" id="term-body"><span class="term-prompt">$ </span><span id="term-txt"></span><span class="term-cursor"></span></div>
+    </div>
     <div class="hero-metrics">
-      <div class="hm"><div class="hm-val" data-count="100" data-suf="+">0+</div><div class="hm-lab">Projects Delivered</div></div>
-      <div class="hm"><div class="hm-val" data-count="99.9" data-dec="1" data-suf="%">0%</div><div class="hm-lab">Accuracy Rate</div></div>
-      <div class="hm"><div class="hm-val" data-count="40" data-suf="+">0+</div><div class="hm-lab">Global Clients</div></div>
-      <div class="hm"><div class="hm-val" data-count="5" data-suf="yrs">0yrs</div><div class="hm-lab">Experience</div></div>
+      <div class="hm"><div class="hm-val" data-count="500" data-suf="+">0+</div><div class="hm-lbl">Tests/Day</div></div>
+      <div class="hm"><div class="hm-val" data-count="99.9" data-dec="1" data-suf="%">0%</div><div class="hm-lbl">Accuracy Rate</div></div>
+      <div class="hm"><div class="hm-val" data-count="40" data-suf="+">0+</div><div class="hm-lbl">Global Clients</div></div>
+      <div class="hm"><div class="hm-val" data-count="5" data-suf="yr">0yr</div><div class="hm-lbl">Expertise</div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ SERVICES ═══ -->
-<section id="services" class="sec">
-  <div class="con">
-    <div class="sh rv">
-      <div class="stag"><span class="blink"></span>What We Do</div>
-      <h2>End-to-End Quality Engineering</h2>
-      <p>From first commit to production — every layer of quality, fully covered.</p>
-    </div>
-    <div class="svc-grid">
-      <div class="svc rv"><div class="svc-ic"><i class="fas fa-robot"></i></div><h3>Software Testing</h3><p>Selenium, Playwright &amp; Cypress automation suites with AI-powered test case generation that ships confidence at scale.</p><div class="svc-chips"><span class="chip">Selenium</span><span class="chip">Playwright</span><span class="chip">Cypress</span><span class="chip">TestNG</span></div></div>
-      <div class="svc rv"><div class="svc-ic"><i class="fas fa-check-double"></i></div><h3>Quality Assurance</h3><p>Test strategies, OKRs, and governance frameworks aligning engineering output with measurable business outcomes.</p><div class="svc-chips"><span class="chip">SDLC</span><span class="chip">ISO 9001</span><span class="chip">Agile QA</span></div></div>
-      <div class="svc rv"><div class="svc-ic"><i class="fas fa-bug"></i></div><h3>Bug Audits</h3><p>Systematic codebase audits surfacing critical defects, regressions, and tech-debt before they cost you customers.</p><div class="svc-chips"><span class="chip">Root Cause</span><span class="chip">AI-powered</span><span class="chip">Regression</span></div></div>
-      <div class="svc rv"><div class="svc-ic"><i class="fas fa-tachometer-alt"></i></div><h3>Performance Testing</h3><p>JMeter, k6, and Gatling stress testing modelling millions of concurrent users under real-world demand.</p><div class="svc-chips"><span class="chip">JMeter</span><span class="chip">k6</span><span class="chip">Gatling</span></div></div>
-      <div class="svc rv"><div class="svc-ic"><i class="fas fa-shield-alt"></i></div><h3>Security Testing</h3><p>OWASP penetration testing, VAPT assessments, and compliance audits hardening your applications.</p><div class="svc-chips"><span class="chip">OWASP</span><span class="chip">VAPT</span><span class="chip">SAST/DAST</span></div></div>
-      <div class="svc rv"><div class="svc-ic"><i class="fas fa-globe"></i></div><h3>IT Outsourcing</h3><p>Dedicated QA teams on-demand across time zones with fractional CQO advisory and 24/7 production support.</p><div class="svc-chips"><span class="chip">On-demand</span><span class="chip">DevOps</span><span class="chip">24/7</span></div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ AI ANIMATED VIDEO SECTION ═══ -->
+<!-- ═══════════════════════════════════════
+     AI TECHNOLOGY — 6 ANIMATED PANELS
+═══════════════════════════════════════ -->
 <section id="aivis" class="sec">
   <div class="con">
     <div class="sh rv">
-      <div class="stag"><span class="blink"></span>AI Visualizations</div>
+      <div class="etag"><div class="etag-dot"></div>AI Visualizations</div>
       <h2>Technology in Motion</h2>
-      <p>AI-generated animations of the technologies, architectures, and workflows that power our solutions.</p>
+      <p>Six live animated views of our intelligent testing architecture, security engine, and cloud deployment systems running in real-time.</p>
     </div>
-    <!-- AI CANVAS ANIMATIONS -->
-    <div class="aiv-grid rv">
-      <div class="aiv-card featured">
-        <div class="aiv-canvas-wrap"><canvas id="cv-neural" style="background:#000"></canvas></div>
-        <div class="aiv-overlay"></div>
-        <div class="aiv-badge">AI LIVE</div>
-        <div class="aiv-label"><div class="tag">// Neural Network</div><div class="ttl">AI Test Intelligence — Real-time Anomaly Detection</div></div>
+    <div class="viz-grid rv">
+      <!-- 1. Code Execution (featured, spans 2) -->
+      <div class="viz-card featured">
+        <div class="viz-wrap"><canvas id="cv-code"></canvas></div>
+        <div class="viz-overlay"></div>
+        <div class="viz-live">● LIVE RENDER</div>
+        <div class="viz-info">
+          <div class="viz-tag">Automated Test Execution</div>
+          <div class="viz-title">Real-Time Test Pipeline &amp; Debug Stream</div>
+          <div class="viz-desc">AI-powered test generation running Selenium, Playwright &amp; Cypress concurrently across 48 parallel workers.</div>
+        </div>
       </div>
-      <div class="aiv-card">
-        <div class="aiv-canvas-wrap"><canvas id="cv-code" style="background:#000"></canvas></div>
-        <div class="aiv-overlay"></div>
-        <div class="aiv-badge">LIVE</div>
-        <div class="aiv-label"><div class="tag">// Code Streams</div><div class="ttl">Automated Test Execution Pipeline</div></div>
+      <!-- 2. Neural Network -->
+      <div class="viz-card">
+        <div class="viz-wrap"><canvas id="cv-neural"></canvas></div>
+        <div class="viz-overlay"></div>
+        <div class="viz-live">● LIVE RENDER</div>
+        <div class="viz-info">
+          <div class="viz-tag">AI Engine</div>
+          <div class="viz-title">Neural Test Intelligence</div>
+          <div class="viz-desc">Deep learning model predicting failure paths.</div>
+        </div>
       </div>
-      <div class="aiv-card">
-        <div class="aiv-canvas-wrap"><canvas id="cv-security" style="background:#000"></canvas></div>
-        <div class="aiv-overlay"></div>
-        <div class="aiv-badge">LIVE</div>
-        <div class="aiv-label"><div class="tag">// Security Scan</div><div class="ttl">Real-time Threat Detection Matrix</div></div>
+      <!-- 3. Security Threat Map -->
+      <div class="viz-card featured">
+        <div class="viz-wrap"><canvas id="cv-security"></canvas></div>
+        <div class="viz-overlay"></div>
+        <div class="viz-live">● LIVE RENDER</div>
+        <div class="viz-info">
+          <div class="viz-tag">Security Scan</div>
+          <div class="viz-title">Threat Detection &amp; Vulnerability Assessment</div>
+          <div class="viz-desc">OWASP Top-10 scanner with real-time CVE database sync and automated VAPT reporting.</div>
+        </div>
       </div>
-    </div>
-    <!-- YOUTUBE EMBEDS -->
-    <div class="yt-row rv">
-      <div class="yt-card">
-        <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/1mXN_-GaGUc?rel=0&modestbranding=1&color=white" title="Software Testing" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
-        <div class="yt-meta"><div class="yt-tag">// Software Testing</div><div class="yt-ttl">Complete Software Testing Tutorial — Manual &amp; Automation</div></div>
+      <!-- 4. CI/CD Pipeline -->
+      <div class="viz-card">
+        <div class="viz-wrap"><canvas id="cv-deploy"></canvas></div>
+        <div class="viz-overlay"></div>
+        <div class="viz-live">● LIVE RENDER</div>
+        <div class="viz-info">
+          <div class="viz-tag">CI/CD Pipeline</div>
+          <div class="viz-title">Deployment Orchestration</div>
+          <div class="viz-desc">Zero-downtime release automation.</div>
+        </div>
       </div>
-      <div class="yt-card">
-        <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/3Fg0V-PliGE?rel=0&modestbranding=1&color=white" title="Cybersecurity" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
-        <div class="yt-meta"><div class="yt-tag">// Cybersecurity</div><div class="yt-ttl">Cybersecurity Full Course — Ethical Hacking Fundamentals</div></div>
+      <!-- 5. Performance Monitoring -->
+      <div class="viz-card">
+        <div class="viz-wrap"><canvas id="cv-perf"></canvas></div>
+        <div class="viz-overlay"></div>
+        <div class="viz-live">● LIVE RENDER</div>
+        <div class="viz-info">
+          <div class="viz-tag">Performance Monitor</div>
+          <div class="viz-title">Load &amp; Latency Dashboard</div>
+          <div class="viz-desc">JMeter &amp; k6 real-time metrics feed.</div>
+        </div>
       </div>
-      <div class="yt-card">
-        <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/5iWhQWVXosU?rel=0&modestbranding=1&color=white" title="Selenium" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
-        <div class="yt-meta"><div class="yt-tag">// Automation Testing</div><div class="yt-ttl">Selenium WebDriver — Complete Tutorial for QA Engineers</div></div>
-      </div>
-      <div class="yt-card">
-        <div class="yt-wrap"><iframe src="https://www.youtube.com/embed/V-UvSKe8jW4?rel=0&modestbranding=1&color=white" title="API Testing" allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" allowfullscreen loading="lazy"></iframe></div>
-        <div class="yt-meta"><div class="yt-tag">// API Testing</div><div class="yt-ttl">Postman API Testing — Complete Guide for Testers</div></div>
+      <!-- 6. Data Flow -->
+      <div class="viz-card">
+        <div class="viz-wrap"><canvas id="cv-data"></canvas></div>
+        <div class="viz-overlay"></div>
+        <div class="viz-live">● LIVE RENDER</div>
+        <div class="viz-info">
+          <div class="viz-tag">Data Pipeline</div>
+          <div class="viz-title">Test Analytics Stream</div>
+          <div class="viz-desc">Event-driven test telemetry ingestion.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ INTERNSHIP ═══ -->
+<!-- ═══════════════════════════════════════
+     SERVICES — BENTO GRID
+═══════════════════════════════════════ -->
+<section id="services" class="sec">
+  <div class="con">
+    <div class="sh rv">
+      <div class="etag"><div class="etag-dot"></div>What We Do</div>
+      <h2>End-to-End Quality<br>Engineering</h2>
+      <p>Every layer of your stack, covered. From code commits to production deployments — complete QA excellence.</p>
+    </div>
+    <div class="bento rv">
+      <div class="bcard bcard-featured span2 tall">
+        <div class="bcard-accent"></div>
+        <div class="bcard-icon"><i class="fas fa-robot"></i></div>
+        <h3>Automation Testing</h3>
+        <p>Selenium, Playwright &amp; Cypress test suites with AI-powered test generation. Self-healing locators, visual regression, and cross-browser matrix execution. 10x faster than manual with 99.8% accuracy.</p>
+        <div class="bcard-chips"><span class="chip">Selenium</span><span class="chip">Playwright</span><span class="chip">Cypress</span><span class="chip">AI Test Gen</span><span class="chip">Self-Healing</span></div>
+        <div class="bcard-stat"><div class="bcard-stat-val">10x</div><div class="bcard-stat-lbl">Faster delivery</div></div>
+      </div>
+      <div class="bcard rv">
+        <div class="bcard-accent"></div>
+        <div class="bcard-icon"><i class="fas fa-shield-alt"></i></div>
+        <h3>Security Testing</h3>
+        <p>OWASP Top-10 penetration testing, VAPT assessments, and compliance audits for SOC 2, GDPR, HIPAA.</p>
+        <div class="bcard-chips"><span class="chip">OWASP</span><span class="chip">VAPT</span><span class="chip">Burp Suite</span></div>
+      </div>
+      <div class="bcard rv">
+        <div class="bcard-accent"></div>
+        <div class="bcard-icon"><i class="fas fa-tachometer-alt"></i></div>
+        <h3>Performance Testing</h3>
+        <p>JMeter, k6, Gatling load testing. Simulate millions of concurrent users, identify bottlenecks.</p>
+        <div class="bcard-chips"><span class="chip">JMeter</span><span class="chip">k6</span><span class="chip">Gatling</span></div>
+      </div>
+      <div class="bcard rv">
+        <div class="bcard-accent"></div>
+        <div class="bcard-icon"><i class="fas fa-check-double"></i></div>
+        <h3>QA Consulting</h3>
+        <p>Test strategy, frameworks, governance aligned with SDLC and Agile/DevOps pipelines.</p>
+        <div class="bcard-chips"><span class="chip">ISO 9001</span><span class="chip">Agile</span><span class="chip">DevOps</span></div>
+      </div>
+      <div class="bcard rv">
+        <div class="bcard-accent"></div>
+        <div class="bcard-icon"><i class="fas fa-bug"></i></div>
+        <h3>Bug Audits</h3>
+        <p>Systematic codebase analysis surfacing critical defects, tech debt, and security vulnerabilities.</p>
+        <div class="bcard-chips"><span class="chip">Static Analysis</span><span class="chip">AI-Powered</span></div>
+      </div>
+      <div class="bcard span2 rv">
+        <div class="bcard-accent"></div>
+        <div class="bcard-icon"><i class="fas fa-code-branch"></i></div>
+        <h3>DevOps &amp; CI/CD Integration</h3>
+        <p>Embed quality gates directly into your deployment pipeline. GitHub Actions, GitLab CI, Jenkins, CircleCI — automated quality at every commit.</p>
+        <div class="bcard-chips"><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Terraform</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     IT OUTSOURCING — DEEP SECTION
+═══════════════════════════════════════ -->
+<section id="outsourcing" class="sec">
+  <div class="con">
+    <div class="sh rv">
+      <div class="etag"><div class="etag-dot"></div>IT Outsourcing</div>
+      <h2>World-Class Teams,<br>Your Timezone</h2>
+      <p>Dedicated QA &amp; engineering teams embedded into your workflow. Elastic scaling, zero hiring overhead.</p>
+    </div>
+    <div class="out-layout rv">
+      <div class="out-visual">
+        <div class="out-globe-wrap">
+          <canvas id="globe-canvas"></canvas>
+        </div>
+        <div class="out-stats-row">
+          <div class="out-stat"><div class="out-stat-val">12+</div><div class="out-stat-lbl">Countries</div></div>
+          <div class="out-stat"><div class="out-stat-val">24/7</div><div class="out-stat-lbl">Coverage</div></div>
+          <div class="out-stat"><div class="out-stat-val">48hr</div><div class="out-stat-lbl">Onboarding</div></div>
+        </div>
+      </div>
+      <div class="out-text">
+        <div class="etag" style="justify-content:flex-start"><div class="etag-dot"></div>Engagement Models</div>
+        <div class="out-models">
+          <div class="out-model">
+            <div class="out-model-hd">
+              <div class="out-model-name">Dedicated QA Team</div>
+              <div class="out-model-badge badge-pop">Most Popular</div>
+            </div>
+            <p>A fully managed QA team — engineers, leads, and CQO — working exclusively on your product. Embedded into your Slack, Jira, and sprints.</p>
+          </div>
+          <div class="out-model">
+            <div class="out-model-hd">
+              <div class="out-model-name">Staff Augmentation</div>
+              <div class="out-model-badge badge-hot">Flexible</div>
+            </div>
+            <p>Add skilled QA engineers to your existing team on demand. Scale up for launches, scale down in steady state. No contracts, no lock-in.</p>
+          </div>
+          <div class="out-model">
+            <div class="out-model-hd">
+              <div class="out-model-name">Managed QA Center</div>
+              <div class="out-model-badge badge-ent">Enterprise</div>
+            </div>
+            <p>Full-service offshore QA delivery center. End-to-end test management, reporting, automation COE, and CQO advisory for large organizations.</p>
+          </div>
+          <div class="out-model">
+            <div class="out-model-hd">
+              <div class="out-model-name">Project-Based Engagement</div>
+              <div class="out-model-badge badge-hot">Quick Start</div>
+            </div>
+            <p>Defined-scope QA projects with fixed timelines and deliverables. Security audits, regression test suite creation, automation framework builds.</p>
+          </div>
+        </div>
+        <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap">
+          <button class="btn btn-p" onclick="openIQ()">Discuss Your Needs</button>
+          <button class="btn btn-o" onclick="scrollSec('#contact')">Contact Us</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     TRUST & CLIENTS
+═══════════════════════════════════════ -->
+<section id="trust" class="sec" style="padding:4rem 0">
+  <div class="con">
+    <div class="trust-inner rv">
+      <div class="trust-top">
+        <div>
+          <div style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:.2em;color:var(--subtle);text-transform:uppercase;margin-bottom:1rem">Trusted By Teams At</div>
+          <div class="trust-logos">
+            <div class="trust-logo">FinTech Corp</div>
+            <div class="trust-divider"></div>
+            <div class="trust-logo">MediSoft</div>
+            <div class="trust-divider"></div>
+            <div class="trust-logo">RetailEdge</div>
+            <div class="trust-divider"></div>
+            <div class="trust-logo">CloudNova</div>
+            <div class="trust-divider"></div>
+            <div class="trust-logo">DataPilot</div>
+          </div>
+        </div>
+        <div class="trust-certs">
+          <div class="cert">ISO 27001</div>
+          <div class="cert">OWASP</div>
+          <div class="cert">SOC 2</div>
+          <div class="cert">GDPR</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     INTERNSHIPS
+═══════════════════════════════════════ -->
 <section id="internship" class="sec">
   <div class="con">
-    <div class="intern-hero rv">
-      <div class="stag" style="border-color:rgba(112,0,255,.35);color:#bf7fff"><span class="blink" style="background:#bf7fff;box-shadow:0 0 8px #bf7fff"></span>Internship Program</div>
-      <h2>Launch Your Tech Career<br>with DATAEUROS</h2>
-      <p>Join our world-class internship program and work alongside enterprise QA engineers, security experts, and automation architects on real-world projects that matter.</p>
-    </div>
-    <div class="intern-cards rv">
-      <div class="intern-card">
-        <div class="intern-role">QA Engineering Intern</div>
-        <div class="intern-duration">// 1–3 MONTHS · HYBRID / REMOTE</div>
-        <p>Learn industry-standard testing methodologies, write test cases, participate in sprint reviews, and work with real enterprise clients under senior QA engineers.</p>
-        <div class="intern-perks"><span class="perk">Test Design</span><span class="perk">JIRA</span><span class="perk">Agile</span><span class="perk">Bug Reports</span><span class="perk">Certificate</span></div>
-        <button class="intern-apply-btn" onclick="openInternModal('QA Engineering Intern')">Apply Now →</button>
-      </div>
-      <div class="intern-card">
-        <div class="intern-role">Automation Testing Intern</div>
-        <div class="intern-duration">// 2–6 MONTHS · HYBRID / REMOTE</div>
-        <p>Build real Selenium and Playwright automation scripts, contribute to CI/CD pipelines, and learn framework architecture from senior automation engineers.</p>
-        <div class="intern-perks"><span class="perk">Selenium</span><span class="perk">Python</span><span class="perk">CI/CD</span><span class="perk">GitHub</span><span class="perk">Stipend</span></div>
-        <button class="intern-apply-btn" onclick="openInternModal('Automation Testing Intern')">Apply Now →</button>
-      </div>
-      <div class="intern-card">
-        <div class="intern-role">Security Testing Intern</div>
-        <div class="intern-duration">// 3–6 MONTHS · HYBRID / REMOTE</div>
-        <p>Participate in vulnerability assessments, learn OWASP methodologies, assist in penetration testing, and contribute to security audit reports.</p>
-        <div class="intern-perks"><span class="perk">OWASP</span><span class="perk">Burp Suite</span><span class="perk">VAPT</span><span class="perk">Pentest</span><span class="perk">Letter of Rec</span></div>
-        <button class="intern-apply-btn" onclick="openInternModal('Security Testing Intern')">Apply Now →</button>
-      </div>
-      <div class="intern-card">
-        <div class="intern-role">Full Stack Dev Intern</div>
-        <div class="intern-duration">// 2–6 MONTHS · REMOTE</div>
-        <p>Build internal tools, dashboards, and test management systems. Work with React, Node.js, and REST APIs alongside our senior development team.</p>
-        <div class="intern-perks"><span class="perk">React</span><span class="perk">Node.js</span><span class="perk">APIs</span><span class="perk">MongoDB</span><span class="perk">Stipend</span></div>
-        <button class="intern-apply-btn" onclick="openInternModal('Full Stack Dev Intern')">Apply Now →</button>
-      </div>
-      <div class="intern-card">
-        <div class="intern-role">Performance Testing Intern</div>
-        <div class="intern-duration">// 2–4 MONTHS · REMOTE</div>
-        <p>Learn JMeter and k6, run load tests on real enterprise systems, analyze performance bottlenecks, and contribute to optimization reports.</p>
-        <div class="intern-perks"><span class="perk">JMeter</span><span class="perk">k6</span><span class="perk">Grafana</span><span class="perk">Reports</span><span class="perk">Certificate</span></div>
-        <button class="intern-apply-btn" onclick="openInternModal('Performance Testing Intern')">Apply Now →</button>
-      </div>
-      <div class="intern-card">
-        <div class="intern-role">Data Science Intern</div>
-        <div class="intern-duration">// 3–6 MONTHS · REMOTE</div>
-        <p>Apply ML models to test data, build predictive failure analysis systems, and work with our AI team on intelligent test generation tools.</p>
-        <div class="intern-perks"><span class="perk">Python</span><span class="perk">ML</span><span class="perk">pandas</span><span class="perk">TensorFlow</span><span class="perk">Stipend</span></div>
-        <button class="intern-apply-btn" onclick="openInternModal('Data Science Intern')">Apply Now →</button>
-      </div>
-    </div>
-    <div class="intern-cta rv">
-      <div>
-        <h3>Ready to Begin Your Journey?</h3>
-        <p>Applications reviewed weekly · Real project experience · Certificate &amp; Letter of Recommendation provided</p>
-      </div>
-      <button class="btn btn-v" onclick="openInternModal()">🎓 Apply for Internship</button>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PROCESS ═══ -->
-<section id="process" class="sec">
-  <div class="con">
     <div class="sh rv">
-      <div class="stag"><span class="blink"></span>Methodology</div>
-      <h2>The DATAEUROS Process</h2>
-      <p>Battle-tested workflow that delivers measurable results every single time.</p>
+      <div class="etag"><div class="etag-dot"></div>Internship Program</div>
+      <h2>Launch Your<br>Tech Career</h2>
+      <p>Work on real enterprise projects alongside senior engineers. Real clients, real challenges, real impact.</p>
     </div>
-    <div class="proc-grid rv">
-      <div class="proc-step"><div class="proc-n">📋</div><h4>Requirement</h4><p>Gather &amp; analyze scope, define KPIs and success criteria</p></div>
-      <div class="proc-step"><div class="proc-n">🗺️</div><h4>Planning</h4><p>Strategy, tool selection, resource &amp; timeline allocation</p></div>
-      <div class="proc-step"><div class="proc-n">⚙️</div><h4>Automation</h4><p>Build intelligent, scalable, maintainable test suites</p></div>
-      <div class="proc-step"><div class="proc-n">▶️</div><h4>Execution</h4><p>Run at scale with real-time monitoring &amp; alerting</p></div>
-      <div class="proc-step"><div class="proc-n">📊</div><h4>Reporting</h4><p>Insight-driven, actionable deliverables &amp; trends</p></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ SECURITY ═══ -->
-<section id="security" class="sec">
-  <div class="con">
-    <div class="s2">
-      <div class="shield-vis rvl">
-        <div class="shield-bg"><img src="https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=700&q=80&fit=crop" alt="Cybersecurity" loading="lazy"></div>
-        <div class="shield-rings"><div class="sring" style="width:200px;height:200px"></div><div class="sring" style="width:280px;height:280px"></div><div class="sring" style="width:360px;height:360px"></div></div>
-        <div class="shield-svg-c">
-          <svg viewBox="0 0 120 140" fill="none">
-            <defs><linearGradient id="sg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#0055ff"/></linearGradient><filter id="gf"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-            <path d="M60 8L108 28L108 72Q108 112 60 132Q12 112 12 72L12 28Z" fill="rgba(0,229,255,.07)" stroke="url(#sg)" stroke-width="1.5" filter="url(#gf)"/>
-            <path d="M60 22L95 38L95 70Q95 104 60 118Q25 104 25 70L25 38Z" fill="none" stroke="rgba(0,229,255,.22)" stroke-width=".8"/>
-            <circle cx="60" cy="72" r="21" fill="none" stroke="url(#sg)" stroke-width="1.2" opacity=".75"/>
-            <circle cx="60" cy="72" r="10" fill="rgba(0,229,255,.15)" stroke="url(#sg)" stroke-width="1"/>
-            <circle cx="60" cy="72" r="4" fill="#00e5ff"/>
-          </svg>
-        </div>
+    <div class="intern-grid rv">
+      <div class="icard">
+        <div class="icard-no">01</div>
+        <div class="icard-role">QA Engineering Intern</div>
+        <div class="icard-dur">1–3 Months · Certificate</div>
+        <p>Learn testing methodologies, write test plans, manage test cases, and work directly with enterprise clients using industry-standard tools.</p>
+        <div class="icard-perks"><span class="perk">Test Design</span><span class="perk">JIRA</span><span class="perk">Agile</span><span class="perk">Certificate</span></div>
+        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
       </div>
-      <div class="sec-c rvr">
-        <div class="stag" style="margin-bottom:1rem"><span class="blink"></span>Cybersecurity</div>
-        <h2>Zero Tolerance for<br><em>Vulnerabilities</em></h2>
-        <p>Our security engineering team performs rigorous penetration testing, VAPT assessments, and compliance audits — leaving zero room for exploitable gaps in your production environment.</p>
-        <div class="pill-g">
-          <span class="pill">Penetration Testing</span><span class="pill">OWASP Top 10</span><span class="pill">VAPT</span>
-          <span class="pill">SAST / DAST</span><span class="pill">Threat Modelling</span><span class="pill">ISO 27001</span>
-          <span class="pill">SOC 2 Compliance</span><span class="pill">GDPR Audit</span><span class="pill">Encryption Audit</span>
-        </div>
-        <div class="sec-stats">
-          <div class="sstat"><div class="n">200+</div><div class="l">CVEs Resolved</div></div>
-          <div class="sstat"><div class="n">&lt;48h</div><div class="l">Remediation</div></div>
-          <div class="sstat"><div class="n">100%</div><div class="l">Compliance</div></div>
-        </div>
+      <div class="icard">
+        <div class="icard-no">02</div>
+        <div class="icard-role">Automation Testing Intern</div>
+        <div class="icard-dur">2–6 Months · Stipend</div>
+        <p>Build Selenium &amp; Playwright test suites from scratch. Contribute to live CI/CD pipelines and ship automation frameworks used by enterprise clients.</p>
+        <div class="icard-perks"><span class="perk">Selenium</span><span class="perk">Python</span><span class="perk">CI/CD</span><span class="perk">Stipend</span></div>
+        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
+      </div>
+      <div class="icard">
+        <div class="icard-no">03</div>
+        <div class="icard-role">Security Testing Intern</div>
+        <div class="icard-dur">3–6 Months · LoR + Stipend</div>
+        <p>Learn OWASP methodology, assist in real penetration tests, run VAPT assessments on client applications under senior guidance.</p>
+        <div class="icard-perks"><span class="perk">OWASP</span><span class="perk">Burp Suite</span><span class="perk">VAPT</span><span class="perk">LoR</span></div>
+        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
+      </div>
+      <div class="icard">
+        <div class="icard-no">04</div>
+        <div class="icard-role">Performance Testing Intern</div>
+        <div class="icard-dur">2–4 Months · Certificate</div>
+        <p>Master JMeter &amp; k6, run real load tests, analyze bottlenecks in production-scale systems. Present findings to client stakeholders.</p>
+        <div class="icard-perks"><span class="perk">JMeter</span><span class="perk">k6</span><span class="perk">Grafana</span><span class="perk">Certificate</span></div>
+        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
+      </div>
+      <div class="icard">
+        <div class="icard-no">05</div>
+        <div class="icard-role">Full Stack Dev Intern</div>
+        <div class="icard-dur">2–6 Months · Stipend</div>
+        <p>Build internal dashboards, test management tools, and client-facing portals. React frontend, Node.js backend, real product ownership.</p>
+        <div class="icard-perks"><span class="perk">React</span><span class="perk">Node.js</span><span class="perk">APIs</span><span class="perk">Stipend</span></div>
+        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
+      </div>
+      <div class="icard">
+        <div class="icard-no">06</div>
+        <div class="icard-role">Data Science Intern</div>
+        <div class="icard-dur">3–6 Months · Stipend</div>
+        <p>Apply ML models to test data, build predictive failure analysis systems, and develop anomaly detection for QA automation intelligence.</p>
+        <div class="icard-perks"><span class="perk">Python</span><span class="perk">ML/AI</span><span class="perk">TensorFlow</span><span class="perk">Stipend</span></div>
+        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ IMAGE GALLERY ═══ -->
-<section id="gallery" class="sec">
-  <div class="con">
-    <div class="sh rv">
-      <div class="stag"><span class="blink"></span>Our World</div>
-      <h2>Enterprise IT in Focus</h2>
-      <p>The technologies and environments powering our solutions.</p>
-    </div>
-    <div class="ggrid rv">
-      <div class="gi s2c s2r"><img src="https://images.unsplash.com/photo-1558494949-ef010cbdcc31?w=800&q=80&fit=crop" alt="Data Center" loading="lazy"><div class="gi-lbl">Data Center</div></div>
-      <div class="gi"><img src="https://images.unsplash.com/photo-1555949963-ff9fe0c870eb?w=400&q=80&fit=crop" alt="Code" loading="lazy"><div class="gi-lbl">Code Review</div></div>
-      <div class="gi"><img src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=80&fit=crop" alt="Security" loading="lazy"><div class="gi-lbl">Security Ops</div></div>
-      <div class="gi"><img src="https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=80&fit=crop" alt="Hardware" loading="lazy"><div class="gi-lbl">Hardware</div></div>
-      <div class="gi"><img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?w=400&q=80&fit=crop" alt="Team" loading="lazy"><div class="gi-lbl">QA Team</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ TESTIMONIALS ═══ -->
-<section id="testimonials" class="sec">
-  <div class="con">
-    <div class="sh rv">
-      <div class="stag"><span class="blink"></span>Client Voices</div>
-      <h2>Trusted by Engineering Leaders</h2>
-      <p>What enterprise teams say after working with DATAEUROS.</p>
-    </div>
-    <div class="rv">
-      <div class="tslider">
-        <div class="ttrack" id="ttrack">
-          <div class="tcard"><div class="tstars">★★★★★</div><p class="ttext">DATAEUROS transformed our QA pipeline from a bottleneck into a competitive advantage. Release velocity doubled in 90 days.</p><div class="tname">Rajesh Mehta</div><div class="trole">CTO — NovaPay Financial</div></div>
-          <div class="tcard"><div class="tstars">★★★★★</div><p class="ttext">The security audit uncovered 14 critical vulnerabilities we had no idea existed. Absolutely world-class expertise.</p><div class="tname">Sarah Lindqvist</div><div class="trole">VP Engineering — Klarity Software</div></div>
-          <div class="tcard"><div class="tstars">★★★★★</div><p class="ttext">Their automation framework runs 3,200 tests in under 8 minutes. The ROI paid for itself in week two.</p><div class="tname">Ahmed Al-Farsi</div><div class="trole">Head of Product — Veridian Cloud</div></div>
-          <div class="tcard"><div class="tstars">★★★★★</div><p class="ttext">Professional, precise, and deeply technical. DATAEUROS is the QA partner we wish we had from day one.</p><div class="tname">Priya Nair</div><div class="trole">Engineering Director — Stackflow</div></div>
-          <div class="tcard"><div class="tstars">★★★★★</div><p class="ttext">Performance testing revealed bottlenecks we never knew existed. Throughput improved 5x within a single sprint.</p><div class="tname">Vikas Nair</div><div class="trole">CTO — CloudTech Solutions</div></div>
-          <div class="tcard"><div class="tstars">★★★★★</div><p class="ttext">Three years of partnership and they consistently exceed expectations. Automation expertise is unmatched.</p><div class="tname">Neha Malhotra</div><div class="trole">CEO — FinanceApp Pro</div></div>
-        </div>
-      </div>
-      <div class="tnav" id="tnav"></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ PRICING ═══ -->
-<section id="pricing" class="sec">
-  <div class="con">
-    <div class="sh rv">
-      <div class="stag"><span class="blink"></span>Pricing</div>
-      <h2>Flexible Plans</h2>
-      <p>Enterprise QA solutions tailored to your team's scale and budget.</p>
-    </div>
-    <div class="pgrid rv">
-      <div class="pcard"><div class="ptier">Startup</div><div class="pname">Growth</div><div class="pval">₹50K<small>/month</small></div><div class="pdiv"></div><ul class="plist"><li><i class="fas fa-check"></i>40 hrs/week Testing</li><li><i class="fas fa-check"></i>Basic Automation</li><li><i class="fas fa-check"></i>Monthly Reports</li><li><i class="fas fa-check"></i>Email Support</li></ul><button class="pbtn" onclick="openInquiry()">Get Started</button></div>
-      <div class="pcard hot"><div class="pbadge">Most Popular</div><div class="ptier">Professional</div><div class="pname">Pro</div><div class="pval">₹150K<small>/month</small></div><div class="pdiv"></div><ul class="plist"><li><i class="fas fa-check"></i>Full Testing Suite</li><li><i class="fas fa-check"></i>Advanced Automation</li><li><i class="fas fa-check"></i>Weekly Reports</li><li><i class="fas fa-check"></i>Priority Support</li><li><i class="fas fa-check"></i>Performance Testing</li></ul><button class="pbtn" onclick="openInquiry()">Get Started</button></div>
-      <div class="pcard"><div class="ptier">Enterprise</div><div class="pname">Enterprise</div><div class="pval">₹500K<small>/month</small></div><div class="pdiv"></div><ul class="plist"><li><i class="fas fa-check"></i>Complete Solutions</li><li><i class="fas fa-check"></i>Security Testing</li><li><i class="fas fa-check"></i>Real-time Reports</li><li><i class="fas fa-check"></i>24/7 Dedicated Support</li><li><i class="fas fa-check"></i>Custom Solutions</li></ul><button class="pbtn" onclick="openInquiry()">Contact Sales</button></div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ CONTACT ═══ -->
+<!-- ═══════════════════════════════════════
+     CONTACT
+═══════════════════════════════════════ -->
 <section id="contact" class="sec">
   <div class="con">
-    <div class="sh rv">
-      <div class="stag"><span class="blink"></span>Get In Touch</div>
-      <h2>Let's Build Quality Together</h2>
-      <p>Reach our team directly or fill the form — we respond within 2 hours.</p>
-    </div>
-    <div class="cwrap">
-      <div class="rvl">
-        <div class="ci">
-          <h2>Contact<br>Information</h2>
-          <p>Multiple channels, one expert team — always ready to help you ship with confidence.</p>
-          <div class="clist">
-            <div class="crow"><div class="cico"><i class="fas fa-envelope"></i></div><div><div class="clab">General</div><div class="cval"><a href="mailto:info@dataeuros.com">info@dataeuros.com</a></div></div></div>
-            <div class="crow"><div class="cico"><i class="fas fa-users"></i></div><div><div class="clab">HR</div><div class="cval"><a href="mailto:hr@dataeuros.com">hr@dataeuros.com</a></div></div></div>
-            <div class="crow"><div class="cico"><i class="fas fa-briefcase"></i></div><div><div class="clab">Executive</div><div class="cval"><a href="mailto:ceo@dataeuros.com">ceo@dataeuros.com</a></div></div></div>
-            <div class="crow"><div class="cico"><i class="fas fa-headset"></i></div><div><div class="clab">Sales &amp; Support</div><div class="cval"><a href="mailto:contact@dataeuros.com">contact@dataeuros.com</a></div></div></div>
-            <div class="crow"><div class="cico"><i class="fas fa-phone"></i></div><div><div class="clab">Phone (24/7)</div><div class="cval"><a href="tel:+919419281505">+91 9419281505</a></div></div></div>
-            <div class="crow"><div class="cico"><i class="fas fa-map-marker-alt"></i></div><div><div class="clab">Headquarters</div><div class="cval">23/A Shastri Nagar, Jammu, J&K 180001</div></div></div>
+    <div class="contact-layout rv">
+      <div class="contact-left">
+        <div class="etag" style="justify-content:flex-start"><div class="etag-dot"></div>Get In Touch</div>
+        <h2>Let's Start<br>Something Great</h2>
+        <p>Whether you need a full QA overhaul or want to embed testing excellence into your next sprint — we're ready.</p>
+        <div class="contact-items">
+          <div class="ci">
+            <div class="ci-ico"><i class="fas fa-envelope"></i></div>
+            <div><div class="ci-lbl">Email</div><div class="ci-val">contact@dataeuros.com</div></div>
           </div>
-          <div class="soctit">Follow Us</div>
-          <div class="socrow">
-            <a class="soca li" href="https://linkedin.com/company/dataeuros" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-            <a class="soca tw" href="https://twitter.com/dataeuros" target="_blank" rel="noopener" title="X"><i class="fab fa-x-twitter"></i></a>
-            <a class="soca fb" href="https://facebook.com/dataeuros" target="_blank" rel="noopener" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-            <a class="soca ig" href="https://instagram.com/dataeuros" target="_blank" rel="noopener" title="Instagram"><i class="fab fa-instagram"></i></a>
-            <a class="soca yt" href="https://youtube.com/@dataeuros" target="_blank" rel="noopener" title="YouTube"><i class="fab fa-youtube"></i></a>
-            <a class="soca gh" href="https://github.com/dataeuros" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
-            <a class="soca wa" href="https://wa.me/919419281505" target="_blank" rel="noopener" title="WhatsApp"><i class="fab fa-whatsapp"></i></a>
-            <a class="soca tt" href="https://tiktok.com/@dataeuros" target="_blank" rel="noopener" title="TikTok"><i class="fab fa-tiktok"></i></a>
+          <div class="ci">
+            <div class="ci-ico"><i class="fas fa-phone"></i></div>
+            <div><div class="ci-lbl">Phone</div><div class="ci-val">+91 9419281505</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-ico"><i class="fas fa-clock"></i></div>
+            <div><div class="ci-lbl">Response Time</div><div class="ci-val">Within 2 Hours (Business Hours)</div></div>
+          </div>
+          <div class="ci">
+            <div class="ci-ico"><i class="fas fa-globe"></i></div>
+            <div><div class="ci-lbl">Coverage</div><div class="ci-val">12+ Countries · 24/7 Support</div></div>
           </div>
         </div>
       </div>
-      <div class="rvr">
-        <div class="cform">
-          <form id="contactForm" novalidate>
-            <div class="frow">
-              <div class="fg"><label>Full Name *</label><input type="text" id="c-name" placeholder="Your name"><span class="errt">Required</span></div>
-              <div class="fg"><label>Email *</label><input type="email" id="c-email" placeholder="you@company.com"><span class="errt">Valid email required</span></div>
-            </div>
-            <div class="frow">
-              <div class="fg"><label>Phone</label><input type="tel" id="c-phone" placeholder="+91 ..."></div>
-              <div class="fg"><label>Company *</label><input type="text" id="c-company" placeholder="Company"><span class="errt">Required</span></div>
-            </div>
-            <div class="fg">
-              <label>Service *</label>
-              <select id="c-service"><option value="">Select service</option><option>Software Testing</option><option>Quality Assurance</option><option>Bug Audits</option><option>Performance Testing</option><option>Security Testing</option><option>IT Outsourcing</option></select>
-              <span class="errt">Please select</span>
-            </div>
-            <div class="fg"><label>Message *</label><textarea id="c-msg" rows="4" placeholder="Describe your project..."></textarea><span class="errt">Please add details</span></div>
-            <button type="submit" class="fsub2" id="csubBtn">Send Request →</button>
-            <div class="fmsg" id="cfmsg"></div>
-          </form>
-        </div>
+      <div class="contact-right">
+        <div class="contact-form-title">Quick Message</div>
+        <form id="contactForm" novalidate>
+          <div class="fg2">
+            <div class="fg"><label>Name *</label><input id="c-name" type="text" placeholder="Your name"></div>
+            <div class="fg"><label>Email *</label><input id="c-email" type="email" placeholder="you@company.com"></div>
+          </div>
+          <div class="fg"><label>Subject</label><input id="c-subject" type="text" placeholder="How can we help?"></div>
+          <div class="fg"><label>Message *</label><textarea id="c-msg" rows="4" placeholder="Tell us about your project..."></textarea></div>
+          <button type="submit" class="iq-submit" style="margin-top:.5rem"><span>Send Message →</span></button>
+          <div id="c-feedback" style="display:none;margin-top:1rem;padding:.8rem;border-radius:8px;text-align:center;font-family:var(--font-mono);font-size:.75rem;color:var(--acc1);border:1px solid rgba(57,255,20,.2);background:rgba(57,255,20,.05)">✓ Message sent! We'll respond within 2 hours.</div>
+        </form>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══ MAP ═══ -->
-<section id="mapview" class="sec" style="padding-top:0">
-  <div class="con">
-    <div class="sh rv"><div class="stag"><span class="blink"></span>Location</div><h2>Visit Our Office</h2></div>
-    <div class="mframe rv"><iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3362.5!2d74.8573!3d32.7265!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391e83f3ab46f1f3%3A0xa2f1c834f96d0b04!2sShastri%20Nagar%2C%20Jammu!5e0!3m2!1sen!2sin!4v1" title="DATAEUROS Office" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe></div>
-    <div class="minfo rv">
-      <div class="mc"><h4>Address</h4><p>23/A Shastri Nagar<br>Jammu, J&K 180001</p></div>
-      <div class="mc"><h4>Phone</h4><p>+91 9419281505</p></div>
-      <div class="mc"><h4>Office Hours</h4><p>Mon–Fri: 9AM–6PM IST</p></div>
-      <div class="mc"><h4>24/7 Support</h4><p>Emergency support<br>always available</p></div>
     </div>
   </div>
 </section>
@@ -1094,405 +919,517 @@ footer{border-top:1px solid var(--border);padding:4rem 0 2rem;position:relative;
 <!-- FOOTER -->
 <footer>
   <div class="con">
-    <div class="fgrid">
-      <div class="fbrand">
-        <div class="nav-logo">DATA<span>EUROS</span></div>
-        <p>Advanced Software Testing &amp; QA Solutions for engineering teams worldwide. Built on trust, delivered with precision.</p>
-        <div class="fsoc">
-          <a href="https://linkedin.com/company/dataeuros" target="_blank" rel="noopener"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://twitter.com/dataeuros" target="_blank" rel="noopener"><i class="fab fa-x-twitter"></i></a>
-          <a href="https://facebook.com/dataeuros" target="_blank" rel="noopener"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://instagram.com/dataeuros" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
-          <a href="https://youtube.com/@dataeuros" target="_blank" rel="noopener"><i class="fab fa-youtube"></i></a>
-          <a href="https://github.com/dataeuros" target="_blank" rel="noopener"><i class="fab fa-github"></i></a>
-          <a href="https://wa.me/919419281505" target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i></a>
-        </div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-mark">DE</div><span class="logo-txt">DATA<span>EUROS</span></span></div>
+        <p>Advanced Software Testing &amp; QA Solutions for engineering teams worldwide. Built on trust, delivered with precision. ISO 27001 certified.</p>
       </div>
-      <div class="fcol"><h5>Services</h5><ul><li><a href="#services">Software Testing</a></li><li><a href="#services">Quality Assurance</a></li><li><a href="#services">Bug Audits</a></li><li><a href="#services">Performance Testing</a></li><li><a href="#services">Security Testing</a></li><li><a href="#services">IT Outsourcing</a></li></ul></div>
-      <div class="fcol"><h5>Company</h5><ul><li><a href="#process">Our Process</a></li><li><a href="#internship">Internships</a></li><li><a href="#gallery">Gallery</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#testimonials">Reviews</a></li></ul></div>
-      <div class="fcol"><h5>Contact</h5><ul><li><a href="mailto:info@dataeuros.com">info@dataeuros.com</a></li><li><a href="mailto:ceo@dataeuros.com">ceo@dataeuros.com</a></li><li><a href="mailto:hr@dataeuros.com">hr@dataeuros.com</a></li><li><a href="mailto:contact@dataeuros.com">contact@dataeuros.com</a></li><li><a href="tel:+919419281505">+91 9419281505</a></li></ul></div>
+      <div>
+        <div class="footer-col-title">Services</div>
+        <ul class="footer-links">
+          <li><a href="#services">Software Testing</a></li>
+          <li><a href="#services">Automation Testing</a></li>
+          <li><a href="#services">Security Testing</a></li>
+          <li><a href="#services">Performance Testing</a></li>
+          <li><a href="#outsourcing">IT Outsourcing</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Company</div>
+        <ul class="footer-links">
+          <li><a href="#aivis">Technology</a></li>
+          <li><a href="#internship">Internships</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><a href="#trust">Clients</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Legal</div>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Compliance</a></li>
+          <li><a href="#">NDA Request</a></li>
+        </ul>
+      </div>
     </div>
-    <div class="fbot">
-      <p>© 2025 DATAEUROS. All rights reserved.</p>
-      <div class="fbadges"><span class="fbadge">ISO 27001</span><span class="fbadge">OWASP</span><span class="fbadge">SOC 2</span><span class="fbadge">GDPR</span></div>
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2025 DATAEUROS. All rights reserved. · contact@dataeuros.com · +91 9419281505</div>
+      <div class="footer-badges">
+        <div class="fbadge">ISO 27001</div>
+        <div class="fbadge">OWASP</div>
+        <div class="fbadge">SOC 2</div>
+        <div class="fbadge">GDPR</div>
+      </div>
     </div>
   </div>
 </footer>
 
-<!-- EmailJS SDK -->
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script>
 'use strict';
-// ─── EmailJS Init ────────────────────────────────────────────────────────────
-// Replace YOUR_PUBLIC_KEY with your actual EmailJS public key
-// Replace YOUR_SERVICE_ID and YOUR_TEMPLATE_ID with your IDs
-var EJS_PUB = 'YOUR_PUBLIC_KEY';
-var EJS_SVC = 'YOUR_SERVICE_ID';
-var EJS_TMPL_INQUIRY = 'YOUR_INQUIRY_TEMPLATE_ID';
-var EJS_TMPL_INTERN = 'YOUR_INTERN_TEMPLATE_ID';
-try { emailjs.init({publicKey: EJS_PUB}); } catch(e) {}
-
 // ─── CURSOR ──────────────────────────────────────────────────────────────────
-var dot = document.getElementById('cursor-dot');
-var ring = document.getElementById('cursor-ring');
-var mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
-(function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+var core=document.getElementById('cur-core'),orbit=document.getElementById('cur-orbit');
+var mx=0,my=0,ox=0,oy=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;core.style.left=mx+'px';core.style.top=my+'px'});
+(function loop(){ox+=(mx-ox)*.1;oy+=(my-oy)*.1;orbit.style.left=ox+'px';orbit.style.top=oy+'px';requestAnimationFrame(loop)})();
 
-// ─── INTRO ANIMATION ─────────────────────────────────────────────────────────
+// ─── STAR BACKGROUND ──────────────────────────────────────────────────────
 (function(){
-  var cvs = document.getElementById('intro-cvs');
-  var ctx = cvs.getContext('2d');
-  var pts=[], W, H;
+  var c=document.getElementById('bg-stars'),ctx=c.getContext('2d'),stars=[],W,H;
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function init(){stars=[];for(var i=0;i<280;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,a:Math.random()*.8+.1,tw:Math.random()*3+1,phase:Math.random()*Math.PI*2})}
+  var t=0;
+  function draw(){ctx.clearRect(0,0,W,H);stars.forEach(function(s){var a=s.a*(.5+.5*Math.sin(t*s.tw+s.phase));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(200,230,255,'+a+')';ctx.fill()});t+=.01;requestAnimationFrame(draw)}
+  resize();init();draw();
+  window.addEventListener('resize',function(){resize();init()});
+})();
+
+// ─── HERO CANVAS ──────────────────────────────────────────────────────────
+(function(){
+  var c=document.getElementById('hero-canvas'),ctx=c.getContext('2d'),pts=[],W,H;
+  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
+  function init(){pts=[];for(var i=0;i<120;i++){var a=Math.random()*Math.PI*2,r=Math.random()*Math.min(W,H)*.6;pts.push({x:W/2+Math.cos(a)*r,y:H/2+Math.sin(a)*r,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.2,r:Math.random()*2+.5,a:Math.random()*.6+.2,phase:Math.random()*Math.PI*2,sp:Math.random()*.02+.006})}}
+  var t=0;
+  function draw(){ctx.clearRect(0,0,W,H);for(var i=0;i<pts.length;i++){for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<160){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(0,229,255,'+((1-d/160)*.15)+')';ctx.lineWidth=.5;ctx.stroke()}}}pts.forEach(function(p){var pulse=.7+.3*Math.sin(t*p.sp+p.phase);ctx.beginPath();ctx.arc(p.x,p.y,p.r*pulse,0,Math.PI*2);ctx.fillStyle='rgba(0,229,255,'+(p.a*pulse*.7)+')';ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0});t+=.016;requestAnimationFrame(draw)}
+  resize();init();draw();
+  window.addEventListener('resize',function(){resize();init()});
+})();
+
+// ─── CINEMATIC INTRO ──────────────────────────────────────────────────────
+(function(){
+  var cvs=document.getElementById('intro-canvas'),ctx=cvs.getContext('2d'),W,H;
   function resize(){W=cvs.width=window.innerWidth;H=cvs.height=window.innerHeight}
-  function initPts(){
-    pts=[];
-    for(var i=0;i<200;i++){
-      var angle=Math.random()*Math.PI*2;
-      var radius=Math.random()*Math.min(W,H)*.5;
-      pts.push({
-        x:W/2+Math.cos(angle)*radius*(0.2+Math.random()*0.8),
-        y:H/2+Math.sin(angle)*radius*(0.2+Math.random()*0.8),
-        vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.35,
-        r:Math.random()*2+.5,a:Math.random()*.8+.2,
-        phase:Math.random()*Math.PI*2,sp:Math.random()*.02+.005
-      });
+  var pts=[];
+  function init(){pts=[];for(var i=0;i<300;i++){pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.35,r:Math.random()*2.5+.5,a:Math.random()*.9+.1,phase:Math.random()*Math.PI*2,sp:Math.random()*.02+.005})}}
+  var t=0;
+  function drawBg(){
+    ctx.fillStyle='rgba(0,0,0,.15)';ctx.fillRect(0,0,W,H);
+    for(var i=0;i<pts.length;i++){for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<200){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(0,200,255,'+((1-d/200)*.3)+')';ctx.lineWidth=.8;ctx.stroke()}}}
+    pts.forEach(function(p){var pulse=.65+.35*Math.sin(t*p.sp+p.phase);ctx.beginPath();ctx.arc(p.x,p.y,p.r*pulse,0,Math.PI*2);ctx.fillStyle='rgba(0,200,255,'+(p.a*pulse)+')';ctx.fill();if(p.r>1.2){var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);g.addColorStop(0,'rgba(0,200,255,'+(p.a*.3*pulse)+')');g.addColorStop(1,'rgba(0,200,255,0)');ctx.beginPath();ctx.arc(p.x,p.y,p.r*4,0,Math.PI*2);ctx.fillStyle=g;ctx.fill()}p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0});t+=.018;requestAnimationFrame(drawBg)}
+  resize();init();drawBg();
+
+  // Intro progress logic
+  var fill=document.getElementById('intro-fill'),pctSm=document.getElementById('intro-pct-sm'),bigPct=document.getElementById('intro-pct');
+  var phases=[{id:'ph1',label:'LOADING SECURITY MODULES',end:25},{id:'ph2',label:'INITIALIZING AI PIPELINE',end:55},{id:'ph3',label:'SPINNING UP QA ENGINE',end:80},{id:'ph4',label:'PREPARING DASHBOARD',end:100}];
+  var p=0,pi=0,iv=setInterval(function(){
+    p+=Math.random()*2.8+1.2;if(p>100)p=100;
+    fill.style.width=p+'%';pctSm.textContent=Math.floor(p)+'%';bigPct.textContent=Math.floor(p)+'%';
+    if(pi<phases.length&&p>=phases[pi].end){
+      document.getElementById('phases[pi].id') && document.getElementById(phases[pi].id).classList.add('active');
+      document.getElementById(phases[pi].id).classList.add('active');
+      if(pi+1<phases.length){document.getElementById('intro-phase-txt').textContent=phases[pi+1].label}
+      pi++;
     }
-  }
-  var t2=0;
-  function draw(){
-    ctx.clearRect(0,0,W,H);
-    for(var i=0;i<pts.length;i++){
-      for(var j=i+1;j<pts.length;j++){
-        var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y;
-        var d=Math.sqrt(dx*dx+dy*dy);
-        if(d<140){
-          ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);
-          ctx.strokeStyle='rgba(0,200,230,'+((1-d/140)*.22)+')';ctx.lineWidth=.5;ctx.stroke();
-        }
-      }
-    }
-    pts.forEach(function(p){
-      var pulse=.6+.4*Math.sin(t2*p.sp+p.phase);
-      ctx.beginPath();ctx.arc(p.x,p.y,p.r*pulse,0,Math.PI*2);
-      ctx.fillStyle='rgba(0,229,255,'+(p.a*pulse)+')';ctx.fill();
-      if(p.r>1.5){
-        var gg=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*3);
-        gg.addColorStop(0,'rgba(0,229,255,'+(p.a*.4*pulse)+')');gg.addColorStop(1,'rgba(0,229,255,0)');
-        ctx.beginPath();ctx.arc(p.x,p.y,p.r*3,0,Math.PI*2);ctx.fillStyle=gg;ctx.fill();
-      }
-      p.x+=p.vx;p.y+=p.vy;
-      if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0;
-    });
-    t2+=.016;
-    requestAnimationFrame(draw);
-  }
-  resize();initPts();draw();
-  // Animate bar
-  var bar=document.getElementById('introBar');
-  var pct=document.getElementById('introPct');
-  var p=0;
-  var iv=setInterval(function(){
-    p+=Math.random()*3+1;if(p>100)p=100;
-    bar.style.width=p+'%';
-    pct.textContent=Math.floor(p)+'%';
     if(p>=100){
       clearInterval(iv);
       setTimeout(function(){
-        document.getElementById('intro').classList.add('exit');
-        setTimeout(function(){document.getElementById('intro').style.display='none'},850);
-      },400);
+        document.getElementById('intro').classList.add('fade-out');
+        setTimeout(function(){document.getElementById('intro').style.display='none';openIQ()},700);
+      },500);
     }
   },55);
-})();
-
-// ─── BACKGROUND CANVAS ───────────────────────────────────────────────────────
-(function(){
-  var c=document.getElementById('bg-canvas');
-  var ctx=c.getContext('2d');
-  var pts=[];
-  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
-  function init(){pts=[];for(var i=0;i<130;i++)pts.push({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.25,vy:(Math.random()-.5)*.15,r:Math.random()*1.6+.3,a:Math.random()*.65+.15,phase:Math.random()*Math.PI*2,sp:Math.random()*.015+.004})}
-  var t=0;
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    for(var i=0;i<pts.length;i++){for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<110){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(0,180,220,'+((1-d/110)*.16)+')';ctx.lineWidth=.5;ctx.stroke()}}}
-    pts.forEach(function(p){var pulse=.6+.4*Math.sin(t*p.sp+p.phase);ctx.beginPath();ctx.arc(p.x,p.y,p.r*pulse,0,Math.PI*2);ctx.fillStyle='rgba(0,229,255,'+(p.a*pulse)+')';ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<-10)p.x=c.width+10;if(p.x>c.width+10)p.x=-10;if(p.y<-10)p.y=c.height+10;if(p.y>c.height+10)p.y=-10});
-    t+=.016;requestAnimationFrame(draw);
-  }
   window.addEventListener('resize',function(){resize();init()});
-  resize();init();draw();
 })();
 
-// ─── GRID CANVAS ─────────────────────────────────────────────────────────────
+// ─── TERMINAL TICKER ──────────────────────────────────────────────────────
 (function(){
-  var c=document.getElementById('grid-canvas');
-  var ctx=c.getContext('2d');
-  var t=0;
-  function resize(){c.width=window.innerWidth;c.height=window.innerHeight}
-  function draw(){
-    ctx.clearRect(0,0,c.width,c.height);
-    var vy=c.height*.62,vx=c.width*.5;
-    for(var i=0;i<=22;i++){var prog=i/22,e=Math.pow(prog,2.2),y=vy+(c.height*1.1-vy)*e+(t%1)*(c.height*1.1-vy)/22;if(y>c.height*1.05)continue;var a=Math.max(0,(.5-Math.abs(prog-.5))*2)*.14;ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(c.width,y);ctx.strokeStyle='rgba(0,180,220,'+a+')';ctx.lineWidth=.5;ctx.stroke()}
-    for(var j=0;j<=28;j++){var t3=j/28,bx=c.width*t3,a2=Math.max(0,(.5-Math.abs(t3-.5))*2)*.2;ctx.beginPath();ctx.moveTo(vx,vy);ctx.lineTo(bx,c.height*1.05);ctx.strokeStyle='rgba(0,180,220,'+a2+')';ctx.lineWidth=.5;ctx.stroke()}
-    var grad=ctx.createLinearGradient(0,vy-50,0,vy+50);grad.addColorStop(0,'rgba(0,229,255,0)');grad.addColorStop(.5,'rgba(0,229,255,0.045)');grad.addColorStop(1,'rgba(0,229,255,0)');ctx.fillStyle=grad;ctx.fillRect(0,vy-50,c.width,100);
-    t+=.004;requestAnimationFrame(draw);
-  }
-  window.addEventListener('resize',resize);resize();draw();
-})();
-
-// ─── AI CANVAS ANIMATIONS ────────────────────────────────────────────────────
-// Neural network animation
-(function(){
-  var el=document.getElementById('cv-neural');
-  if(!el)return;
-  var ctx=el.getContext('2d');
-  var nodes=[],W=0,H=0;
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height;buildNodes()}
-  function buildNodes(){
-    nodes=[];
-    var layers=[4,6,8,6,4];
-    var xStep=W/(layers.length+1);
-    layers.forEach(function(count,li){
-      for(var ni=0;ni<count;ni++){
-        var yStep=H/(count+1);
-        nodes.push({x:xStep*(li+1),y:yStep*(ni+1),layer:li,idx:ni,total:count,pulse:Math.random()*Math.PI*2,act:Math.random()});
-      }
-    });
-  }
-  var t=0;
-  function draw(){
-    ctx.fillStyle='rgba(0,0,0,.15)';ctx.fillRect(0,0,W,H);
-    // Draw connections
-    nodes.forEach(function(a){
-      nodes.filter(function(b){return b.layer===a.layer+1}).forEach(function(b){
-        var strength=.4+.5*Math.sin(t*.02+a.pulse+b.pulse);
-        ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);
-        ctx.strokeStyle='rgba(0,229,255,'+(strength*.35)+')';ctx.lineWidth=.8;ctx.stroke();
-        // Signal pulse
-        var sp=(t*.025+a.pulse)%1;
-        var px=a.x+(b.x-a.x)*sp,py=a.y+(b.y-a.y)*sp;
-        ctx.beginPath();ctx.arc(px,py,2,0,Math.PI*2);
-        ctx.fillStyle='rgba(0,255,200,'+(strength*.8)+')';ctx.fill();
-      });
-    });
-    // Draw nodes
-    nodes.forEach(function(n){
-      var act=.5+.5*Math.sin(t*.03+n.pulse);
-      var r=6+act*4;
-      var g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*2);
-      g.addColorStop(0,'rgba(0,229,255,'+(act*.9)+')');g.addColorStop(1,'rgba(0,229,255,0)');
-      ctx.beginPath();ctx.arc(n.x,n.y,r*2,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-      ctx.beginPath();ctx.arc(n.x,n.y,r*.5,0,Math.PI*2);ctx.fillStyle='rgba(180,255,255,'+(act*.95)+')';ctx.fill();
-    });
-    t++;requestAnimationFrame(draw);
-  }
-  var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){resize();draw();obs.disconnect()}});
-  obs.observe(el.parentElement);
-  window.addEventListener('resize',resize);
-})();
-
-// Code rain animation
-(function(){
-  var el=document.getElementById('cv-code');
-  if(!el)return;
-  var ctx=el.getContext('2d');
-  var cols=[],W=0,H=0;
-  var chars='01アイウエオカキクケコテストQABUGFIXJSPYTHONSELENIUMCYPRESS{}[]()=>function()testing{}assert()expect()';
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height;cols=[];for(var i=0;i<Math.floor(W/12);i++)cols.push(Math.random()*H/14*-1)}
-  function draw(){
-    ctx.fillStyle='rgba(0,0,0,.08)';ctx.fillRect(0,0,W,H);
-    ctx.font='11px IBM Plex Mono,monospace';
-    cols.forEach(function(y,i){
-      var ch=chars[Math.floor(Math.random()*chars.length)];
-      var alpha=.15+Math.random()*.6;
-      ctx.fillStyle='rgba(0,229,255,'+alpha+')';
-      ctx.fillText(ch,i*12,y*14);
-      if(y*14>H&&Math.random()>.97)cols[i]=0;else cols[i]++;
-    });
-    requestAnimationFrame(draw);
-  }
-  var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){resize();draw();obs.disconnect()}});
-  obs.observe(el.parentElement);
-  window.addEventListener('resize',resize);
-})();
-
-// Security hex grid animation
-(function(){
-  var el=document.getElementById('cv-security');
-  if(!el)return;
-  var ctx=el.getContext('2d');
-  var W=0,H=0,t=0,threats=[];
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
-  function hexPts(cx,cy,r){var pts=[];for(var i=0;i<6;i++){var a=Math.PI/3*i-Math.PI/6;pts.push([cx+r*Math.cos(a),cy+r*Math.sin(a)])}return pts}
-  function drawHex(cx,cy,r,color,alpha){var p=hexPts(cx,cy,r);ctx.beginPath();ctx.moveTo(p[0][0],p[0][1]);for(var i=1;i<p.length;i++)ctx.lineTo(p[i][0],p[i][1]);ctx.closePath();ctx.strokeStyle='rgba('+color+','+alpha+')';ctx.lineWidth=1;ctx.stroke()}
-  function draw(){
-    ctx.fillStyle='rgba(0,0,0,.12)';ctx.fillRect(0,0,W,H);
-    var hexR=28,hs=hexR*Math.sqrt(3),vs=hexR*1.5,cols2=Math.ceil(W/hs)+2,rows=Math.ceil(H/vs)+2;
-    for(var row=0;row<rows;row++){for(var col=0;col<cols2;col++){
-      var cx=(col+(row%2)*.5)*hs,cy=row*vs;
-      var dist=Math.sqrt((cx-W/2)*(cx-W/2)+(cy-H/2)*(cy-H/2));
-      var pulse=.5+.5*Math.sin(t*.015-dist*.018);
-      drawHex(cx,cy,hexR*.85,'0,229,255',pulse*.22);
-    }}
-    if(Math.random()<.015)threats.push({x:Math.random()*W,y:Math.random()*H,r:0,max:80+Math.random()*50,color:Math.random()<.5?'255,45,85':'255,149,0'});
-    threats=threats.filter(function(th){
-      th.r+=2;var alpha=(1-th.r/th.max)*.7;
-      ctx.beginPath();ctx.arc(th.x,th.y,th.r,0,Math.PI*2);ctx.strokeStyle='rgba('+th.color+','+alpha+')';ctx.lineWidth=1.5;ctx.stroke();
-      ctx.beginPath();ctx.arc(th.x,th.y,th.r*.3,0,Math.PI*2);ctx.fillStyle='rgba('+th.color+','+(alpha*.5)+')';ctx.fill();
-      return th.r<th.max;
-    });
-    t++;requestAnimationFrame(draw);
-  }
-  var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){resize();draw();obs.disconnect()}});
-  obs.observe(el.parentElement);
-  window.addEventListener('resize',resize);
-})();
-
-// ─── CODE TICKER ─────────────────────────────────────────────────────────────
-(function(){
-  var el=document.getElementById('tickerText');
-  if(!el)return;
-  var phrases=['Running 3,200 automated test cases in 8 minutes...','Security audit: 0 critical vulnerabilities found ✓','Performance load test: 1M concurrent users — 99.9ms response','Deploying QA pipeline to production — all systems green','Bug detected in auth module → Fixed → Regression passed','CI/CD integration: 847 tests passing, 0 failures'];
-  var pi=0,ci=0,typing=true,wait=0;
+  var el=document.getElementById('term-txt');if(!el)return;
+  var lines=[
+    {p:'$ ',t:'dataeuros run --suite=full --parallel=48',c:'cmd'},
+    {p:'',t:'  ✓ Loaded 5,248 test cases across 12 modules',c:'out'},
+    {p:'',t:'  ↻ Executing: Auth, Payment, API, UI flows...',c:'out'},
+    {p:'',t:'  ✓ All 5,248 tests PASSED [99.8% accuracy]',c:'pass'},
+    {p:'$ ',t:'dataeuros security --scan=OWASP-TOP10',c:'cmd'},
+    {p:'',t:'  ◉ Scanning 847 endpoints... 0 critical CVEs found',c:'pass'},
+    {p:'$ ',t:'dataeuros perf --load=100k --duration=300s',c:'cmd'},
+    {p:'',t:'  ◉ Peak load: 100,000 users · Avg latency: 99ms',c:'pass'},
+  ];
+  var li=0,ci=0,typing=true,wait=0,lineIdx=0;
+  var termBody=document.getElementById('term-body');
   function tick(){
     if(wait>0){wait--;setTimeout(tick,40);return}
+    var line=lines[li];
     if(typing){
-      el.textContent=phrases[pi].slice(0,ci+1);
+      var full=line.p+line.t;
+      var color=line.c==='cmd'?'var(--c1)':line.c==='pass'?'var(--acc1)':'var(--muted)';
+      termBody.innerHTML='<span style="color:'+color+'">'+full.slice(0,ci+1)+'</span><span class="term-cursor"></span>';
       ci++;
-      if(ci>=phrases[pi].length){typing=false;wait=60}
+      if(ci>=full.length){typing=false;wait=60}
     }else{
-      el.textContent=phrases[pi].slice(0,ci-1);
-      ci--;
-      if(ci<=0){typing=true;pi=(pi+1)%phrases.length;wait=15}
+      li=(li+1)%lines.length;ci=0;typing=true;wait=15;
     }
-    setTimeout(tick,typing?55:25);
+    setTimeout(tick,typing?55:28);
   }
   tick();
 })();
 
-// ─── NAV ─────────────────────────────────────────────────────────────────────
-window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('scrolled',window.scrollY>60)});
+// ─── CV-CODE: Test Execution Stream ──────────────────────────────────────
+(function(){
+  var el=document.getElementById('cv-code');if(!el)return;
+  var ctx=el.getContext('2d'),lines=[],W=0,H=0,t=0;
+  var codeLines=['✓ test("user login flow") → PASS 12ms','✓ test("payment gateway") → PASS 28ms','✗ test("checkout redirect") → FAIL 404','→ AI FIX: updating selector [data-checkout-btn]','✓ test("checkout redirect") → PASS 31ms [FIXED]','✓ test("API: POST /orders") → PASS 8ms','◉ Running visual regression suite...','✓ 48 screenshots matched · 0 diffs found','✓ test("mobile responsive") → PASS 19ms','✓ Cross-browser: Chrome/FF/Safari → ALL PASS'];
+  var cols=['rgba(57,255,20,.8)','rgba(57,255,20,.8)','rgba(255,80,80,.9)','rgba(0,229,255,.8)','rgba(57,255,20,.8)','rgba(57,255,20,.8)','rgba(0,229,255,.6)','rgba(57,255,20,.8)','rgba(57,255,20,.8)','rgba(57,255,20,.8)'];
+  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
+  function draw(){
+    ctx.fillStyle='rgba(2,4,8,.18)';ctx.fillRect(0,0,W,H);
+    var lineH=H/12;
+    codeLines.forEach(function(line,i){
+      var y=H/14*(i+1);
+      var pulse=Math.sin(t*.04+i*.3)>.1;
+      ctx.font='600 '+(Math.min(W*.019,12))+'px JetBrains Mono';
+      ctx.fillStyle=cols[i];
+      ctx.globalAlpha=.7+.3*Math.sin(t*.03+i*.5);
+      ctx.fillText(line,20,y+lineH/2);
+      ctx.globalAlpha=1;
+      if(pulse&&Math.random()<.015){
+        lines.push({x:W*.7+Math.random()*W*.25,y:y,vx:-Math.random()*3-1,life:1,color:cols[i]});
+      }
+    });
+    // scan line
+    var sy=(t*1.5)%H;
+    var sg=ctx.createLinearGradient(0,sy-3,0,sy+3);
+    sg.addColorStop(0,'rgba(0,229,255,0)');sg.addColorStop(.5,'rgba(0,229,255,.3)');sg.addColorStop(1,'rgba(0,229,255,0)');
+    ctx.fillStyle=sg;ctx.fillRect(0,sy-3,W,6);
+    lines=lines.filter(function(l){l.x+=l.vx;l.life-=.04;ctx.beginPath();ctx.arc(l.x,l.y,3,0,Math.PI*2);ctx.fillStyle=l.color.replace('.8',''+l.life+')').replace('.9',''+l.life+')');ctx.fill();return l.life>0&&l.x>0});
+    t++;requestAnimationFrame(draw);
+  }
+  resize();draw();
+  var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){draw();obs.disconnect()}});obs.observe(el.parentElement);
+  window.addEventListener('resize',resize);
+})();
+
+// ─── CV-NEURAL: Neural Network ──────────────────────────────────────────
+(function(){
+  var el=document.getElementById('cv-neural');if(!el)return;
+  var ctx=el.getContext('2d'),W=0,H=0,t=0;
+  var nodes=[],edges=[];
+  var layers=[3,5,5,3];
+  function resize(){
+    var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height;
+    nodes=[];edges=[];
+    var lw=W/(layers.length+1);
+    layers.forEach(function(count,li){
+      for(var ni=0;ni<count;ni++){
+        var nx=lw*(li+1),ny=H/(count+1)*(ni+1);
+        nodes.push({x:nx,y:ny,layer:li,idx:ni,act:Math.random(),phase:Math.random()*Math.PI*2,sp:Math.random()*.05+.02});
+      }
+    });
+    var offset=0;
+    for(var li=0;li<layers.length-1;li++){
+      var lStart=offset,lEnd=offset+layers[li];
+      var nStart=offset+layers[li],nEnd=nStart+layers[li+1];
+      for(var a=lStart;a<lEnd;a++){for(var b=nStart;b<nEnd;b++){edges.push({a:a,b:b,w:Math.random()-.5,phase:Math.random()*Math.PI*2,sp:Math.random()*.03+.01,signal:null})}}
+      offset+=layers[li];
+    }
+  }
+  function draw(){
+    ctx.fillStyle='rgba(2,4,8,.15)';ctx.fillRect(0,0,W,H);
+    edges.forEach(function(e){
+      var na=nodes[e.a],nb=nodes[e.b];
+      var act=(Math.sin(t*e.sp+e.phase)+1)/2;
+      var col=act>.5?'0,229,255':'57,255,20';
+      ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);
+      ctx.strokeStyle='rgba('+col+','+(act*.35)+')';ctx.lineWidth=act*1.5;ctx.stroke();
+      // signal dot
+      var sig=(Math.sin(t*e.sp*2+e.phase)+1)/2;
+      var sx=na.x+(nb.x-na.x)*sig,sy=na.y+(nb.y-na.y)*sig;
+      ctx.beginPath();ctx.arc(sx,sy,3,0,Math.PI*2);
+      ctx.fillStyle='rgba('+col+','+(sig*.8)+')';ctx.fill();
+    });
+    nodes.forEach(function(n){
+      n.act=.5+.5*Math.sin(t*n.sp+n.phase);
+      var r=Math.max(W*.018,8)*n.act;
+      var col=n.layer===0?'0,229,255':n.layer===layers.length-1?'57,255,20':'180,79,255';
+      var g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*2);
+      g.addColorStop(0,'rgba('+col+','+(n.act*.7)+')');g.addColorStop(1,'rgba('+col+',0)');
+      ctx.beginPath();ctx.arc(n.x,n.y,r*2,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+      ctx.beginPath();ctx.arc(n.x,n.y,r*.5,0,Math.PI*2);
+      ctx.fillStyle='rgba('+col+','+n.act+')';ctx.fill();
+    });
+    t+=.02;requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ─── CV-SECURITY: Threat Map ─────────────────────────────────────────────
+(function(){
+  var el=document.getElementById('cv-security');if(!el)return;
+  var ctx=el.getContext('2d'),threats=[],zones=[],W=0,H=0,t=0;
+  function resize(){
+    var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height;
+    zones=[];
+    for(var i=0;i<12;i++)zones.push({x:(i%4+.5)*(W/4),y:Math.floor(i/4)*(H/3)+H/6,r:W*.075,threat:0,id:i});
+  }
+  function draw(){
+    ctx.fillStyle='rgba(2,4,8,.12)';ctx.fillRect(0,0,W,H);
+    // hex grid lines
+    ctx.strokeStyle='rgba(0,229,255,.06)';ctx.lineWidth=1;
+    for(var xi=0;xi<W;xi+=60){ctx.beginPath();ctx.moveTo(xi,0);ctx.lineTo(xi,H);ctx.stroke()}
+    for(var yi=0;yi<H;yi+=60){ctx.beginPath();ctx.moveTo(0,yi);ctx.lineTo(W,yi);ctx.stroke()}
+    zones.forEach(function(z){
+      z.threat=Math.max(0,z.threat-.008);
+      var c=z.threat>.5?'255,34,68':z.threat>.2?'255,107,0':'0,229,255';
+      var g=ctx.createRadialGradient(z.x,z.y,0,z.x,z.y,z.r*2);
+      g.addColorStop(0,'rgba('+c+','+(z.threat*.35)+')');g.addColorStop(1,'rgba('+c+',0)');
+      ctx.beginPath();ctx.arc(z.x,z.y,z.r*2,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+      ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,Math.PI*2);
+      ctx.strokeStyle='rgba('+c+','+(z.threat*.5+.1)+')';ctx.lineWidth=1.5;ctx.stroke();
+      // label
+      ctx.font='500 '+(Math.min(W*.018,10))+'px JetBrains Mono';
+      ctx.fillStyle='rgba('+c+','+(z.threat*.6+.3)+')';
+      ctx.textAlign='center';ctx.fillText('NODE-'+String(z.id+1).padStart(2,'0'),z.x,z.y+4);
+    });
+    if(Math.random()<.04){
+      var zi=Math.floor(Math.random()*zones.length);
+      zones[zi].threat=1;
+      threats.push({x:zones[zi].x,y:zones[zi].y,r:0,maxR:zones[zi].r*3,c:Math.random()<.35?'255,34,68':Math.random()<.6?'255,107,0':'57,255,20'});
+    }
+    threats=threats.filter(function(th){
+      th.r+=5;var a=(1-th.r/th.maxR);
+      ctx.beginPath();ctx.arc(th.x,th.y,th.r,0,Math.PI*2);
+      ctx.strokeStyle='rgba('+th.c+','+(a*.7)+')';ctx.lineWidth=2;ctx.stroke();
+      return th.r<th.maxR;
+    });
+    // scan sweep
+    ctx.save();ctx.translate(W/2,H/2);
+    var angle=t*.025;
+    var sweepG=ctx.createConicalGradient?null:null;
+    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,Math.max(W,H),angle,angle+.5);ctx.closePath();
+    ctx.fillStyle='rgba(0,229,255,.04)';ctx.fill();
+    ctx.restore();
+    t++;requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ─── CV-DEPLOY: CI/CD Pipeline ───────────────────────────────────────────
+(function(){
+  var el=document.getElementById('cv-deploy');if(!el)return;
+  var ctx=el.getContext('2d'),packets=[],W=0,H=0,t=0;
+  var stages=[{label:'SRC'},{label:'BUILD'},{label:'TEST'},{label:'SCAN'},{label:'DEPLOY'},{label:'LIVE'}];
+  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
+  function draw(){
+    ctx.fillStyle='rgba(2,4,8,.14)';ctx.fillRect(0,0,W,H);
+    var sx=W/(stages.length+1),sy=H/2;
+    var pts=stages.map(function(s,i){return{x:sx*(i+1),y:sy,label:s.label}});
+    // connecting lines
+    for(var i=0;i<pts.length-1;i++){
+      ctx.beginPath();ctx.moveTo(pts[i].x+18,pts[i].y);ctx.lineTo(pts[i+1].x-18,pts[i+1].y);
+      var la=(Math.sin(t*.04+i*.6)+1)/2;
+      ctx.strokeStyle='rgba(0,229,255,'+(la*.3+.1)+')';ctx.lineWidth=1.5;ctx.stroke();
+      // arrow
+      var midX=(pts[i].x+pts[i+1].x)/2,midY=pts[i].y;
+      ctx.beginPath();ctx.moveTo(midX-4,midY-4);ctx.lineTo(midX+4,midY);ctx.lineTo(midX-4,midY+4);
+      ctx.strokeStyle='rgba(0,229,255,.3)';ctx.lineWidth=1;ctx.stroke();
+    }
+    pts.forEach(function(p,i){
+      var pulse=.6+.4*Math.sin(t*.05+i*.9);
+      var col=i===pts.length-1?'57,255,20':'0,229,255';
+      ctx.beginPath();ctx.arc(p.x,p.y,18,0,Math.PI*2);
+      ctx.strokeStyle='rgba('+col+','+(pulse*.5)+')';ctx.lineWidth=2;ctx.stroke();
+      var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,30);
+      g.addColorStop(0,'rgba('+col+','+(pulse*.2)+')');g.addColorStop(1,'rgba('+col+',0)');
+      ctx.beginPath();ctx.arc(p.x,p.y,30,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+      ctx.font='bold '+(Math.min(W*.016,9))+'px JetBrains Mono';ctx.fillStyle='rgba('+col+','+pulse+')';ctx.textAlign='center';ctx.fillText(p.label,p.x,p.y+5);
+      ctx.font=(Math.min(W*.013,8))+'px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.4)';ctx.fillText('v'+((i+1)*3)+'.'+Math.floor(t/20+i)%10,p.x,p.y+26);
+    });
+    if(Math.random()<.025){var fi=Math.floor(Math.random()*(pts.length-1));packets.push({from:fi,to:fi+1,prog:0,sp:Math.random()*.018+.008,col:Math.random()<.6?'0,229,255':'57,255,20'})}
+    packets=packets.filter(function(pk){pk.prog+=pk.sp;var x=pts[pk.from].x+(pts[pk.to].x-pts[pk.from].x)*pk.prog,y=H/2;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle='rgba('+pk.col+','+(1-pk.prog)*.8+')';ctx.fill();ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.strokeStyle='rgba('+pk.col+','+(1-pk.prog)*.3+')';ctx.lineWidth=1.5;ctx.stroke();return pk.prog<1});
+    t++;requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ─── CV-PERF: Performance Charts ─────────────────────────────────────────
+(function(){
+  var el=document.getElementById('cv-perf');if(!el)return;
+  var ctx=el.getContext('2d'),W=0,H=0,t=0,history=[];
+  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
+  function draw(){
+    ctx.fillStyle='rgba(2,4,8,.12)';ctx.fillRect(0,0,W,H);
+    var val=50+40*Math.sin(t*.03)+15*Math.sin(t*.07)+10*Math.sin(t*.15)+Math.random()*5;
+    history.push(val);if(history.length>120)history.shift();
+    // grid
+    for(var gi=0;gi<=4;gi++){var gy=H*.15+gi*(H*.7/4);ctx.beginPath();ctx.moveTo(W*.05,gy);ctx.lineTo(W*.95,gy);ctx.strokeStyle='rgba(0,229,255,.06)';ctx.lineWidth=1;ctx.stroke();ctx.font='9px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.3)';ctx.textAlign='right';ctx.fillText(Math.round(100-gi*25)+'ms',W*.04,gy+4)}
+    // chart line
+    if(history.length>2){
+      ctx.beginPath();
+      history.forEach(function(v,i){var x=W*.05+(W*.9)*(i/(119)),y=H*.85-v*(H*.7/100);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
+      ctx.strokeStyle='rgba(57,255,20,.7)';ctx.lineWidth=2;ctx.stroke();
+      // fill
+      ctx.lineTo(W*.95,H*.85);ctx.lineTo(W*.05,H*.85);ctx.closePath();
+      var lg=ctx.createLinearGradient(0,H*.15,0,H*.85);lg.addColorStop(0,'rgba(57,255,20,.2)');lg.addColorStop(1,'rgba(57,255,20,0)');ctx.fillStyle=lg;ctx.fill();
+    }
+    // labels
+    ctx.font='bold 10px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.6)';ctx.textAlign='left';ctx.fillText('LATENCY (ms)',W*.06,H*.12);
+    ctx.font='bold '+(Math.min(W*.06,28))+'px Syne';ctx.fillStyle='rgba(57,255,20,.9)';ctx.fillText(Math.round(val)+'ms',W*.06,H*.35);
+    ctx.font='10px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.4)';ctx.fillText('AVG RESPONSE',W*.06,H*.45);
+    // rps meter
+    var rps=800+Math.floor(Math.random()*200);
+    ctx.font='bold '+(Math.min(W*.045,22))+'px Syne';ctx.fillStyle='rgba(0,229,255,.8)';ctx.textAlign='right';ctx.fillText(rps+' RPS',W*.94,H*.35);
+    ctx.font='10px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.4)';ctx.fillText('THROUGHPUT',W*.94,H*.45);
+    t++;requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ─── CV-DATA: Data Flow ──────────────────────────────────────────────────
+(function(){
+  var el=document.getElementById('cv-data');if(!el)return;
+  var ctx=el.getContext('2d'),W=0,H=0,t=0,streams=[];
+  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
+  function draw(){
+    ctx.fillStyle='rgba(2,4,8,.1)';ctx.fillRect(0,0,W,H);
+    if(Math.random()<.06){
+      var col=Math.random()<.4?'0,229,255':Math.random()<.6?'57,255,20':'180,79,255';
+      streams.push({x:Math.random()*W,y:-20,vy:Math.random()*2.5+1.5,chars:[],col:col,len:Math.floor(Math.random()*10+5)});
+      for(var i=0;i<streams[streams.length-1].len;i++)streams[streams.length-1].chars.push(String.fromCharCode(0x30A0+Math.floor(Math.random()*96)));
+    }
+    var fs=Math.min(W*.028,13);
+    streams=streams.filter(function(s){
+      s.y+=s.vy;
+      s.chars.forEach(function(c,i){
+        var cy=s.y-i*fs*1.4;if(cy<-fs||cy>H+fs)return;
+        var alpha=Math.max(0,(1-i/(s.len))*(.7+.3*Math.sin(t*.08+i)));
+        ctx.font='500 '+fs+'px JetBrains Mono';ctx.fillStyle='rgba('+s.col+','+alpha+')';
+        ctx.textAlign='center';ctx.fillText(c,s.x,cy);
+      });
+      return s.y<H+s.len*fs*1.4;
+    });
+    // horizontal data bars
+    for(var b=0;b<6;b++){
+      var by=H*.15+b*(H*.7/6),bw=(W*.6)*(.3+.7*Math.abs(Math.sin(t*.02+b)));
+      var bcol=b%3===0?'0,229,255':b%3===1?'57,255,20':'180,79,255';
+      ctx.fillStyle='rgba('+bcol+',.06)';ctx.fillRect(W*.05,by,W*.9,H*.07);
+      ctx.fillStyle='rgba('+bcol+',.3)';ctx.fillRect(W*.05,by,bw,H*.07);
+      ctx.font='9px JetBrains Mono';ctx.fillStyle='rgba('+bcol+',.6)';ctx.textAlign='left';
+      var lbl=['EVENTS','ERRORS','SPANS','TRACES','METRICS','LOGS'][b];ctx.fillText(lbl,W*.06,by+H*.045);
+      ctx.textAlign='right';ctx.fillText(Math.floor(bw/(W*.9)*100)+'%',W*.94,by+H*.045);
+    }
+    t++;requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ─── GLOBE (OUTSOURCING) ─────────────────────────────────────────────────
+(function(){
+  var el=document.getElementById('globe-canvas');if(!el)return;
+  var ctx=el.getContext('2d'),W=0,H=0,t=0;
+  var dots=[],arcs=[];
+  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
+  function latLonTo3D(lat,lon,r){var phi=(90-lat)*Math.PI/180,theta=(lon+180)*Math.PI/180;return{x:-r*Math.sin(phi)*Math.cos(theta),y:r*Math.cos(phi),z:r*Math.sin(phi)*Math.sin(theta)}}
+  function project(p,cx,cy,r,rot){
+    var cosR=Math.cos(rot),sinR=Math.sin(rot);
+    var rx=p.x*cosR+p.z*sinR,ry=p.y,rz=-p.x*sinR+p.z*cosR;
+    return{x:cx+rx*(r/2),y:cy-ry*(r/2),z:rz,vis:rz>-r*.2}
+  }
+  var cities=[{lat:28.6,lon:77.2,name:'Delhi'},{lat:19,lon:72.8,name:'Mumbai'},{lat:51.5,lon:-.1,name:'London'},{lat:40.7,lon:-74,name:'New York'},{lat:1.3,lon:103.8,name:'Singapore'},{lat:35.7,lon:139.7,name:'Tokyo'},{lat:-33.8,lon:151.2,name:'Sydney'},{lat:48.8,lon:2.3,name:'Paris'},{lat:37.6,lon:-122.4,name:'SF'},{lat:25.2,lon:55.3,name:'Dubai'}];
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    var cx=W/2,cy=H/2,R=Math.min(W,H)*.42;
+    // globe base
+    var g=ctx.createRadialGradient(cx-R*.2,cy-R*.2,R*.1,cx,cy,R);
+    g.addColorStop(0,'rgba(0,50,120,.4)');g.addColorStop(1,'rgba(0,20,50,.2)');
+    ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
+    ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.strokeStyle='rgba(0,229,255,.18)';ctx.lineWidth=1.5;ctx.stroke();
+    var rot=t*.005;
+    // lat/lon grid
+    for(var lat=-60;lat<=60;lat+=30){
+      ctx.beginPath();var first=true;
+      for(var lon2=0;lon2<=360;lon2+=5){var p=latLonTo3D(lat,lon2,R),pp=project(p,cx,cy,R,rot);if(pp.vis){if(first){ctx.moveTo(pp.x,pp.y);first=false}else ctx.lineTo(pp.x,pp.y)}}
+      ctx.strokeStyle='rgba(0,229,255,.07)';ctx.lineWidth=.8;ctx.stroke();
+    }
+    for(var lon3=-180;lon3<180;lon3+=30){
+      ctx.beginPath();var first2=true;
+      for(var lat2=-80;lat2<=80;lat2+=5){var p2=latLonTo3D(lat2,lon3,R),pp2=project(p2,cx,cy,R,rot);if(pp2.vis){if(first2){ctx.moveTo(pp2.x,pp2.y);first2=false}else ctx.lineTo(pp2.x,pp2.y)}}
+      ctx.strokeStyle='rgba(0,229,255,.07)';ctx.lineWidth=.8;ctx.stroke();
+    }
+    // cities
+    cities.forEach(function(city,i){
+      var p3=latLonTo3D(city.lat,city.lon,R),pp3=project(p3,cx,cy,R,rot);
+      if(!pp3.vis)return;
+      var pulse=(Math.sin(t*.06+i*.7)+1)/2;
+      ctx.beginPath();ctx.arc(pp3.x,pp3.y,4,0,Math.PI*2);
+      ctx.fillStyle='rgba(57,255,20,'+(pulse*.8+.2)+')';ctx.fill();
+      ctx.beginPath();ctx.arc(pp3.x,pp3.y,10*pulse,0,Math.PI*2);
+      ctx.strokeStyle='rgba(57,255,20,'+(pulse*.4)+')';ctx.lineWidth=1;ctx.stroke();
+      ctx.font='9px JetBrains Mono';ctx.fillStyle='rgba(57,255,20,.7)';ctx.textAlign='center';ctx.fillText(city.name,pp3.x,pp3.y-12);
+    });
+    // arcs between cities
+    if(Math.random()<.02&&cities.length>2){
+      var a=Math.floor(Math.random()*cities.length),b=Math.floor(Math.random()*cities.length);
+      if(a!==b)arcs.push({a:a,b:b,prog:0,sp:Math.random()*.015+.008});
+    }
+    arcs=arcs.filter(function(arc){
+      arc.prog+=arc.sp;
+      var ca=cities[arc.a],cb=cities[arc.b];
+      var pa=latLonTo3D(ca.lat,ca.lon,R),ppa=project(pa,cx,cy,R,rot);
+      var pb=latLonTo3D(cb.lat,cb.lon,R),ppb=project(pb,cx,cy,R,rot);
+      if(!ppa.vis||!ppb.vis)return arc.prog<1;
+      var ex=ppa.x+(ppb.x-ppa.x)*arc.prog,ey=ppa.y+(ppb.y-ppa.y)*arc.prog;
+      ctx.beginPath();ctx.moveTo(ppa.x,ppa.y);ctx.lineTo(ex,ey);
+      ctx.strokeStyle='rgba(0,229,255,'+(1-arc.prog)*.6+')';ctx.lineWidth=1.5;ctx.stroke();
+      ctx.beginPath();ctx.arc(ex,ey,3,0,Math.PI*2);ctx.fillStyle='rgba(0,229,255,'+(1-arc.prog)+')';ctx.fill();
+      return arc.prog<1;
+    });
+    // atmosphere glow
+    var atm=ctx.createRadialGradient(cx,cy,R*.9,cx,cy,R*1.15);
+    atm.addColorStop(0,'rgba(0,229,255,.08)');atm.addColorStop(1,'rgba(0,229,255,0)');
+    ctx.beginPath();ctx.arc(cx,cy,R*1.15,0,Math.PI*2);ctx.fillStyle=atm;ctx.fill();
+    t++;requestAnimationFrame(draw);
+  }
+  resize();draw();
+  window.addEventListener('resize',resize);
+})();
+
+// ─── NAV SCROLL ──────────────────────────────────────────────────────────
+window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('solid',window.scrollY>80)});
 document.getElementById('hbg').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mobNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobNav').classList.contains('open')?'hidden':''});
 document.getElementById('mobClose').addEventListener('click',closeMob);
 function closeMob(){document.getElementById('hbg').classList.remove('open');document.getElementById('mobNav').classList.remove('open');document.body.style.overflow=''}
+function scrollSec(id){var e=document.querySelector(id);if(e)e.scrollIntoView({behavior:'smooth'})}
 
-// ─── SCROLL TO ───────────────────────────────────────────────────────────────
-function scrollTo2(id){var e=document.getElementById(id);if(e)e.scrollIntoView({behavior:'smooth'})}
-document.querySelectorAll('a[href^="#"]').forEach(function(a){a.addEventListener('click',function(e){var id=this.getAttribute('href').slice(1);var el=document.getElementById(id);if(el){e.preventDefault();el.scrollIntoView({behavior:'smooth'})}})});
-
-// ─── SCROLL REVEAL ───────────────────────────────────────────────────────────
-var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{threshold:0.07,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv,.rvl,.rvr,.proc-step').forEach(function(el){ro.observe(el)});
-
-// ─── COUNTERS ────────────────────────────────────────────────────────────────
-var metDone=false;
-var mo=new IntersectionObserver(function(e){if(e[0].isIntersecting&&!metDone){metDone=true;document.querySelectorAll('[data-count]').forEach(function(el){var target=parseFloat(el.dataset.count);var dec=parseInt(el.dataset.dec||'0');var suf=el.dataset.suf||'';var s=null;(function step(ts){if(!s)s=ts;var p=Math.min((ts-s)/2000,1);var ease=1-Math.pow(1-p,3);el.textContent=(ease*target).toFixed(dec)+suf;if(p<1)requestAnimationFrame(step)})(performance.now())});mo.disconnect()}},{threshold:0.4});
-var hms=document.querySelector('.hero-metrics');if(hms)mo.observe(hms);
-
-// ─── TESTIMONIALS ────────────────────────────────────────────────────────────
-(function(){
-  var track=document.getElementById('ttrack');var nav=document.getElementById('tnav');if(!track||!nav)return;
-  var cards=track.querySelectorAll('.tcard');var pp=window.innerWidth<768?1:3;var pages=Math.ceil(cards.length/pp);var cur=0;
-  function buildDots(){nav.innerHTML='';for(var i=0;i<pages;i++){var d=document.createElement('button');d.className='tdot'+(i===0?' on':'');d.onclick=(function(idx){return function(){go(idx)}})(i);nav.appendChild(d)}}
-  function go(idx){cur=idx;track.style.transform='translateX(-'+(idx*(100/pp))+'%)';nav.querySelectorAll('.tdot').forEach(function(d,j){d.classList.toggle('on',j===idx)})}
-  buildDots();
-  window.addEventListener('resize',function(){pp=window.innerWidth<768?1:3;pages=Math.ceil(cards.length/pp);cur=0;buildDots();go(0)});
-  setInterval(function(){go((cur+1)%pages)},5500);
-})();
-
-// ─── FORM HELPERS ────────────────────────────────────────────────────────────
-function vEmail(v){return/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)}
-function vPhone(v){return v===''||(/^[\d\s+\-()]+$/.test(v)&&v.replace(/\D/g,'').length>=10)}
-function setErr(inp,show){var fg=inp.closest('.fg');var em=fg?fg.querySelector('.errt'):null;if(show){inp.classList.add('err');if(em)em.classList.add('show')}else{inp.classList.remove('err');if(em)em.classList.remove('show')}return!show}
-function clearE(inp){setErr(inp,false)}
-
-// ─── MODAL HELPERS ───────────────────────────────────────────────────────────
-function openModal(id){document.getElementById(id).classList.add('show');document.body.style.overflow='hidden'}
-function closeModal(id){document.getElementById(id).classList.remove('show');document.body.style.overflow=''}
-
-// ─── INTERNSHIP MODAL ────────────────────────────────────────────────────────
-function openInternModal(role){
-  document.getElementById('internSuccess').classList.remove('show');
-  document.getElementById('internFormWrap').style.display='';
-  var rf=document.getElementById('i-role');
-  if(role&&rf){for(var i=0;i<rf.options.length;i++){if(rf.options[i].text===role){rf.selectedIndex=i;break}}}
-  openModal('internModal');
-}
-function closeInternModal(){
-  closeModal('internModal');
-  setTimeout(function(){document.getElementById('internSuccess').classList.remove('show');document.getElementById('internFormWrap').style.display='';document.getElementById('internForm').reset();document.querySelectorAll('#internForm .err').forEach(function(el){el.classList.remove('err')});document.querySelectorAll('#internForm .errt.show').forEach(function(el){el.classList.remove('show')})},400);
-}
-document.getElementById('internModal').addEventListener('click',function(e){if(e.target===this)closeInternModal()});
-document.getElementById('internForm').addEventListener('submit',function(e){
+// ─── INQUIRY MODAL ───────────────────────────────────────────────────────
+function openIQ(){document.getElementById('iqModal').classList.add('show');document.body.style.overflow='hidden'}
+function closeIQ(){document.getElementById('iqModal').classList.remove('show');document.body.style.overflow=''}
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeIQ()});
+function setPill(el,val){document.querySelectorAll('.sp').forEach(function(s){s.classList.remove('sel')});el.classList.add('sel');document.getElementById('q-service').value=val}
+document.getElementById('iqForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var n=document.getElementById('i-name'),em=document.getElementById('i-email'),ph=document.getElementById('i-phone');
-  var co=document.getElementById('i-college'),ro=document.getElementById('i-role'),du=document.getElementById('i-dur');
-  var yr=document.getElementById('i-year'),why=document.getElementById('i-why');
-  var ok=true;
-  ok=setErr(n,!n.value.trim())&&ok;
-  ok=setErr(em,!vEmail(em.value))&&ok;
-  ok=setErr(ph,!vPhone(ph.value.trim()||'x'))&&ok;
-  ok=setErr(co,!co.value.trim())&&ok;
-  ok=setErr(ro,!ro.value)&&ok;
-  ok=setErr(du,!du.value)&&ok;
-  ok=setErr(yr,!yr.value)&&ok;
-  ok=setErr(why,why.value.trim().length<20)&&ok;
-  if(!ok)return;
-  var btn=e.target.querySelector('.fsub');
-  btn.disabled=true;btn.textContent='Submitting...';
-  var params={to_email:'hr@dataeuros.com',from_name:n.value,from_email:em.value,phone:ph.value,college:co.value,role:ro.value,duration:du.value,year:yr.value,why:why.value,skills:document.getElementById('i-skills').value,link:document.getElementById('i-link').value};
-  function onSuccess(){document.getElementById('internFormWrap').style.display='none';document.getElementById('internSuccess').classList.add('show');toast('Application submitted! Check your email.','ok')}
-  function onFail(){btn.disabled=false;btn.textContent='Submit Application';toast('Failed to send. Please email hr@dataeuros.com directly.','er')}
-  if(EJS_PUB==='YOUR_PUBLIC_KEY'){setTimeout(onSuccess,1500)}
-  else{emailjs.send(EJS_SVC,EJS_TMPL_INTERN,params).then(onSuccess,onFail)}
-});
-[document.getElementById('i-name'),document.getElementById('i-email'),document.getElementById('i-phone'),document.getElementById('i-college'),document.getElementById('i-role'),document.getElementById('i-dur'),document.getElementById('i-year'),document.getElementById('i-why')].forEach(function(el){el&&el.addEventListener('input',function(){clearE(this)})});
-
-// ─── INQUIRY MODAL ────────────────────────────────────────────────────────────
-function openInquiry(){document.getElementById('inquirySuccess').classList.remove('show');document.getElementById('inquiryFormWrap').style.display='';openModal('inquiryModal')}
-function closeInquiry(){closeModal('inquiryModal');setTimeout(function(){document.getElementById('inquirySuccess').classList.remove('show');document.getElementById('inquiryFormWrap').style.display='';document.getElementById('inquiryForm').reset()},400)}
-document.getElementById('inquiryModal').addEventListener('click',function(e){if(e.target===this)closeInquiry()});
-document.getElementById('inquiryForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  var n=document.getElementById('q-name'),em=document.getElementById('q-email');
-  var co=document.getElementById('q-company'),sv=document.getElementById('q-service'),ms=document.getElementById('q-msg');
-  var ok=true;
-  ok=setErr(n,!n.value.trim())&&ok;ok=setErr(em,!vEmail(em.value))&&ok;
-  ok=setErr(co,!co.value.trim())&&ok;ok=setErr(sv,!sv.value)&&ok;ok=setErr(ms,ms.value.trim().length<10)&&ok;
-  if(!ok)return;
-  var btn=e.target.querySelector('.fsub');btn.disabled=true;btn.textContent='Sending...';
-  var params={to_email:'contact@dataeuros.com',from_name:n.value,from_email:em.value,phone:document.getElementById('q-phone').value,company:co.value,service:sv.value,message:ms.value};
-  function onOk(){document.getElementById('inquiryFormWrap').style.display='none';document.getElementById('inquirySuccess').classList.add('show');toast('Request sent! We\'ll be in touch within 24 hours.','ok')}
-  function onFail(){btn.disabled=false;btn.textContent='Send Request';toast('Send failed. Please email contact@dataeuros.com','er')}
-  if(EJS_PUB==='YOUR_PUBLIC_KEY'){setTimeout(onOk,1500)}
-  else{emailjs.send(EJS_SVC,EJS_TMPL_INQUIRY,params).then(onOk,onFail)}
+  var name=document.getElementById('q-name').value.trim(),email=document.getElementById('q-email').value.trim(),company=document.getElementById('q-company').value.trim(),service=document.getElementById('q-service').value,msg=document.getElementById('q-msg').value.trim();
+  if(!name||!email||!company){alert('Please fill all required fields (Name, Email, Company)');return}
+  var btn=e.target.querySelector('.iq-submit');btn.disabled=true;btn.querySelector('span').textContent='Sending...';
+  setTimeout(function(){document.getElementById('iqFormWrap').style.display='none';document.getElementById('iqSuccess').classList.add('show');btn.disabled=false;btn.querySelector('span').textContent='Send Secure Inquiry →';e.target.reset();document.querySelectorAll('.sp').forEach(function(s){s.classList.remove('sel')})},1600);
 });
 
-// ─── CONTACT FORM ────────────────────────────────────────────────────────────
+// Contact form
 document.getElementById('contactForm').addEventListener('submit',function(e){
   e.preventDefault();
-  var n=document.getElementById('c-name'),em=document.getElementById('c-email');
-  var co=document.getElementById('c-company'),sv=document.getElementById('c-service'),ms=document.getElementById('c-msg');
-  var ok=true;
-  ok=setErr(n,!n.value.trim())&&ok;ok=setErr(em,!vEmail(em.value))&&ok;
-  ok=setErr(co,!co.value.trim())&&ok;ok=setErr(sv,!sv.value)&&ok;ok=setErr(ms,ms.value.trim().length<10)&&ok;
-  if(!ok)return;
-  var btn=document.getElementById('csubBtn');btn.disabled=true;btn.textContent='Sending...';
-  var msg=document.getElementById('cfmsg');msg.className='fmsg';
-  var params={to_email:'contact@dataeuros.com',from_name:n.value,from_email:em.value,phone:document.getElementById('c-phone').value,company:co.value,service:sv.value,message:ms.value};
-  function onOk(){btn.disabled=false;btn.textContent='Send Request →';msg.className='fmsg ok';msg.textContent='✓ Message sent! We\'ll respond within 24 hours.';e.target.reset();toast('Message sent successfully!','ok');setTimeout(function(){msg.className='fmsg'},6000)}
-  function onFail(){btn.disabled=false;btn.textContent='Send Request →';msg.className='fmsg er';msg.textContent='× Failed to send. Please email contact@dataeuros.com directly.';toast('Send failed.','er')}
-  if(EJS_PUB==='YOUR_PUBLIC_KEY'){setTimeout(onOk,1600)}
-  else{emailjs.send(EJS_SVC,EJS_TMPL_INQUIRY,params).then(onOk,onFail)}
+  var btn=e.target.querySelector('.iq-submit');btn.disabled=true;
+  setTimeout(function(){document.getElementById('c-feedback').style.display='block';btn.disabled=false;e.target.reset()},1200);
 });
-[document.getElementById('c-name'),document.getElementById('c-email'),document.getElementById('c-company'),document.getElementById('c-service'),document.getElementById('c-msg')].forEach(function(el){el&&el.addEventListener('input',function(){clearE(this)})});
 
-// Escape key for modals
-document.addEventListener('keydown',function(e){if(e.key==='Escape'){closeInternModal();closeInquiry()}});
+// ─── SCROLL REVEAL ───────────────────────────────────────────────────────
+var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.rv,.rv-left,.rv-right').forEach(function(el){ro.observe(el)});
 
-// ─── TOAST ───────────────────────────────────────────────────────────────────
-function toast(msg,type){var t=document.createElement('div');t.className='toast '+(type||'ok');t.textContent=msg;document.body.appendChild(t);setTimeout(function(){t.style.transition='all .4s';t.style.opacity='0';t.style.transform='translateY(20px)';setTimeout(function(){t.remove()},420)},3200)}
+// ─── COUNTERS ────────────────────────────────────────────────────────────
+var done=false;
+var mo=new IntersectionObserver(function(e){if(e[0].isIntersecting&&!done){done=true;document.querySelectorAll('[data-count]').forEach(function(el){var target=parseFloat(el.dataset.count),dec=parseInt(el.dataset.dec||0),suf=el.dataset.suf||'',start=null;(function step(ts){if(!start)start=ts;var p=Math.min((ts-start)/2500,1),ease=1-Math.pow(1-p,4);el.textContent=(ease*target).toFixed(dec)+suf;if(p<1)requestAnimationFrame(step)})(performance.now())});mo.disconnect()}},{threshold:.5});
+var hm=document.querySelector('.hero-metrics');if(hm)mo.observe(hm);
+
+// ─── INTRO PHASE HELPER ──────────────────────────────────────────────────
+// Graceful fallback — ensure phases activate even if element id iteration was off
+setTimeout(function(){
+  ['ph1','ph2','ph3','ph4'].forEach(function(id,i){
+    setTimeout(function(){var el=document.getElementById(id);if(el)el.classList.add('active')},i*600);
+  });
+},800);
 </script>
 </body>
 </html>
