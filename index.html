@@ -3,913 +3,510 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DATAEUROS — Elite Enterprise QA & Cybersecurity</title>
+<title>DATAEUROS — Enterprise QA & Cybersecurity</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=JetBrains+Mono:wght@300;400;500;600;700&family=DM+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=JetBrains+Mono:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#020408;--bg1:#03070f;--bg2:#05101a;
-  --c1:#00e5ff;--c2:#0090a8;--c3:#003344;
-  --acc1:#39ff14;--acc2:#ff6b00;--acc3:#ff2244;
-  --acc4:#b44fff;
-  --text:#e8f4ff;--muted:#6a8fab;--subtle:#2a4560;
-  --border:rgba(0,229,255,.1);--border2:rgba(0,229,255,.22);
-  --card:rgba(3,7,15,.85);--glow:rgba(0,229,255,.18);
-  --font-display:'Syne',sans-serif;
-  --font-mono:'JetBrains Mono',monospace;
-  --font-body:'DM Sans',sans-serif;
+  --c1:#00e5ff;--acc1:#39ff14;--acc2:#ff6b00;
+  --text:#e8f4ff;--muted:#5a7a9a;--subtle:#1e3550;
+  --border:rgba(0,229,255,.1);--border2:rgba(0,229,255,.2);--bg:#020408;
+  --fd:'Syne',sans-serif;--fm:'JetBrains Mono',monospace;--fb:'DM Sans',sans-serif;
 }
 html{scroll-behavior:smooth}
-body{font-family:var(--font-body);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;cursor:none}
+body{font-family:var(--fb);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;cursor:none}
 a{text-decoration:none;color:inherit}
 button{cursor:none;font-family:inherit;border:none;outline:none}
-img{display:block;max-width:100%}
-::selection{background:rgba(0,229,255,.3);color:#fff}
-
-/* ══════════════════════════════════════════════
-   CUSTOM CURSOR — ORBITAL DESIGN
-══════════════════════════════════════════════ */
-#cur-core{position:fixed;width:12px;height:12px;border-radius:50%;background:var(--c1);pointer-events:none;z-index:999999;transform:translate(-50%,-50%);mix-blend-mode:screen;box-shadow:0 0 20px var(--c1),0 0 60px rgba(0,229,255,.4);transition:transform .12s,width .15s,height .15s}
-#cur-orbit{position:fixed;width:44px;height:44px;border-radius:50%;border:1.5px solid rgba(0,229,255,.4);pointer-events:none;z-index:999998;transform:translate(-50%,-50%);transition:width .25s,height .25s,border-color .25s}
-#cur-trail{position:fixed;pointer-events:none;z-index:999997}
-.cur-trail-dot{position:fixed;width:4px;height:4px;border-radius:50%;background:var(--c1);pointer-events:none;z-index:999996;transform:translate(-50%,-50%);opacity:.4}
-body:has(a:hover) #cur-core,body:has(button:hover) #cur-core{transform:translate(-50%,-50%) scale(2.2);background:var(--acc1);box-shadow:0 0 30px var(--acc1)}
-body:has(a:hover) #cur-orbit,body:has(button:hover) #cur-orbit{width:64px;height:64px;border-color:rgba(57,255,20,.5)}
-
-/* ══════════════════════════════════════════════
-   ULTRA CINEMATIC INTRO
-══════════════════════════════════════════════ */
+::selection{background:rgba(0,229,255,.25);color:#fff}
+#cc{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--c1);pointer-events:none;z-index:99999;transform:translate(-50%,-50%);box-shadow:0 0 14px var(--c1);will-change:transform}
+#co{position:fixed;width:36px;height:36px;border-radius:50%;border:1.5px solid rgba(0,229,255,.32);pointer-events:none;z-index:99998;transform:translate(-50%,-50%);will-change:transform}
+/* INTRO */
 #intro{position:fixed;inset:0;z-index:100000;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;overflow:hidden}
-#intro-canvas{position:absolute;inset:0;width:100%;height:100%}
-.intro-content{position:relative;z-index:10;text-align:center;pointer-events:none}
-.intro-eyebrow{font-family:var(--font-mono);font-size:.7rem;letter-spacing:.45em;color:rgba(0,229,255,.6);text-transform:uppercase;margin-bottom:2rem;opacity:0;animation:iUp .8s .4s forwards}
-.intro-brand{font-family:var(--font-display);font-size:clamp(4rem,14vw,11rem);font-weight:800;letter-spacing:-.04em;line-height:.9;opacity:0;animation:iBrand 1.4s .7s cubic-bezier(.19,1,.22,1) forwards;position:relative}
-.intro-brand .d1{display:block;background:linear-gradient(90deg,#fff 0%,var(--c1) 55%,var(--acc1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 80px rgba(0,229,255,.6))}
-.intro-brand .d2{display:block;color:rgba(0,229,255,.15);font-size:.35em;letter-spacing:.6em;-webkit-text-fill-color:rgba(0,229,255,.15);font-weight:400;font-family:var(--font-mono);margin-top:.8em}
-@keyframes iBrand{0%{opacity:0;filter:blur(60px);transform:scaleY(.3)}50%{opacity:.9;filter:blur(5px)}100%{opacity:1;filter:blur(0);transform:scaleY(1)}}
-@keyframes iUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-
-.intro-progress{width:min(500px,80vw);margin:3.5rem auto 0;opacity:0;animation:iUp .7s 1.2s forwards}
-.intro-track{height:2px;background:rgba(0,229,255,.1);border-radius:2px;overflow:hidden;position:relative}
-.intro-track::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(0,229,255,.3),transparent);animation:scanTrack 2s linear infinite}
-@keyframes scanTrack{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
-.intro-fill{height:100%;background:linear-gradient(90deg,var(--c1),var(--acc1));border-radius:2px;width:0;box-shadow:0 0 20px var(--c1);transition:width .06s linear}
-.intro-stats{display:flex;justify-content:space-between;margin-top:.9rem}
-.intro-stat{font-family:var(--font-mono);font-size:.6rem;color:rgba(0,229,255,.45);letter-spacing:.1em}
-#intro-pct{font-family:var(--font-mono);font-size:4rem;font-weight:700;color:rgba(0,229,255,.08);position:absolute;bottom:2rem;right:3rem;letter-spacing:-.03em}
-
-.intro-phases{display:flex;gap:3rem;margin-top:2.5rem;justify-content:center}
-.intro-phase{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.15em;color:rgba(0,229,255,.25);text-transform:uppercase;transition:color .3s;display:flex;align-items:center;gap:.5rem}
-.intro-phase.active{color:var(--acc1)}
-.intro-phase::before{content:'';width:5px;height:5px;border-radius:50%;background:currentColor}
-#intro.fade-out{animation:introOut 1s cubic-bezier(.4,0,.2,1) forwards}
-@keyframes introOut{0%{opacity:1;transform:scale(1)}100%{opacity:0;transform:scale(1.06);visibility:hidden}}
-
-/* ══════════════════════════════════════════════
-   BACKGROUND — DEEP SPACE + GRID
-══════════════════════════════════════════════ */
-#bg-deep{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 120% 80% at 50% 30%,rgba(0,40,80,.35) 0%,transparent 70%)}
-#bg-stars{position:fixed;inset:0;z-index:0}
-#bg-grid{position:fixed;inset:0;z-index:1;opacity:.25;background-image:linear-gradient(rgba(0,229,255,.08) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.08) 1px,transparent 1px);background-size:60px 60px}
-#bg-vignette{position:fixed;inset:0;z-index:2;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 40%,rgba(0,0,0,.7) 100%);pointer-events:none}
-.noise{position:fixed;inset:0;z-index:3;pointer-events:none;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");background-repeat:repeat;background-size:200px 200px}
-.scanline{position:fixed;inset:0;z-index:4;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.04) 3px,rgba(0,0,0,.04) 4px)}
-
-/* ══════════════════════════════════════════════
-   NAVIGATION
-══════════════════════════════════════════════ */
-#nav{position:fixed;top:0;left:0;right:0;z-index:2000;padding:1.5rem 4rem;display:flex;align-items:center;justify-content:space-between;transition:all .5s}
-#nav.solid{background:rgba(2,4,8,.94);backdrop-filter:blur(40px);border-bottom:1px solid var(--border);box-shadow:0 0 60px rgba(0,0,0,.8)}
-.logo{font-family:var(--font-display);font-size:1.5rem;font-weight:800;letter-spacing:-.02em;cursor:none;display:flex;align-items:center;gap:.5rem}
-.logo-mark{width:32px;height:32px;border:2px solid var(--c1);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-family:var(--font-mono);color:var(--c1);position:relative;overflow:hidden}
-.logo-mark::before{content:'';position:absolute;inset:-2px;background:linear-gradient(135deg,var(--c1),var(--acc1));opacity:.15}
-.logo-txt{background:linear-gradient(90deg,#fff 0%,var(--c1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.logo-txt span{-webkit-text-fill-color:rgba(0,229,255,.3);color:rgba(0,229,255,.3)}
-
-.nav-center{display:flex;align-items:center;gap:.3rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:50px;padding:.4rem .6rem}
-.nav-link{padding:.5rem 1.2rem;border-radius:50px;font-family:var(--font-mono);font-size:.65rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);transition:all .3s;font-weight:500}
-.nav-link:hover{color:var(--c1);background:rgba(0,229,255,.1)}
-
-.nav-right{display:flex;align-items:center;gap:1rem}
-.nav-status{display:flex;align-items:center;gap:.5rem;font-family:var(--font-mono);font-size:.6rem;color:var(--acc1);letter-spacing:.1em;opacity:.7}
-.nav-status::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc1);box-shadow:0 0 10px var(--acc1);animation:pulse 2s ease-in-out infinite}
-.cta-nav{padding:.7rem 1.8rem;background:linear-gradient(135deg,var(--c1),rgba(0,229,255,.8));color:#000;font-family:var(--font-display);font-weight:700;font-size:.75rem;letter-spacing:.05em;border-radius:50px;transition:all .35s;box-shadow:0 0 30px rgba(0,229,255,.25);cursor:none}
-.cta-nav:hover{transform:translateY(-3px);box-shadow:0 8px 50px rgba(0,229,255,.5)}
-.hbg{display:none;flex-direction:column;gap:5px;background:none;padding:.5rem;cursor:none}
-.hbg span{width:22px;height:2px;background:var(--muted);border-radius:2px;transition:all .3s;display:block}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
-
-/* MOBILE NAV */
-.mob-nav{display:none;position:fixed;inset:0;z-index:1999;background:rgba(2,4,8,.97);backdrop-filter:blur(40px);flex-direction:column;align-items:center;justify-content:center;gap:2rem}
-.mob-nav.open{display:flex}
-.mob-nav a,.mob-nav button{font-family:var(--font-display);font-size:1.5rem;font-weight:700;color:var(--muted);background:none;border:none;transition:color .2s;cursor:none}
-.mob-nav a:hover,.mob-nav button:hover{color:var(--c1)}
-.mob-close{position:absolute;top:2rem;right:2.5rem;background:none;color:var(--muted);font-size:1.8rem;cursor:none;transition:color .2s}
-
-/* ══════════════════════════════════════════════
-   INQUIRY MODAL — ULTRA PREMIUM
-══════════════════════════════════════════════ */
-.iq-modal{position:fixed;inset:0;z-index:90000;display:flex;align-items:center;justify-content:center;padding:2rem;opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s}
-.iq-modal.show{opacity:1;visibility:visible}
-.iq-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.92);backdrop-filter:blur(30px)}
-.iq-box{
-  position:relative;z-index:2;width:100%;max-width:580px;max-height:92vh;overflow-y:auto;
-  background:linear-gradient(145deg,rgba(3,10,25,.97) 0%,rgba(2,7,18,.97) 100%);
-  border:1px solid rgba(0,229,255,.2);border-radius:16px;
-  padding:0;overflow:hidden;
-  box-shadow:0 0 0 1px rgba(0,229,255,.05),0 40px 120px rgba(0,0,0,.9),0 0 100px rgba(0,229,255,.12);
-  animation:modalIn .55s cubic-bezier(.34,1.56,.64,1);
-}
-@keyframes modalIn{from{opacity:0;transform:translateY(-50px) scale(.88);filter:blur(20px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
-.iq-header{padding:2.5rem 2.5rem 1.5rem;background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(57,255,20,.04));border-bottom:1px solid var(--border);position:relative;overflow:hidden}
-.iq-header::before{content:'';position:absolute;top:-50%;right:-20%;width:300px;height:300px;background:radial-gradient(circle,rgba(0,229,255,.12),transparent 70%);pointer-events:none}
-.iq-tag{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.3em;color:var(--acc1);text-transform:uppercase;margin-bottom:.8rem;display:flex;align-items:center;gap:.5rem}
-.iq-tag::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--acc1);box-shadow:0 0 10px var(--acc1);animation:pulse 1.5s ease-in-out infinite}
-.iq-title{font-family:var(--font-display);font-size:1.9rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,#fff 0%,var(--c1) 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
-.iq-sub{font-size:.85rem;color:var(--muted);margin-top:.5rem;font-weight:300}
-.iq-close{position:absolute;top:1.5rem;right:1.5rem;width:36px;height:36px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--muted);display:flex;align-items:center;justify-content:center;font-size:.9rem;cursor:none;transition:all .3s}
-.iq-close:hover{border-color:var(--c1);color:var(--c1);background:rgba(0,229,255,.1);transform:rotate(90deg)}
-.iq-body{padding:2rem 2.5rem 2.5rem;overflow-y:auto}
-.fg{display:flex;flex-direction:column;gap:.5rem;margin-bottom:1.2rem}
-.fg label{font-family:var(--font-mono);font-size:.65rem;letter-spacing:.18em;text-transform:uppercase;color:var(--c1);font-weight:600}
-.fg input,.fg select,.fg textarea{
-  padding:.85rem 1rem;background:rgba(0,0,0,.5);
-  border:1px solid rgba(0,229,255,.12);border-radius:8px;
-  color:var(--text);font-family:var(--font-body);font-size:.9rem;font-weight:400;
-  transition:all .3s;outline:none;width:100%;
-}
-.fg select{-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2300e5ff' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center}
-.fg input::placeholder,.fg textarea::placeholder{color:rgba(106,143,171,.4)}
-.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--c1);background:rgba(0,229,255,.04);box-shadow:0 0 0 3px rgba(0,229,255,.1)}
-.fg2{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
-.iq-divider{height:1px;background:var(--border);margin:1.5rem 0;position:relative}
-.iq-divider::before{content:'OR CHOOSE SERVICE';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:rgba(3,10,25,.97);padding:0 1rem;font-family:var(--font-mono);font-size:.55rem;letter-spacing:.2em;color:var(--subtle)}
-.service-pills{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1.5rem}
-.sp{padding:.45rem 1rem;border:1px solid var(--border);border-radius:50px;font-family:var(--font-mono);font-size:.62rem;color:var(--muted);cursor:none;transition:all .3s;background:none;letter-spacing:.05em}
-.sp:hover,.sp.sel{border-color:var(--c1);color:var(--c1);background:rgba(0,229,255,.08)}
-.iq-submit{
-  width:100%;padding:1.1rem;border-radius:10px;
-  background:linear-gradient(135deg,var(--c1) 0%,rgba(0,200,220,1) 50%,var(--acc1) 100%);
-  background-size:200% 100%;background-position:0% 0%;
-  color:#000;font-family:var(--font-display);font-weight:800;font-size:.85rem;letter-spacing:.05em;text-transform:uppercase;
-  cursor:none;transition:all .4s;box-shadow:0 0 50px rgba(0,229,255,.3);margin-top:.5rem;
-  position:relative;overflow:hidden;
-}
-.iq-submit::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,var(--acc1) 0%,var(--c1) 100%);opacity:0;transition:opacity .4s}
-.iq-submit:hover{transform:translateY(-3px);box-shadow:0 10px 70px rgba(0,229,255,.5);background-position:100% 0%}
-.iq-submit:hover::after{opacity:1}
-.iq-submit span{position:relative;z-index:1}
-.iq-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.iq-success{text-align:center;padding:3rem 2rem;display:none}
-.iq-success.show{display:block;animation:iUp .5s forwards}
-.success-ring{width:90px;height:90px;margin:0 auto 1.5rem;border-radius:50%;background:linear-gradient(135deg,var(--acc1),var(--c1));display:flex;align-items:center;justify-content:center;font-size:2rem;box-shadow:0 0 60px rgba(57,255,20,.4);animation:ringPop .7s cubic-bezier(.34,1.56,.64,1)}
-@keyframes ringPop{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-.iq-success h3{font-family:var(--font-display);font-size:1.8rem;font-weight:800;color:var(--acc1);margin-bottom:.8rem}
-.iq-success p{color:var(--muted);font-weight:300;line-height:1.8}
-
-/* ══════════════════════════════════════════════
-   SHARED
-══════════════════════════════════════════════ */
-.sec{position:relative;z-index:10;padding:9rem 0}
-.con{max-width:1440px;margin:0 auto;padding:0 4rem}
-.sh{text-align:center;margin-bottom:5rem}
-.etag{display:inline-flex;align-items:center;gap:.6rem;padding:.45rem 1.2rem;border:1px solid rgba(57,255,20,.3);border-radius:50px;font-family:var(--font-mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--acc1);background:rgba(57,255,20,.06);margin-bottom:1.8rem;font-weight:600}
-.etag-dot{width:6px;height:6px;border-radius:50%;background:var(--acc1);box-shadow:0 0 10px var(--acc1);animation:pulse 2s ease-in-out infinite}
-.sh h2{font-family:var(--font-display);font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:1.2rem;background:linear-gradient(135deg,#ffffff 0%,var(--c1) 60%,var(--acc1) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.sh p{color:var(--muted);font-size:1rem;font-weight:300;max-width:600px;margin:0 auto;line-height:1.9}
-.rv{opacity:0;transform:translateY(50px);transition:opacity .9s cubic-bezier(.2,.85,.4,1),transform .9s cubic-bezier(.2,.85,.4,1)}
+#ic{position:absolute;inset:0;width:100%;height:100%}
+.ix{position:relative;z-index:5;text-align:center;pointer-events:none}
+.iey{font-family:var(--fm);font-size:.65rem;letter-spacing:.4em;color:rgba(0,229,255,.5);text-transform:uppercase;margin-bottom:1.8rem;opacity:0;animation:fu .7s .3s forwards}
+.ibr{font-family:var(--fd);font-size:clamp(3.5rem,12vw,9rem);font-weight:800;letter-spacing:-.04em;line-height:.9;opacity:0;animation:ibAn 1.2s .6s cubic-bezier(.19,1,.22,1) forwards}
+.d1{display:block;background:linear-gradient(90deg,#fff,var(--c1) 50%,var(--acc1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.d2{display:block;color:rgba(0,229,255,.12);-webkit-text-fill-color:rgba(0,229,255,.12);font-size:.28em;letter-spacing:.5em;font-family:var(--fm);font-weight:400;margin-top:.8em}
+@keyframes ibAn{from{opacity:0;filter:blur(40px);transform:scaleY(.4)}70%{filter:blur(3px)}to{opacity:1;filter:blur(0);transform:scaleY(1)}}
+@keyframes fu{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.ipr{width:min(420px,80vw);margin:3rem auto 0;opacity:0;animation:fu .6s 1.1s forwards}
+.itr{height:2px;background:rgba(0,229,255,.08);border-radius:2px;overflow:hidden}
+.ifl{height:100%;background:linear-gradient(90deg,var(--c1),var(--acc1));width:0;border-radius:2px;transition:width .05s linear}
+.ist{display:flex;justify-content:space-between;margin-top:.7rem;font-family:var(--fm);font-size:.58rem;color:rgba(0,229,255,.35)}
+.iph{display:flex;gap:2rem;margin-top:2rem;justify-content:center}
+.iphase{font-family:var(--fm);font-size:.57rem;letter-spacing:.12em;color:rgba(0,229,255,.18);text-transform:uppercase;transition:color .3s;display:flex;align-items:center;gap:.4rem}
+.iphase::before{content:'';width:4px;height:4px;border-radius:50%;background:currentColor;flex-shrink:0}
+.iphase.on{color:var(--acc1)}
+#ibig{font-family:var(--fm);font-size:4rem;font-weight:700;color:rgba(0,229,255,.06);position:absolute;bottom:1.5rem;right:2.5rem;letter-spacing:-.03em}
+#intro.out{animation:iout .8s forwards;pointer-events:none}
+@keyframes iout{to{opacity:0;transform:scale(1.04);visibility:hidden}}
+/* BG */
+#bgs{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 100% 70% at 50% 20%,rgba(0,35,70,.38),transparent 65%)}
+#bgc{position:fixed;inset:0;z-index:0}
+.bgrid{position:fixed;inset:0;z-index:1;opacity:.16;background-image:linear-gradient(rgba(0,229,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.09) 1px,transparent 1px);background-size:64px 64px}
+.bvig{position:fixed;inset:0;z-index:2;background:radial-gradient(ellipse 100% 100% at 50% 50%,transparent 35%,rgba(0,0,0,.72) 100%);pointer-events:none}
+.scl{position:fixed;inset:0;z-index:3;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.03) 3px,rgba(0,0,0,.03) 4px)}
+/* NAV */
+#nav{position:fixed;top:0;left:0;right:0;z-index:2000;padding:1.2rem 3.5rem;display:flex;align-items:center;justify-content:space-between;transition:background .4s,border .4s}
+#nav.s{background:rgba(2,4,8,.95);backdrop-filter:blur(28px);border-bottom:1px solid var(--border)}
+.logo{font-family:var(--fd);font-size:1.4rem;font-weight:800;letter-spacing:-.02em;display:flex;align-items:center;gap:.6rem;cursor:none}
+.lm{width:30px;height:30px;border:1.5px solid var(--c1);border-radius:6px;display:grid;place-items:center;font-family:var(--fm);font-size:.65rem;color:var(--c1);background:rgba(0,229,255,.06)}
+.lt{background:linear-gradient(90deg,#fff,var(--c1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lt span{-webkit-text-fill-color:rgba(0,229,255,.28)}
+.nc{display:flex;align-items:center;gap:.2rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:50px;padding:.3rem .5rem}
+.nl{padding:.45rem 1rem;border-radius:50px;font-family:var(--fm);font-size:.6rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);transition:all .25s}
+.nl:hover{color:var(--c1);background:rgba(0,229,255,.08)}
+.nr{display:flex;align-items:center;gap:.8rem}
+.nst{font-family:var(--fm);font-size:.57rem;color:var(--acc1);letter-spacing:.1em;display:flex;align-items:center;gap:.4rem;opacity:.7}
+.nst::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--acc1);box-shadow:0 0 8px var(--acc1);animation:pk 2s ease-in-out infinite}
+@keyframes pk{50%{opacity:.3;transform:scale(.8)}}
+.cbtn{padding:.65rem 1.5rem;background:linear-gradient(135deg,var(--c1),rgba(0,200,220,1));color:#000;font-family:var(--fd);font-weight:800;font-size:.7rem;border-radius:50px;cursor:none;transition:all .3s;box-shadow:0 0 22px rgba(0,229,255,.18)}
+.cbtn:hover{transform:translateY(-3px);box-shadow:0 8px 38px rgba(0,229,255,.42)}
+.hbg{display:none;flex-direction:column;gap:5px;background:none;padding:.4rem;cursor:none}
+.hbg span{width:20px;height:2px;background:var(--muted);border-radius:2px;display:block;transition:all .3s}
+.mnav{display:none;position:fixed;inset:0;z-index:1999;background:rgba(2,4,8,.97);flex-direction:column;align-items:center;justify-content:center;gap:1.8rem}
+.mnav.on{display:flex}
+.mnav a,.mnav button{font-family:var(--fd);font-size:1.3rem;font-weight:700;color:var(--muted);background:none;cursor:none;transition:color .2s}
+.mnav a:hover,.mnav button:hover{color:var(--c1)}
+.mc{position:absolute;top:1.8rem;right:2rem;background:none;color:var(--muted);font-size:1.5rem;cursor:none;transition:color .2s}
+/* MODAL */
+.iqm{position:fixed;inset:0;z-index:90000;display:flex;align-items:center;justify-content:center;padding:1.5rem;opacity:0;visibility:hidden;transition:opacity .32s,visibility .32s}
+.iqm.on{opacity:1;visibility:visible}
+.iqb2{position:absolute;inset:0;background:rgba(0,0,0,.87);backdrop-filter:blur(18px)}
+.iqbox{position:relative;z-index:2;width:100%;max-width:550px;max-height:90vh;overflow-y:auto;background:linear-gradient(145deg,rgba(3,10,25,.98),rgba(2,6,16,.98));border:1px solid rgba(0,229,255,.17);border-radius:13px;overflow:hidden;box-shadow:0 30px 90px rgba(0,0,0,.9),0 0 70px rgba(0,229,255,.09);animation:min .48s cubic-bezier(.34,1.56,.64,1)}
+@keyframes min{from{opacity:0;transform:translateY(-38px) scale(.9)}to{opacity:1;transform:none}}
+.iqhd{padding:2rem 2.2rem 1.4rem;background:linear-gradient(135deg,rgba(0,229,255,.06),rgba(57,255,20,.02));border-bottom:1px solid var(--border)}
+.iqtag{font-family:var(--fm);font-size:.57rem;letter-spacing:.26em;color:var(--acc1);text-transform:uppercase;margin-bottom:.6rem;display:flex;align-items:center;gap:.45rem}
+.iqtag::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--acc1);box-shadow:0 0 7px var(--acc1);animation:pk 1.5s ease-in-out infinite}
+.iqtit{font-family:var(--fd);font-size:1.65rem;font-weight:800;letter-spacing:-.03em;background:linear-gradient(135deg,#fff,var(--c1) 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;line-height:1.1}
+.iqsub{font-size:.8rem;color:var(--muted);margin-top:.38rem;font-weight:300}
+.iqcl{position:absolute;top:1.1rem;right:1.1rem;width:30px;height:30px;border-radius:50%;border:1px solid var(--border);background:none;color:var(--muted);display:grid;place-items:center;font-size:.82rem;cursor:none;transition:all .28s}
+.iqcl:hover{border-color:var(--c1);color:var(--c1);transform:rotate(90deg)}
+.iqbd{padding:1.7rem 2.2rem 2.2rem;overflow-y:auto}
+.fg{display:flex;flex-direction:column;gap:.42rem;margin-bottom:1rem}
+.fg label{font-family:var(--fm);font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:var(--c1);font-weight:600}
+.fg input,.fg select,.fg textarea{padding:.78rem .92rem;background:rgba(0,0,0,.55);border:1px solid rgba(0,229,255,.1);border-radius:7px;color:var(--text);font-family:var(--fb);font-size:.87rem;transition:border .22s,background .22s;outline:none;width:100%}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--c1);background:rgba(0,229,255,.03)}
+.fg input::placeholder,.fg textarea::placeholder{color:rgba(90,122,154,.38)}
+.fg2{display:grid;grid-template-columns:1fr 1fr;gap:.85rem}
+.spills{display:flex;flex-wrap:wrap;gap:.38rem;margin-bottom:1.1rem}
+.sp{padding:.35rem .85rem;border:1px solid var(--border);border-radius:50px;font-family:var(--fm);font-size:.57rem;color:var(--muted);cursor:none;transition:all .22s;background:none;letter-spacing:.04em}
+.sp:hover,.sp.s{border-color:var(--c1);color:var(--c1);background:rgba(0,229,255,.07)}
+.iqs{width:100%;padding:.95rem;border-radius:9px;background:linear-gradient(135deg,var(--c1),var(--acc1));color:#000;font-family:var(--fd);font-weight:800;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;cursor:none;transition:all .32s;box-shadow:0 0 35px rgba(0,229,255,.22);margin-top:.35rem}
+.iqs:hover{transform:translateY(-3px);box-shadow:0 8px 45px rgba(0,229,255,.42)}
+.iqs:disabled{opacity:.5;transform:none}
+.iqok{text-align:center;padding:2.4rem 1.5rem;display:none}
+.iqok.on{display:block;animation:fu .42s forwards}
+.okr{width:78px;height:78px;margin:0 auto 1.1rem;border-radius:50%;background:linear-gradient(135deg,var(--acc1),var(--c1));display:grid;place-items:center;font-size:1.7rem;box-shadow:0 0 45px rgba(57,255,20,.32);animation:rp .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes rp{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+.iqok h3{font-family:var(--fd);font-size:1.65rem;font-weight:800;color:var(--acc1);margin-bottom:.65rem}
+.iqok p{color:var(--muted);font-weight:300;line-height:1.75;font-size:.88rem}
+/* SHARED */
+.sec{position:relative;z-index:10;padding:8rem 0}
+.con{max-width:1380px;margin:0 auto;padding:0 3.5rem}
+.sh{text-align:center;margin-bottom:4.5rem}
+.etag{display:inline-flex;align-items:center;gap:.5rem;padding:.38rem 1.05rem;border:1px solid rgba(57,255,20,.22);border-radius:50px;font-family:var(--fm);font-size:.57rem;letter-spacing:.19em;text-transform:uppercase;color:var(--acc1);background:rgba(57,255,20,.05);margin-bottom:1.5rem;font-weight:600}
+.edot{width:5px;height:5px;border-radius:50%;background:var(--acc1);box-shadow:0 0 7px var(--acc1);animation:pk 2s ease-in-out infinite}
+.sh h2{font-family:var(--fd);font-size:clamp(2.1rem,4.8vw,3.8rem);font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:1rem;background:linear-gradient(135deg,#fff,var(--c1) 55%,var(--acc1));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sh p{color:var(--muted);font-size:.93rem;font-weight:300;max-width:570px;margin:0 auto;line-height:1.82}
+.rv{opacity:0;transform:translateY(30px);transition:opacity .65s ease,transform .65s ease}
 .rv.in{opacity:1;transform:none}
-.rv-left{opacity:0;transform:translateX(-50px);transition:opacity .9s .1s ease,transform .9s .1s ease}
-.rv-left.in{opacity:1;transform:none}
-.rv-right{opacity:0;transform:translateX(50px);transition:opacity .9s .2s ease,transform .9s .2s ease}
-.rv-right.in{opacity:1;transform:none}
-
-.btn{display:inline-flex;align-items:center;gap:.7rem;padding:1rem 2.5rem;border-radius:50px;font-family:var(--font-display);font-weight:700;font-size:.8rem;letter-spacing:.03em;text-transform:uppercase;transition:all .4s;cursor:none;border:none}
-.btn-p{background:linear-gradient(135deg,var(--c1),var(--acc1));color:#000;box-shadow:0 0 50px rgba(0,229,255,.3)}
-.btn-p:hover{transform:translateY(-5px);box-shadow:0 15px 80px rgba(0,229,255,.5)}
-.btn-o{background:transparent;color:var(--c1);border:1.5px solid rgba(0,229,255,.4)}
-.btn-o:hover{background:rgba(0,229,255,.1);border-color:var(--c1);transform:translateY(-5px)}
-
-/* ══════════════════════════════════════════════
-   HERO — FULL CINEMATIC
-══════════════════════════════════════════════ */
-#hero{min-height:100vh;display:grid;place-items:center;padding:10rem 4rem 6rem;position:relative;overflow:hidden}
-.hero-bg-canvas{position:absolute;inset:0;z-index:0}
-.hero-orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(120px)}
-.hero-orb-1{width:900px;height:900px;top:-200px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(0,80,160,.35) 0%,transparent 70%)}
-.hero-orb-2{width:500px;height:500px;bottom:0;left:10%;background:radial-gradient(circle,rgba(0,229,255,.1) 0%,transparent 70%);animation:orbFloat 12s ease-in-out infinite}
-.hero-orb-3{width:400px;height:400px;bottom:10%;right:5%;background:radial-gradient(circle,rgba(57,255,20,.08) 0%,transparent 70%);animation:orbFloat 15s ease-in-out infinite reverse}
-@keyframes orbFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-40px)}}
-.hero-in{text-align:center;max-width:1200px;position:relative;z-index:5}
-.hero-badge{display:inline-flex;align-items:center;gap:1rem;padding:.7rem 2rem;border:1px solid rgba(0,229,255,.2);border-radius:50px;font-family:var(--font-mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--c1);background:rgba(0,229,255,.06);margin-bottom:2.5rem;backdrop-filter:blur(10px);opacity:0;animation:iUp .8s .4s forwards}
-.hero-badge-dot{width:8px;height:8px;border-radius:50%;background:var(--acc1);box-shadow:0 0 15px var(--acc1);animation:pulse 1.5s ease-in-out infinite}
-.hero-h1{font-family:var(--font-display);font-size:clamp(4rem,12vw,10rem);font-weight:800;letter-spacing:-.05em;line-height:.9;margin-bottom:2rem;opacity:0;animation:iUp 1s .6s cubic-bezier(.19,1,.22,1) forwards}
-.hero-h1 .line1{display:block;background:linear-gradient(125deg,#fff 0%,rgba(0,229,255,.9) 50%,#fff 100%);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmer 6s linear 2s infinite}
-@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.hero-h1 .line2{display:block;color:rgba(0,229,255,.18);-webkit-text-fill-color:rgba(0,229,255,.18);font-size:.28em;letter-spacing:.5em;font-family:var(--font-mono);font-weight:400;margin-top:.8em}
-.hero-desc{font-size:1.1rem;font-weight:300;color:var(--muted);max-width:700px;margin:0 auto 3rem;line-height:2;opacity:0;animation:iUp .9s .85s forwards}
-.hero-desc strong{color:var(--text);font-weight:500}
-.hero-ctas{display:flex;gap:1.2rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:iUp .8s 1.05s forwards}
-
-.hero-terminal{
-  margin-top:4rem;max-width:720px;margin-left:auto;margin-right:auto;
-  background:rgba(0,0,0,.7);border:1px solid var(--border);border-radius:12px;overflow:hidden;
-  backdrop-filter:blur(20px);opacity:0;animation:iUp .9s 1.3s forwards;
-  box-shadow:0 30px 80px rgba(0,0,0,.8),0 0 0 1px rgba(0,229,255,.05);
-}
-.term-bar{padding:.7rem 1.2rem;background:rgba(0,229,255,.05);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem}
-.term-dot{width:10px;height:10px;border-radius:50%}
-.term-dot:nth-child(1){background:#ff5f57}
-.term-dot:nth-child(2){background:#febc2e}
-.term-dot:nth-child(3){background:#28c840}
-.term-title{font-family:var(--font-mono);font-size:.65rem;color:var(--muted);margin-left:auto;letter-spacing:.1em}
-.term-body{padding:1.2rem 1.5rem;font-family:var(--font-mono);font-size:.8rem;min-height:60px;line-height:1.8}
-.term-prompt{color:var(--acc1)}
-.term-cmd{color:var(--c1)}
-.term-out{color:var(--muted)}
-.term-cursor{display:inline-block;width:8px;height:14px;background:var(--c1);vertical-align:text-bottom;animation:blink .8s ease-in-out infinite}
-
-.hero-metrics{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-top:4rem;backdrop-filter:blur(20px);background:rgba(0,0,0,.4);opacity:0;animation:iUp 1s 1.55s forwards}
-.hm{padding:2rem 1rem;border-right:1px solid var(--border);text-align:center;position:relative;overflow:hidden;transition:background .3s}
-.hm:hover{background:rgba(0,229,255,.05)}
-.hm:last-child{border-right:none}
-.hm-val{font-family:var(--font-display);font-size:2.8rem;font-weight:800;color:var(--c1);line-height:1;letter-spacing:-.03em}
-.hm-unit{font-size:.5em;color:var(--acc1)}
-.hm-lbl{font-family:var(--font-mono);font-size:.6rem;color:var(--subtle);letter-spacing:.18em;text-transform:uppercase;margin-top:.5rem}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-
-/* ══════════════════════════════════════════════
-   AI TECH VISUALIZATIONS (6 PANELS)
-══════════════════════════════════════════════ */
-#aivis{background:linear-gradient(180deg,transparent,rgba(0,20,50,.15) 50%,transparent);overflow:hidden}
-.viz-intro{text-align:center;margin-bottom:4rem}
-.viz-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-.viz-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;position:relative;background:rgba(2,5,15,.9);transition:all .5s;cursor:none}
-.viz-card:hover{border-color:rgba(0,229,255,.35);transform:translateY(-10px);box-shadow:0 25px 80px rgba(0,0,0,.8),0 0 60px rgba(0,229,255,.15)}
-.viz-card.featured{grid-column:span 2}
-.viz-wrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden}
-.viz-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
-.viz-overlay{position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(2,5,15,.98) 100%);pointer-events:none;z-index:2}
-.viz-info{padding:1.5rem}
-.viz-tag{font-family:var(--font-mono);font-size:.6rem;color:var(--c1);letter-spacing:.2em;text-transform:uppercase;margin-bottom:.5rem;display:flex;align-items:center;gap:.5rem}
-.viz-tag::before{content:'//'}
-.viz-title{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
-.viz-desc{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.7}
-.viz-live{position:absolute;top:1rem;left:1rem;z-index:5;display:flex;align-items:center;gap:.4rem;background:rgba(0,0,0,.8);padding:.3rem .8rem;border:1px solid rgba(0,229,255,.2);border-radius:50px;font-family:var(--font-mono);font-size:.55rem;color:var(--acc1);letter-spacing:.1em;backdrop-filter:blur(10px)}
-.viz-live::before{content:'';width:5px;height:5px;border-radius:50%;background:var(--acc1);box-shadow:0 0 8px var(--acc1);animation:pulse 1.5s ease-in-out infinite}
-
-/* ══════════════════════════════════════════════
-   SERVICES — BENTO GRID
-══════════════════════════════════════════════ */
-#services{overflow:hidden}
-.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:260px;gap:1.2rem}
-.bcard{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:14px;padding:2.2rem;overflow:hidden;position:relative;transition:all .5s;cursor:none}
-.bcard::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,229,255,.06),transparent 60%);opacity:0;transition:opacity .5s}
-.bcard:hover{border-color:rgba(0,229,255,.3);transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,0,0,.8),0 0 40px rgba(0,229,255,.1)}
-.bcard:hover::before{opacity:1}
-.bcard.span2{grid-column:span 2}
-.bcard.span3{grid-column:span 3}
-.bcard.tall{grid-row:span 2}
-.bcard-accent{position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),transparent);transform:scaleX(0);transition:transform .6s}
-.bcard:hover .bcard-accent{transform:scaleX(1)}
-.bcard-icon{width:52px;height:52px;border-radius:10px;background:linear-gradient(135deg,rgba(0,229,255,.15),rgba(57,255,20,.06));border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:var(--c1);margin-bottom:1.4rem}
-.bcard h3{font-family:var(--font-display);font-size:1.15rem;font-weight:700;color:var(--text);margin-bottom:.6rem;letter-spacing:-.01em}
-.bcard p{font-size:.85rem;color:var(--muted);font-weight:300;line-height:1.85}
-.bcard-chips{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:1.2rem}
-.chip{font-family:var(--font-mono);font-size:.58rem;padding:.2rem .65rem;border:1px solid var(--border);color:var(--subtle);border-radius:4px;background:rgba(0,229,255,.02);transition:all .3s;font-weight:600}
+.btn{display:inline-flex;align-items:center;gap:.6rem;padding:.88rem 2.1rem;border-radius:50px;font-family:var(--fd);font-weight:700;font-size:.73rem;letter-spacing:.03em;text-transform:uppercase;transition:all .32s;cursor:none;border:none}
+.btn-p{background:linear-gradient(135deg,var(--c1),var(--acc1));color:#000;box-shadow:0 0 30px rgba(0,229,255,.22)}
+.btn-p:hover{transform:translateY(-4px);box-shadow:0 12px 55px rgba(0,229,255,.42)}
+.btn-o{background:transparent;color:var(--c1);border:1.5px solid rgba(0,229,255,.33)}
+.btn-o:hover{background:rgba(0,229,255,.08);border-color:var(--c1);transform:translateY(-4px)}
+/* HERO */
+#hero{min-height:100vh;display:grid;place-items:center;padding:9rem 3.5rem 5rem;position:relative;overflow:hidden}
+.ho{position:absolute;border-radius:50%;pointer-events:none;filter:blur(90px)}
+.ho1{width:750px;height:750px;top:-120px;left:50%;transform:translateX(-50%);background:radial-gradient(circle,rgba(0,65,140,.28),transparent 70%)}
+.ho2{width:380px;height:380px;bottom:5%;left:8%;background:radial-gradient(circle,rgba(0,229,255,.07),transparent 70%);animation:of 10s ease-in-out infinite}
+.ho3{width:320px;height:320px;bottom:10%;right:5%;background:radial-gradient(circle,rgba(57,255,20,.055),transparent 70%);animation:of 13s ease-in-out infinite reverse}
+@keyframes of{50%{transform:translateY(-28px)}}
+.hrin{text-align:center;max-width:1050px;position:relative;z-index:5}
+.hbadge{display:inline-flex;align-items:center;gap:.75rem;padding:.55rem 1.7rem;border:1px solid rgba(0,229,255,.16);border-radius:50px;font-family:var(--fm);font-size:.63rem;letter-spacing:.17em;text-transform:uppercase;color:var(--c1);background:rgba(0,229,255,.05);margin-bottom:2rem;opacity:0;animation:fu .7s .3s forwards}
+.hbd{width:6px;height:6px;border-radius:50%;background:var(--acc1);box-shadow:0 0 10px var(--acc1);animation:pk 1.5s ease-in-out infinite}
+.hh1{font-family:var(--fd);font-size:clamp(3.2rem,9.5vw,8rem);font-weight:800;letter-spacing:-.05em;line-height:.9;margin-bottom:1.7rem;opacity:0;animation:fu .9s .55s ease forwards}
+.l1{display:block;background:linear-gradient(125deg,#fff,rgba(0,229,255,.88) 50%,#fff);background-size:200% 100%;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:sh 7s linear 2s infinite}
+@keyframes sh{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.l2{display:block;color:rgba(0,229,255,.14);-webkit-text-fill-color:rgba(0,229,255,.14);font-size:.25em;letter-spacing:.43em;font-family:var(--fm);font-weight:400;margin-top:.8em}
+.hdesc{font-size:1.02rem;font-weight:300;color:var(--muted);max-width:640px;margin:0 auto 2.4rem;line-height:1.92;opacity:0;animation:fu .82s .78s forwards}
+.hdesc strong{color:var(--text);font-weight:500}
+.hctas{display:flex;gap:.9rem;justify-content:center;flex-wrap:wrap;opacity:0;animation:fu .72s .95s forwards}
+.hterm{margin:3rem auto 0;max-width:660px;background:rgba(0,0,0,.62);border:1px solid var(--border);border-radius:9px;overflow:hidden;opacity:0;animation:fu .78s 1.12s forwards;box-shadow:0 18px 55px rgba(0,0,0,.65)}
+.tbar{padding:.58rem 1.05rem;background:rgba(0,229,255,.04);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.45rem}
+.td{width:8px;height:8px;border-radius:50%}
+.td:nth-child(1){background:#ff5f57}.td:nth-child(2){background:#febc2e}.td:nth-child(3){background:#28c840}
+.ttit{font-family:var(--fm);font-size:.58rem;color:var(--muted);margin-left:auto;letter-spacing:.07em}
+.tbody{padding:1rem 1.3rem;font-family:var(--fm);font-size:.76rem;min-height:48px;line-height:1.85}
+.tcur{display:inline-block;width:6px;height:12px;background:var(--c1);vertical-align:text-bottom;animation:bk .85s ease-in-out infinite}
+@keyframes bk{50%{opacity:0}}
+.hmets{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:9px;overflow:hidden;margin-top:3.2rem;background:rgba(0,0,0,.32);opacity:0;animation:fu .88s 1.38s forwards}
+.hm{padding:1.7rem 1rem;border-right:1px solid var(--border);text-align:center;transition:background .28s}
+.hm:hover{background:rgba(0,229,255,.04)}.hm:last-child{border-right:none}
+.hmv{font-family:var(--fd);font-size:2.4rem;font-weight:800;color:var(--c1);line-height:1;letter-spacing:-.03em}
+.hml{font-family:var(--fm);font-size:.57rem;color:var(--subtle);letter-spacing:.15em;text-transform:uppercase;margin-top:.38rem}
+/* VIZ */
+#aivis{overflow:hidden}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.vcard{border:1px solid var(--border);border-radius:10px;overflow:hidden;background:rgba(2,5,14,.92);transition:border-color .38s,transform .38s,box-shadow .38s;cursor:none;contain:layout style paint}
+.vcard:hover{border-color:rgba(0,229,255,.28);transform:translateY(-7px);box-shadow:0 18px 55px rgba(0,0,0,.68),0 0 35px rgba(0,229,255,.09)}
+.vcard.ft{grid-column:span 2}
+.vwrap{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:#020509}
+.vwrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.vovl{position:absolute;inset:0;background:linear-gradient(180deg,transparent 42%,rgba(2,5,14,.97) 100%);pointer-events:none;z-index:2}
+.vinfo{padding:1.1rem 1.35rem}
+.vtag{font-family:var(--fm);font-size:.57rem;color:var(--c1);letter-spacing:.17em;text-transform:uppercase;margin-bottom:.38rem}
+.vtag::before{content:'// '}
+.vtit{font-family:var(--fd);font-size:.92rem;font-weight:700;color:var(--text);margin-bottom:.28rem}
+.vdesc{font-size:.77rem;color:var(--muted);font-weight:300;line-height:1.62}
+.vlive{position:absolute;top:.75rem;left:.75rem;z-index:5;display:flex;align-items:center;gap:.32rem;background:rgba(0,0,0,.8);padding:.22rem .65rem;border:1px solid rgba(0,229,255,.16);border-radius:50px;font-family:var(--fm);font-size:.5rem;color:var(--acc1);letter-spacing:.07em}
+.vlive::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--acc1);animation:pk 1.5s ease-in-out infinite}
+/* SERVICES BENTO */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);grid-auto-rows:235px;gap:.95rem}
+.bc{background:rgba(3,7,18,.88);border:1px solid var(--border);border-radius:11px;padding:1.9rem;overflow:hidden;position:relative;transition:border-color .38s,transform .38s,box-shadow .38s;cursor:none}
+.bc::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),transparent);transform:scaleX(0);transition:transform .48s}
+.bc:hover{border-color:rgba(0,229,255,.23);transform:translateY(-5px);box-shadow:0 14px 45px rgba(0,0,0,.65)}
+.bc:hover::after{transform:scaleX(1)}
+.bc.s2{grid-column:span 2}.bc.s3{grid-column:span 3}.bc.tall{grid-row:span 2}
+.bci{width:46px;height:46px;border-radius:9px;background:rgba(0,229,255,.09);border:1px solid var(--border2);display:grid;place-items:center;font-size:1.35rem;color:var(--c1);margin-bottom:1.1rem}
+.bc h3{font-family:var(--fd);font-size:1rem;font-weight:700;margin-bottom:.45rem;letter-spacing:-.01em}
+.bc p{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.78}
+.chips{display:flex;flex-wrap:wrap;gap:.32rem;margin-top:.9rem}
+.chip{font-family:var(--fm);font-size:.54rem;padding:.16rem .58rem;border:1px solid var(--border);color:var(--subtle);border-radius:3px;background:rgba(0,229,255,.02);transition:all .22s}
 .chip:hover{border-color:var(--c1);color:var(--c1)}
-
-/* FEATURED BENTO CARD STYLES */
-.bcard-featured{background:linear-gradient(135deg,rgba(0,60,120,.3),rgba(0,30,60,.4));border-color:rgba(0,229,255,.25)}
-.bcard-stat{position:absolute;bottom:2rem;right:2rem;text-align:right}
-.bcard-stat-val{font-family:var(--font-display);font-size:3rem;font-weight:800;color:var(--c1);opacity:.25;line-height:1}
-.bcard-stat-lbl{font-family:var(--font-mono);font-size:.55rem;color:var(--subtle);letter-spacing:.18em}
-
-/* ══════════════════════════════════════════════
-   IT OUTSOURCING SECTION
-══════════════════════════════════════════════ */
-#outsourcing{background:linear-gradient(180deg,transparent,rgba(0,30,80,.12) 50%,transparent)}
-.out-layout{display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center}
-.out-visual{position:relative}
-.out-globe-wrap{width:100%;aspect-ratio:1;position:relative}
-#globe-canvas{width:100%;height:100%}
-.out-text{}
-.out-models{display:grid;gap:1rem;margin-top:2.5rem}
-.out-model{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:10px;padding:1.5rem 1.8rem;transition:all .4s;cursor:none}
-.out-model:hover{border-color:rgba(0,229,255,.3);background:rgba(0,229,255,.04);transform:translateX(6px)}
-.out-model-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
-.out-model-name{font-family:var(--font-display);font-size:1rem;font-weight:700;color:var(--text)}
-.out-model-badge{font-family:var(--font-mono);font-size:.58rem;padding:.2rem .7rem;border-radius:50px;letter-spacing:.08em;font-weight:600}
-.badge-pop{background:rgba(57,255,20,.1);border:1px solid rgba(57,255,20,.3);color:var(--acc1)}
-.badge-hot{background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);color:var(--acc2)}
-.badge-ent{background:rgba(0,229,255,.1);border:1px solid rgba(0,229,255,.3);color:var(--c1)}
-.out-model p{font-size:.82rem;color:var(--muted);font-weight:300;line-height:1.7}
-.out-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:3rem}
-.out-stat{text-align:center;padding:1.5rem 1rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:10px}
-.out-stat-val{font-family:var(--font-display);font-size:2rem;font-weight:800;color:var(--c1);line-height:1}
-.out-stat-lbl{font-family:var(--font-mono);font-size:.58rem;color:var(--muted);letter-spacing:.15em;margin-top:.4rem;text-transform:uppercase}
-
-/* ══════════════════════════════════════════════
-   INTERNSHIP SECTION
-══════════════════════════════════════════════ */
-#internship{overflow:hidden;position:relative}
-#internship::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:1000px;height:1000px;background:radial-gradient(circle,rgba(0,229,255,.06),transparent 70%);filter:blur(80px);pointer-events:none}
-.intern-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-.icard{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:14px;padding:2.2rem;position:relative;overflow:hidden;transition:all .5s;cursor:none}
-.icard::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),transparent);transform:scaleX(0);transition:transform .6s}
-.icard:hover{border-color:rgba(0,229,255,.3);transform:translateY(-8px);box-shadow:0 20px 70px rgba(0,229,255,.12)}
-.icard:hover::before{transform:scaleX(1)}
-.icard-no{position:absolute;top:1.5rem;right:1.8rem;font-family:var(--font-display);font-size:2.5rem;font-weight:800;color:rgba(0,229,255,.05);line-height:1}
-.icard-role{font-family:var(--font-display);font-size:1.05rem;font-weight:700;color:var(--c1);margin-bottom:.5rem}
-.icard-dur{font-family:var(--font-mono);font-size:.6rem;color:var(--muted);letter-spacing:.1em;margin-bottom:1rem;text-transform:uppercase}
-.icard p{font-size:.85rem;color:var(--muted);font-weight:300;line-height:1.85;margin-bottom:1.2rem}
-.icard-perks{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1.5rem}
-.perk{font-family:var(--font-mono);font-size:.6rem;padding:.22rem .7rem;border:1px solid var(--border);color:var(--subtle);border-radius:4px;font-weight:600}
-.icard-apply{width:100%;padding:.85rem;background:none;border:1px solid rgba(0,229,255,.2);border-radius:8px;color:var(--c1);font-family:var(--font-display);font-weight:700;font-size:.75rem;letter-spacing:.05em;text-transform:uppercase;transition:all .3s;cursor:none}
-.icard-apply:hover{background:linear-gradient(135deg,rgba(0,229,255,.12),rgba(57,255,20,.06));border-color:var(--c1);box-shadow:0 0 30px rgba(0,229,255,.2)}
-
-/* ══════════════════════════════════════════════
-   CLIENTS & TRUST SIGNALS
-══════════════════════════════════════════════ */
-#trust{overflow:hidden}
-.trust-inner{border:1px solid var(--border);border-radius:16px;padding:3rem 4rem;background:rgba(3,7,18,.6);backdrop-filter:blur(20px)}
-.trust-top{display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
-.trust-logos{display:flex;align-items:center;gap:3rem;flex-wrap:wrap}
-.trust-logo{font-family:var(--font-display);font-size:1.1rem;font-weight:700;color:rgba(106,143,171,.4);letter-spacing:-.01em;transition:color .3s;cursor:none}
-.trust-logo:hover{color:var(--muted)}
-.trust-divider{width:1px;height:3rem;background:var(--border)}
-.trust-certs{display:flex;gap:1rem}
-.cert{padding:.4rem 1rem;border:1px solid rgba(0,229,255,.2);border-radius:50px;font-family:var(--font-mono);font-size:.58rem;color:var(--c1);letter-spacing:.1em;font-weight:600}
-
-/* ══════════════════════════════════════════════
-   CONTACT
-══════════════════════════════════════════════ */
-#contact{overflow:hidden}
-.contact-layout{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
-.contact-left h2{font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4rem);font-weight:800;letter-spacing:-.04em;line-height:1;background:linear-gradient(135deg,#fff 0%,var(--c1) 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.5rem}
-.contact-left p{color:var(--muted);font-weight:300;line-height:1.9;font-size:.95rem}
-.contact-items{display:flex;flex-direction:column;gap:1.2rem;margin-top:2.5rem}
-.ci{display:flex;align-items:center;gap:1.2rem;padding:1.2rem 1.5rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:10px;transition:all .3s;cursor:none}
-.ci:hover{border-color:rgba(0,229,255,.25);background:rgba(0,229,255,.07)}
-.ci-ico{width:40px;height:40px;border-radius:8px;background:rgba(0,229,255,.1);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1rem;color:var(--c1);flex-shrink:0}
-.ci-lbl{font-family:var(--font-mono);font-size:.6rem;color:var(--subtle);letter-spacing:.12em;text-transform:uppercase}
-.ci-val{font-size:.9rem;color:var(--text);font-weight:500;margin-top:.2rem}
-.contact-right{background:rgba(3,7,18,.85);border:1px solid var(--border);border-radius:14px;padding:2.5rem;overflow:hidden}
-.contact-form-title{font-family:var(--font-display);font-size:1.5rem;font-weight:800;color:var(--text);margin-bottom:1.5rem;letter-spacing:-.02em}
-
-/* ══════════════════════════════════════════════
-   FOOTER
-══════════════════════════════════════════════ */
-footer{border-top:1px solid var(--border);padding:5rem 4rem 2.5rem;position:relative;z-index:10}
-.footer-grid{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr;gap:3rem;margin-bottom:3.5rem}
-.footer-brand p{color:var(--muted);font-size:.85rem;font-weight:300;line-height:1.85;max-width:300px;margin-top:1rem}
-.footer-col-title{font-family:var(--font-mono);font-size:.6rem;letter-spacing:.22em;text-transform:uppercase;color:var(--subtle);margin-bottom:1.2rem;font-weight:700}
-.footer-links{list-style:none;display:flex;flex-direction:column;gap:.7rem}
-.footer-links a{font-size:.85rem;color:var(--muted);transition:color .2s}
-.footer-links a:hover{color:var(--c1)}
-.footer-bottom{border-top:1px solid var(--border);padding-top:2rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
-.footer-copy{font-family:var(--font-mono);font-size:.65rem;color:var(--subtle);letter-spacing:.1em}
-.footer-badges{display:flex;gap:.6rem}
-.fbadge{font-family:var(--font-mono);font-size:.6rem;padding:.25rem .8rem;border:1px solid rgba(0,229,255,.2);color:var(--c1);border-radius:4px;font-weight:700;letter-spacing:.08em}
-
-/* ══════════════════════════════════════════════
-   RESPONSIVE
-══════════════════════════════════════════════ */
-@media(max-width:1200px){
-  .bento{grid-template-columns:repeat(2,1fr)}.bcard.span3{grid-column:span 2}
-  .out-layout{grid-template-columns:1fr;gap:4rem}.out-globe-wrap{max-width:420px;margin:0 auto}
-  .viz-grid{grid-template-columns:1fr 1fr}.viz-card.featured{grid-column:1/-1}
-  .con{padding:0 2.5rem}
-}
-@media(max-width:900px){
-  .nav-center{display:none}.hbg{display:flex}
-  .intern-grid{grid-template-columns:1fr 1fr}
-  .bento{grid-template-columns:1fr}.bcard.span2,.bcard.span3{grid-column:1}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .contact-layout{grid-template-columns:1fr}
-  .hero-metrics{grid-template-columns:repeat(2,1fr)}
-  .hero-metrics .hm:nth-child(2){border-right:none}
-  .hero-metrics .hm:nth-child(3){border-right:1px solid var(--border);border-top:1px solid var(--border)}
-  .hero-metrics .hm:nth-child(4){border-top:1px solid var(--border)}
-}
-@media(max-width:640px){
-  .intern-grid{grid-template-columns:1fr}
-  .viz-grid{grid-template-columns:1fr}.viz-card.featured{grid-column:1}
-  .hero-h1{font-size:3.5rem}.con{padding:0 1.5rem}.sec{padding:6rem 0}
-  .hero-metrics{grid-template-columns:repeat(2,1fr)}
-  footer{padding:3rem 1.5rem 2rem}
-  .trust-inner{padding:2rem 1.5rem}
-  .fg2{grid-template-columns:1fr}
-}
+.bsv{position:absolute;bottom:1.3rem;right:1.6rem;font-family:var(--fd);font-size:2.6rem;font-weight:800;color:rgba(0,229,255,.05);line-height:1}
+/* OUTSOURCING */
+.outl{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center}
+#gc{width:100%;aspect-ratio:1;display:block}
+.oss{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-top:1.8rem}
+.oss-s{text-align:center;padding:1.1rem .75rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:8px}
+.oss-v{font-family:var(--fd);font-size:1.7rem;font-weight:800;color:var(--c1);line-height:1}
+.oss-l{font-family:var(--fm);font-size:.55rem;color:var(--muted);letter-spacing:.13em;margin-top:.28rem;text-transform:uppercase}
+.omods{display:flex;flex-direction:column;gap:.75rem;margin-top:1.8rem}
+.om{background:rgba(3,7,18,.88);border:1px solid var(--border);border-radius:9px;padding:1.2rem 1.5rem;transition:all .32s;cursor:none}
+.om:hover{border-color:rgba(0,229,255,.23);background:rgba(0,229,255,.04);transform:translateX(5px)}
+.omhd{display:flex;align-items:center;justify-content:space-between;margin-bottom:.38rem}
+.omn{font-family:var(--fd);font-size:.92rem;font-weight:700}
+.omb{font-family:var(--fm);font-size:.53rem;padding:.16rem .62rem;border-radius:50px;letter-spacing:.06em;font-weight:600}
+.bp{background:rgba(57,255,20,.08);border:1px solid rgba(57,255,20,.25);color:var(--acc1)}
+.bh{background:rgba(255,107,0,.08);border:1px solid rgba(255,107,0,.25);color:var(--acc2)}
+.be{background:rgba(0,229,255,.08);border:1px solid rgba(0,229,255,.25);color:var(--c1)}
+.om p{font-size:.78rem;color:var(--muted);font-weight:300;line-height:1.68}
+/* INTERNSHIP */
+.igrid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+.ic2{background:rgba(3,7,18,.88);border:1px solid var(--border);border-radius:11px;padding:1.9rem;position:relative;overflow:hidden;transition:all .42s;cursor:none}
+.ic2::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--c1),transparent);transform:scaleX(0);transition:transform .48s}
+.ic2:hover{border-color:rgba(0,229,255,.23);transform:translateY(-7px);box-shadow:0 16px 50px rgba(0,229,255,.09)}
+.ic2:hover::before{transform:scaleX(1)}
+.icn{position:absolute;top:1.2rem;right:1.4rem;font-family:var(--fd);font-size:2rem;font-weight:800;color:rgba(0,229,255,.05);line-height:1}
+.icr{font-family:var(--fd);font-size:.97rem;font-weight:700;color:var(--c1);margin-bottom:.28rem}
+.icd{font-family:var(--fm);font-size:.57rem;color:var(--muted);letter-spacing:.08em;margin-bottom:.85rem;text-transform:uppercase}
+.ic2 p{font-size:.8rem;color:var(--muted);font-weight:300;line-height:1.78;margin-bottom:.95rem}
+.ips{display:flex;flex-wrap:wrap;gap:.32rem;margin-bottom:1.1rem}
+.ip{font-family:var(--fm);font-size:.56rem;padding:.18rem .62rem;border:1px solid var(--border);color:var(--subtle);border-radius:4px;font-weight:600}
+.iap{width:100%;padding:.78rem;background:none;border:1px solid rgba(0,229,255,.17);border-radius:7px;color:var(--c1);font-family:var(--fd);font-weight:700;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;transition:all .28s;cursor:none}
+.iap:hover{background:rgba(0,229,255,.07);border-color:var(--c1);box-shadow:0 0 22px rgba(0,229,255,.13)}
+/* TRUST */
+.tinner{border:1px solid var(--border);border-radius:13px;padding:2.4rem 3.2rem;background:rgba(3,7,18,.55)}
+.ttop{display:flex;align-items:center;justify-content:space-between;gap:2rem;flex-wrap:wrap}
+.tlogos{display:flex;align-items:center;gap:2.2rem;flex-wrap:wrap}
+.tlogo{font-family:var(--fd);font-size:.97rem;font-weight:700;color:rgba(90,122,154,.33);transition:color .28s}
+.tlogo:hover{color:var(--muted)}
+.tdiv{width:1px;height:2.2rem;background:var(--border)}
+.tcerts{display:flex;gap:.55rem;flex-wrap:wrap}
+.tcert{padding:.28rem .85rem;border:1px solid rgba(0,229,255,.17);border-radius:50px;font-family:var(--fm);font-size:.54rem;color:var(--c1);letter-spacing:.08em;font-weight:600}
+/* CONTACT */
+.cl{display:grid;grid-template-columns:1fr 1fr;gap:4rem;align-items:start}
+.cl-l h2{font-family:var(--fd);font-size:clamp(2rem,4.3vw,3.3rem);font-weight:800;letter-spacing:-.04em;line-height:1;background:linear-gradient(135deg,#fff,var(--c1) 60%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:1.1rem}
+.cl-l p{color:var(--muted);font-weight:300;line-height:1.82;font-size:.88rem}
+.citems{display:flex;flex-direction:column;gap:.9rem;margin-top:1.8rem}
+.ci{display:flex;align-items:center;gap.95rem;gap:1rem;padding:1rem 1.2rem;background:rgba(0,229,255,.04);border:1px solid var(--border);border-radius:8px;transition:all .28s}
+.ci:hover{border-color:rgba(0,229,255,.2);background:rgba(0,229,255,.07)}
+.ciico{width:36px;height:36px;border-radius:7px;background:rgba(0,229,255,.08);border:1px solid var(--border2);display:grid;place-items:center;font-size:.88rem;color:var(--c1);flex-shrink:0}
+.cil{font-family:var(--fm);font-size:.54rem;color:var(--subtle);letter-spacing:.1em;text-transform:uppercase}
+.civ{font-size:.83rem;color:var(--text);font-weight:500;margin-top:.13rem}
+.cr{background:rgba(3,7,18,.88);border:1px solid var(--border);border-radius:11px;padding:2rem}
+.crt{font-family:var(--fd);font-size:1.35rem;font-weight:800;margin-bottom:1.3rem;letter-spacing:-.02em}
+.cfb{display:none;margin-top:.85rem;padding:.72rem;border-radius:7px;text-align:center;font-family:var(--fm);font-size:.68rem;color:var(--acc1);border:1px solid rgba(57,255,20,.17);background:rgba(57,255,20,.05)}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:4.2rem 3.5rem 2rem;position:relative;z-index:10}
+.fg3{display:grid;grid-template-columns:2.2fr 1fr 1fr 1fr;gap:2.5rem;margin-bottom:2.8rem}
+.fbrand p{color:var(--muted);font-size:.8rem;font-weight:300;line-height:1.78;max-width:275px;margin-top:.85rem}
+.fct{font-family:var(--fm);font-size:.57rem;letter-spacing:.2em;text-transform:uppercase;color:var(--subtle);margin-bottom:.95rem;font-weight:700}
+.flinks{list-style:none;display:flex;flex-direction:column;gap:.58rem}
+.flinks a{font-size:.8rem;color:var(--muted);transition:color .2s}
+.flinks a:hover{color:var(--c1)}
+.fbot{border-top:1px solid var(--border);padding-top:1.7rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.9rem}
+.fcopy{font-family:var(--fm);font-size:.58rem;color:var(--subtle);letter-spacing:.07em}
+.fbadges{display:flex;gap:.45rem}
+.fbg{font-family:var(--fm);font-size:.54rem;padding:.2rem .7rem;border:1px solid rgba(0,229,255,.17);color:var(--c1);border-radius:4px;font-weight:700}
+/* RESPONSIVE */
+@media(max-width:1100px){.nc{display:none}.hbg{display:flex}.outl{grid-template-columns:1fr;gap:3rem}.bento{grid-template-columns:repeat(2,1fr)}.bc.s3{grid-column:span 2}.fg3{grid-template-columns:1fr 1fr}.vgrid{grid-template-columns:1fr 1fr}.vcard.ft{grid-column:1/-1}.con{padding:0 2rem}}
+@media(max-width:700px){.igrid{grid-template-columns:1fr}.cl{grid-template-columns:1fr}.vgrid{grid-template-columns:1fr}.vcard.ft{grid-column:1}.bento{grid-template-columns:1fr}.bc.s2,.bc.s3{grid-column:1}.hmets{grid-template-columns:repeat(2,1fr)}.hm:nth-child(2){border-right:none}.hm:nth-child(3){border-top:1px solid var(--border);border-right:1px solid var(--border)}.hm:nth-child(4){border-top:1px solid var(--border)}.fg2{grid-template-columns:1fr}.tinner{padding:1.4rem 1.2rem}.fg3{grid-template-columns:1fr}footer{padding:2.8rem 1.5rem 2rem}}
 </style>
 </head>
 <body>
+<div id="cc"></div><div id="co"></div>
 
-<!-- CURSOR -->
-<div id="cur-core"></div>
-<div id="cur-orbit"></div>
-
-<!-- ═══════════════════════════════════════
-     ULTRA CINEMATIC INTRO
-═══════════════════════════════════════ -->
+<!-- INTRO -->
 <div id="intro">
-  <canvas id="intro-canvas"></canvas>
-  <div class="intro-content">
-    <div class="intro-eyebrow">Initializing Enterprise Systems</div>
-    <div class="intro-brand">
-      <span class="d1">DATAEUROS</span>
-      <span class="d2">Enterprise QA &amp; Cybersecurity</span>
+  <canvas id="ic"></canvas>
+  <div class="ix">
+    <div class="iey">Initializing Enterprise Systems</div>
+    <div class="ibr"><span class="d1">DATAEUROS</span><span class="d2">Enterprise QA &amp; Cybersecurity</span></div>
+    <div class="ipr">
+      <div class="itr"><div class="ifl" id="ifl"></div></div>
+      <div class="ist"><span id="iphTxt">LOADING SECURITY MODULES</span><span id="ipct">0%</span></div>
     </div>
-    <div class="intro-progress">
-      <div class="intro-track"><div class="intro-fill" id="intro-fill"></div></div>
-      <div class="intro-stats">
-        <span class="intro-stat" id="intro-phase-txt">LOADING CORE SYSTEMS</span>
-        <span class="intro-stat" id="intro-pct-sm">0%</span>
-      </div>
-    </div>
-    <div class="intro-phases">
-      <div class="intro-phase active" id="ph1">Security Modules</div>
-      <div class="intro-phase" id="ph2">AI Pipeline</div>
-      <div class="intro-phase" id="ph3">QA Engine</div>
-      <div class="intro-phase" id="ph4">Dashboard</div>
+    <div class="iph">
+      <div class="iphase on" id="p1">Security</div>
+      <div class="iphase" id="p2">AI Pipeline</div>
+      <div class="iphase" id="p3">QA Engine</div>
+      <div class="iphase" id="p4">Dashboard</div>
     </div>
   </div>
-  <div id="intro-pct">0%</div>
+  <div id="ibig">0%</div>
 </div>
 
-<!-- BACKGROUNDS -->
-<div id="bg-deep"></div>
-<canvas id="bg-stars"></canvas>
-<div id="bg-grid"></div>
-<div id="bg-vignette"></div>
-<div class="noise"></div>
-<div class="scanline"></div>
+<div id="bgs"></div><canvas id="bgc"></canvas><div class="bgrid"></div><div class="bvig"></div><div class="scl"></div>
 
-<!-- MOBILE NAV -->
-<div class="mob-nav" id="mobNav">
-  <button class="mob-close" id="mobClose"><i class="fas fa-times"></i></button>
-  <a href="#services" onclick="closeMob()">Services</a>
-  <a href="#aivis" onclick="closeMob()">Technology</a>
-  <a href="#outsourcing" onclick="closeMob()">IT Outsourcing</a>
-  <a href="#internship" onclick="closeMob()">Internships</a>
-  <a href="#contact" onclick="closeMob()">Contact</a>
-  <button onclick="openIQ();closeMob()">Get Started</button>
+<div class="mnav" id="mn">
+  <button class="mc" id="mc">✕</button>
+  <a href="#services" onclick="cmob()">Services</a>
+  <a href="#aivis" onclick="cmob()">Technology</a>
+  <a href="#outsourcing" onclick="cmob()">IT Outsourcing</a>
+  <a href="#internship" onclick="cmob()">Internships</a>
+  <a href="#contact" onclick="cmob()">Contact</a>
+  <button onclick="openIQ();cmob()">Get Started</button>
 </div>
 
-<!-- NAVBAR -->
 <nav id="nav">
-  <div class="logo">
-    <div class="logo-mark">DE</div>
-    <span class="logo-txt">DATA<span>EUROS</span></span>
+  <div class="logo"><div class="lm">DE</div><span class="lt">DATA<span>EUROS</span></span></div>
+  <div class="nc">
+    <a href="#services" class="nl">Services</a>
+    <a href="#aivis" class="nl">Technology</a>
+    <a href="#outsourcing" class="nl">IT Outsourcing</a>
+    <a href="#internship" class="nl">Internships</a>
+    <a href="#contact" class="nl">Contact</a>
   </div>
-  <div class="nav-center">
-    <a href="#services" class="nav-link">Services</a>
-    <a href="#aivis" class="nav-link">Technology</a>
-    <a href="#outsourcing" class="nav-link">IT Outsourcing</a>
-    <a href="#internship" class="nav-link">Internships</a>
-    <a href="#contact" class="nav-link">Contact</a>
-  </div>
-  <div class="nav-right">
-    <div class="nav-status">SYSTEMS LIVE</div>
-    <button class="cta-nav" onclick="openIQ()">Get Started →</button>
-    <button class="hbg" id="hbg"><span></span><span></span><span></span></button>
+  <div class="nr">
+    <div class="nst">SYSTEMS LIVE</div>
+    <button class="cbtn" onclick="openIQ()">Get Started →</button>
+    <button class="hbg" id="hb"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
-<!-- ═══════════════════════════════════════
-     INQUIRY MODAL — ULTRA PREMIUM
-═══════════════════════════════════════ -->
-<div class="iq-modal" id="iqModal">
-  <div class="iq-backdrop" onclick="closeIQ()"></div>
-  <div class="iq-box">
-    <div class="iq-header">
-      <div class="iq-tag">Secure Enterprise Inquiry</div>
-      <div class="iq-title">Let's Build<br>Something Elite</div>
-      <div class="iq-sub">2-Hour response guarantee · NDA on request</div>
-      <button class="iq-close" onclick="closeIQ()"><i class="fas fa-times"></i></button>
+<!-- INQUIRY MODAL -->
+<div class="iqm" id="iqm">
+  <div class="iqb2" onclick="closeIQ()"></div>
+  <div class="iqbox">
+    <div class="iqhd">
+      <div class="iqtag">Secure Enterprise Inquiry</div>
+      <div class="iqtit">Let's Build<br>Something Elite</div>
+      <div class="iqsub">2-hour response guarantee · NDA on request</div>
+      <button class="iqcl" onclick="closeIQ()">✕</button>
     </div>
-    <div class="iq-body">
-      <div id="iqFormWrap">
-        <form id="iqForm" novalidate>
+    <div class="iqbd">
+      <div id="iqfw">
+        <form id="iqf" novalidate>
           <div class="fg2">
-            <div class="fg"><label>Full Name *</label><input id="q-name" type="text" placeholder="Your full name"></div>
-            <div class="fg"><label>Work Email *</label><input id="q-email" type="email" placeholder="you@company.com"></div>
+            <div class="fg"><label>Full Name *</label><input id="qn" type="text" placeholder="Your name"></div>
+            <div class="fg"><label>Work Email *</label><input id="qe" type="email" placeholder="you@company.com"></div>
           </div>
           <div class="fg2">
-            <div class="fg"><label>Phone</label><input id="q-phone" type="tel" placeholder="+91 9999 999999"></div>
-            <div class="fg"><label>Company *</label><input id="q-company" type="text" placeholder="Your company"></div>
+            <div class="fg"><label>Phone</label><input id="qp" type="tel" placeholder="+91 9999 999999"></div>
+            <div class="fg"><label>Company *</label><input id="qc2" type="text" placeholder="Company name"></div>
           </div>
-          <div class="fg">
-            <label>Team Size</label>
-            <select id="q-size">
-              <option value="">Select team size</option>
-              <option>1–10 (Startup)</option><option>10–50 (SMB)</option><option>50–200 (Mid-Market)</option><option>200+ (Enterprise)</option>
-            </select>
+          <div class="fg"><label>Service Interest *</label>
+            <select id="qs"><option value="">Select a service</option><option>Software Testing & QA</option><option>Automation Testing</option><option>Security / Pen Testing</option><option>Performance Testing</option><option>IT Outsourcing</option><option>DevOps Consulting</option><option>Bug Audit</option></select>
           </div>
-          <div class="fg">
-            <label>Service Interest *</label>
-            <select id="q-service">
-              <option value="">Select a service</option>
-              <option>Software Testing & QA</option><option>Automation Testing</option><option>Security / Penetration Testing</option>
-              <option>Performance Testing</option><option>IT Outsourcing</option><option>DevOps Consulting</option>
-              <option>Bug Audit</option><option>Full QA Partnership</option>
-            </select>
+          <div class="spills">
+            <button type="button" class="sp" onclick="pill(this,'Software Testing & QA')">Software Testing</button>
+            <button type="button" class="sp" onclick="pill(this,'Automation Testing')">Automation</button>
+            <button type="button" class="sp" onclick="pill(this,'Security / Pen Testing')">Security</button>
+            <button type="button" class="sp" onclick="pill(this,'Performance Testing')">Performance</button>
+            <button type="button" class="sp" onclick="pill(this,'IT Outsourcing')">IT Outsourcing</button>
+            <button type="button" class="sp" onclick="pill(this,'DevOps Consulting')">DevOps</button>
           </div>
-          <div class="service-pills">
-            <button type="button" class="sp" onclick="setPill(this,'Software Testing')">Software Testing</button>
-            <button type="button" class="sp" onclick="setPill(this,'Automation')">Automation</button>
-            <button type="button" class="sp" onclick="setPill(this,'Security Testing')">Security Testing</button>
-            <button type="button" class="sp" onclick="setPill(this,'Performance')">Performance</button>
-            <button type="button" class="sp" onclick="setPill(this,'IT Outsourcing')">IT Outsourcing</button>
-            <button type="button" class="sp" onclick="setPill(this,'DevOps')">DevOps</button>
-          </div>
-          <div class="fg"><label>Project Details *</label><textarea id="q-msg" rows="3" placeholder="Describe your project, challenges, goals..."></textarea></div>
-          <button type="submit" class="iq-submit"><span>Send Secure Inquiry →</span></button>
+          <div class="fg"><label>Project Details</label><textarea id="qm" rows="3" placeholder="Describe your project and goals..."></textarea></div>
+          <button type="submit" class="iqs">Send Secure Inquiry →</button>
         </form>
       </div>
-      <div class="iq-success" id="iqSuccess">
-        <div class="success-ring">✓</div>
+      <div class="iqok" id="iqok">
+        <div class="okr">✓</div>
         <h3>Inquiry Received!</h3>
-        <p>Our senior team will reach out within 2 hours. Check your inbox for a confirmation.</p>
-        <button class="btn btn-o" style="margin-top:2rem" onclick="closeIQ()">Close</button>
+        <p>Our senior team will reach out within 2 hours. Check your inbox for confirmation.</p>
+        <button class="btn btn-o" style="margin-top:1.4rem" onclick="closeIQ()">Close</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════
-     HERO
-═══════════════════════════════════════ -->
+<!-- HERO -->
 <section id="hero">
-  <canvas class="hero-bg-canvas" id="hero-canvas"></canvas>
-  <div class="hero-orb hero-orb-1"></div>
-  <div class="hero-orb hero-orb-2"></div>
-  <div class="hero-orb hero-orb-3"></div>
-  <div class="hero-in">
-    <div class="hero-badge"><div class="hero-badge-dot"></div>99.9% System Uptime · Live</div>
-    <h1 class="hero-h1">
-      <span class="line1">DATAEUROS</span>
-      <span class="line2">Enterprise QA &amp; Cybersecurity Platform</span>
-    </h1>
-    <p class="hero-desc">AI-powered testing, automated security audits, real-time performance intelligence. We eliminate vulnerabilities before they ever reach your users. <strong>Built for enterprises that refuse to compromise.</strong></p>
-    <div class="hero-ctas">
-      <button class="btn btn-p" onclick="scrollSec('#services')">Explore Solutions <i class="fas fa-arrow-right"></i></button>
+  <div class="ho ho1"></div><div class="ho ho2"></div><div class="ho ho3"></div>
+  <div class="hrin">
+    <div class="hbadge"><div class="hbd"></div>99.9% Uptime · Systems Live</div>
+    <h1 class="hh1"><span class="l1">DATAEUROS</span><span class="l2">Enterprise QA &amp; Cybersecurity Platform</span></h1>
+    <p class="hdesc">AI-powered testing, automated security audits, real-time performance intelligence. We eliminate vulnerabilities before they reach your users. <strong>Built for teams that refuse to compromise.</strong></p>
+    <div class="hctas">
+      <button class="btn btn-p" onclick="ss('#services')">Explore Solutions →</button>
       <button class="btn btn-o" onclick="openIQ()">Request Demo</button>
     </div>
-    <div class="hero-terminal">
-      <div class="term-bar">
-        <div class="term-dot"></div><div class="term-dot"></div><div class="term-dot"></div>
-        <span class="term-title">dataeuros-cli v3.1.0</span>
-      </div>
-      <div class="term-body" id="term-body"><span class="term-prompt">$ </span><span id="term-txt"></span><span class="term-cursor"></span></div>
+    <div class="hterm">
+      <div class="tbar"><div class="td"></div><div class="td"></div><div class="td"></div><span class="ttit">dataeuros-cli v3.1</span></div>
+      <div class="tbody"><span id="tt"></span><span class="tcur"></span></div>
     </div>
-    <div class="hero-metrics">
-      <div class="hm"><div class="hm-val" data-count="500" data-suf="+">0+</div><div class="hm-lbl">Tests/Day</div></div>
-      <div class="hm"><div class="hm-val" data-count="99.9" data-dec="1" data-suf="%">0%</div><div class="hm-lbl">Accuracy Rate</div></div>
-      <div class="hm"><div class="hm-val" data-count="40" data-suf="+">0+</div><div class="hm-lbl">Global Clients</div></div>
-      <div class="hm"><div class="hm-val" data-count="5" data-suf="yr">0yr</div><div class="hm-lbl">Expertise</div></div>
+    <div class="hmets">
+      <div class="hm"><div class="hmv" data-count="500" data-suf="+">0+</div><div class="hml">Tests/Day</div></div>
+      <div class="hm"><div class="hmv" data-count="99.9" data-dec="1" data-suf="%">0%</div><div class="hml">Accuracy</div></div>
+      <div class="hm"><div class="hmv" data-count="40" data-suf="+">0+</div><div class="hml">Global Clients</div></div>
+      <div class="hm"><div class="hmv" data-count="5" data-suf="yr">0yr</div><div class="hml">Expertise</div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     AI TECHNOLOGY — 6 ANIMATED PANELS
-═══════════════════════════════════════ -->
+<!-- AI TECH VISUALIZATIONS -->
 <section id="aivis" class="sec">
   <div class="con">
     <div class="sh rv">
-      <div class="etag"><div class="etag-dot"></div>AI Visualizations</div>
+      <div class="etag"><div class="edot"></div>AI Visualizations</div>
       <h2>Technology in Motion</h2>
-      <p>Six live animated views of our intelligent testing architecture, security engine, and cloud deployment systems running in real-time.</p>
+      <p>Six live animated views of our intelligent testing, security, and deployment systems.</p>
     </div>
-    <div class="viz-grid rv">
-      <!-- 1. Code Execution (featured, spans 2) -->
-      <div class="viz-card featured">
-        <div class="viz-wrap"><canvas id="cv-code"></canvas></div>
-        <div class="viz-overlay"></div>
-        <div class="viz-live">● LIVE RENDER</div>
-        <div class="viz-info">
-          <div class="viz-tag">Automated Test Execution</div>
-          <div class="viz-title">Real-Time Test Pipeline &amp; Debug Stream</div>
-          <div class="viz-desc">AI-powered test generation running Selenium, Playwright &amp; Cypress concurrently across 48 parallel workers.</div>
-        </div>
-      </div>
-      <!-- 2. Neural Network -->
-      <div class="viz-card">
-        <div class="viz-wrap"><canvas id="cv-neural"></canvas></div>
-        <div class="viz-overlay"></div>
-        <div class="viz-live">● LIVE RENDER</div>
-        <div class="viz-info">
-          <div class="viz-tag">AI Engine</div>
-          <div class="viz-title">Neural Test Intelligence</div>
-          <div class="viz-desc">Deep learning model predicting failure paths.</div>
-        </div>
-      </div>
-      <!-- 3. Security Threat Map -->
-      <div class="viz-card featured">
-        <div class="viz-wrap"><canvas id="cv-security"></canvas></div>
-        <div class="viz-overlay"></div>
-        <div class="viz-live">● LIVE RENDER</div>
-        <div class="viz-info">
-          <div class="viz-tag">Security Scan</div>
-          <div class="viz-title">Threat Detection &amp; Vulnerability Assessment</div>
-          <div class="viz-desc">OWASP Top-10 scanner with real-time CVE database sync and automated VAPT reporting.</div>
-        </div>
-      </div>
-      <!-- 4. CI/CD Pipeline -->
-      <div class="viz-card">
-        <div class="viz-wrap"><canvas id="cv-deploy"></canvas></div>
-        <div class="viz-overlay"></div>
-        <div class="viz-live">● LIVE RENDER</div>
-        <div class="viz-info">
-          <div class="viz-tag">CI/CD Pipeline</div>
-          <div class="viz-title">Deployment Orchestration</div>
-          <div class="viz-desc">Zero-downtime release automation.</div>
-        </div>
-      </div>
-      <!-- 5. Performance Monitoring -->
-      <div class="viz-card">
-        <div class="viz-wrap"><canvas id="cv-perf"></canvas></div>
-        <div class="viz-overlay"></div>
-        <div class="viz-live">● LIVE RENDER</div>
-        <div class="viz-info">
-          <div class="viz-tag">Performance Monitor</div>
-          <div class="viz-title">Load &amp; Latency Dashboard</div>
-          <div class="viz-desc">JMeter &amp; k6 real-time metrics feed.</div>
-        </div>
-      </div>
-      <!-- 6. Data Flow -->
-      <div class="viz-card">
-        <div class="viz-wrap"><canvas id="cv-data"></canvas></div>
-        <div class="viz-overlay"></div>
-        <div class="viz-live">● LIVE RENDER</div>
-        <div class="viz-info">
-          <div class="viz-tag">Data Pipeline</div>
-          <div class="viz-title">Test Analytics Stream</div>
-          <div class="viz-desc">Event-driven test telemetry ingestion.</div>
-        </div>
-      </div>
+    <div class="vgrid rv">
+      <div class="vcard ft"><div class="vwrap"><canvas id="cv1"></canvas></div><div class="vovl"></div><div class="vlive">● LIVE</div><div class="vinfo"><div class="vtag">Test Execution Stream</div><div class="vtit">Automated Test Pipeline &amp; Debug Output</div><div class="vdesc">AI-powered suite running Selenium, Playwright &amp; Cypress across 48 parallel workers.</div></div></div>
+      <div class="vcard"><div class="vwrap"><canvas id="cv2"></canvas></div><div class="vovl"></div><div class="vlive">● LIVE</div><div class="vinfo"><div class="vtag">Neural AI Engine</div><div class="vtit">Test Intelligence Network</div><div class="vdesc">Deep learning model predicting failure paths.</div></div></div>
+      <div class="vcard ft"><div class="vwrap"><canvas id="cv3"></canvas></div><div class="vovl"></div><div class="vlive">● LIVE</div><div class="vinfo"><div class="vtag">Security Scan</div><div class="vtit">Threat Detection &amp; Vulnerability Map</div><div class="vdesc">OWASP Top-10 scanner with real-time CVE sync and VAPT reporting.</div></div></div>
+      <div class="vcard"><div class="vwrap"><canvas id="cv4"></canvas></div><div class="vovl"></div><div class="vlive">● LIVE</div><div class="vinfo"><div class="vtag">CI/CD Pipeline</div><div class="vtit">Deployment Orchestration</div><div class="vdesc">Zero-downtime release automation.</div></div></div>
+      <div class="vcard"><div class="vwrap"><canvas id="cv5"></canvas></div><div class="vovl"></div><div class="vlive">● LIVE</div><div class="vinfo"><div class="vtag">Performance Monitor</div><div class="vtit">Load &amp; Latency Dashboard</div><div class="vdesc">JMeter &amp; k6 real-time metrics.</div></div></div>
+      <div class="vcard"><div class="vwrap"><canvas id="cv6"></canvas></div><div class="vovl"></div><div class="vlive">● LIVE</div><div class="vinfo"><div class="vtag">Data Pipeline</div><div class="vtit">Test Analytics Stream</div><div class="vdesc">Event-driven telemetry ingestion.</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     SERVICES — BENTO GRID
-═══════════════════════════════════════ -->
+<!-- SERVICES -->
 <section id="services" class="sec">
   <div class="con">
     <div class="sh rv">
-      <div class="etag"><div class="etag-dot"></div>What We Do</div>
+      <div class="etag"><div class="edot"></div>What We Do</div>
       <h2>End-to-End Quality<br>Engineering</h2>
-      <p>Every layer of your stack, covered. From code commits to production deployments — complete QA excellence.</p>
+      <p>Every layer of your stack — from code commit to production deployment.</p>
     </div>
     <div class="bento rv">
-      <div class="bcard bcard-featured span2 tall">
-        <div class="bcard-accent"></div>
-        <div class="bcard-icon"><i class="fas fa-robot"></i></div>
-        <h3>Automation Testing</h3>
-        <p>Selenium, Playwright &amp; Cypress test suites with AI-powered test generation. Self-healing locators, visual regression, and cross-browser matrix execution. 10x faster than manual with 99.8% accuracy.</p>
-        <div class="bcard-chips"><span class="chip">Selenium</span><span class="chip">Playwright</span><span class="chip">Cypress</span><span class="chip">AI Test Gen</span><span class="chip">Self-Healing</span></div>
-        <div class="bcard-stat"><div class="bcard-stat-val">10x</div><div class="bcard-stat-lbl">Faster delivery</div></div>
-      </div>
-      <div class="bcard rv">
-        <div class="bcard-accent"></div>
-        <div class="bcard-icon"><i class="fas fa-shield-alt"></i></div>
-        <h3>Security Testing</h3>
-        <p>OWASP Top-10 penetration testing, VAPT assessments, and compliance audits for SOC 2, GDPR, HIPAA.</p>
-        <div class="bcard-chips"><span class="chip">OWASP</span><span class="chip">VAPT</span><span class="chip">Burp Suite</span></div>
-      </div>
-      <div class="bcard rv">
-        <div class="bcard-accent"></div>
-        <div class="bcard-icon"><i class="fas fa-tachometer-alt"></i></div>
-        <h3>Performance Testing</h3>
-        <p>JMeter, k6, Gatling load testing. Simulate millions of concurrent users, identify bottlenecks.</p>
-        <div class="bcard-chips"><span class="chip">JMeter</span><span class="chip">k6</span><span class="chip">Gatling</span></div>
-      </div>
-      <div class="bcard rv">
-        <div class="bcard-accent"></div>
-        <div class="bcard-icon"><i class="fas fa-check-double"></i></div>
-        <h3>QA Consulting</h3>
-        <p>Test strategy, frameworks, governance aligned with SDLC and Agile/DevOps pipelines.</p>
-        <div class="bcard-chips"><span class="chip">ISO 9001</span><span class="chip">Agile</span><span class="chip">DevOps</span></div>
-      </div>
-      <div class="bcard rv">
-        <div class="bcard-accent"></div>
-        <div class="bcard-icon"><i class="fas fa-bug"></i></div>
-        <h3>Bug Audits</h3>
-        <p>Systematic codebase analysis surfacing critical defects, tech debt, and security vulnerabilities.</p>
-        <div class="bcard-chips"><span class="chip">Static Analysis</span><span class="chip">AI-Powered</span></div>
-      </div>
-      <div class="bcard span2 rv">
-        <div class="bcard-accent"></div>
-        <div class="bcard-icon"><i class="fas fa-code-branch"></i></div>
-        <h3>DevOps &amp; CI/CD Integration</h3>
-        <p>Embed quality gates directly into your deployment pipeline. GitHub Actions, GitLab CI, Jenkins, CircleCI — automated quality at every commit.</p>
-        <div class="bcard-chips"><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Docker</span><span class="chip">Kubernetes</span><span class="chip">Terraform</span></div>
-      </div>
+      <div class="bc s2 tall"><div class="bci">🤖</div><h3>Automation Testing</h3><p>Selenium, Playwright &amp; Cypress with AI-powered generation. Self-healing locators, visual regression, cross-browser execution. 10× faster than manual.</p><div class="chips"><span class="chip">Selenium</span><span class="chip">Playwright</span><span class="chip">Cypress</span><span class="chip">AI Test Gen</span><span class="chip">Self-Healing</span></div><div class="bsv">10x</div></div>
+      <div class="bc"><div class="bci">🛡️</div><h3>Security Testing</h3><p>OWASP Top-10 penetration testing, VAPT assessments, compliance audits for SOC 2, GDPR, HIPAA.</p><div class="chips"><span class="chip">OWASP</span><span class="chip">VAPT</span><span class="chip">Burp Suite</span></div></div>
+      <div class="bc"><div class="bci">⚡</div><h3>Performance Testing</h3><p>JMeter, k6, Gatling load testing. Simulate millions of concurrent users, find bottlenecks.</p><div class="chips"><span class="chip">JMeter</span><span class="chip">k6</span><span class="chip">Gatling</span></div></div>
+      <div class="bc"><div class="bci">✅</div><h3>QA Consulting</h3><p>Test strategy, frameworks, governance aligned with SDLC and Agile/DevOps pipelines.</p><div class="chips"><span class="chip">ISO 9001</span><span class="chip">Agile</span></div></div>
+      <div class="bc"><div class="bci">🐛</div><h3>Bug Audits</h3><p>Systematic codebase analysis surfacing critical defects, tech debt, and vulnerabilities.</p><div class="chips"><span class="chip">Static Analysis</span><span class="chip">AI-Powered</span></div></div>
+      <div class="bc s2"><div class="bci">🔀</div><h3>DevOps &amp; CI/CD Integration</h3><p>Embed quality gates into your deployment pipeline. GitHub Actions, GitLab CI, Jenkins — automated quality at every commit.</p><div class="chips"><span class="chip">GitHub Actions</span><span class="chip">Jenkins</span><span class="chip">Docker</span><span class="chip">Kubernetes</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     IT OUTSOURCING — DEEP SECTION
-═══════════════════════════════════════ -->
+<!-- IT OUTSOURCING -->
 <section id="outsourcing" class="sec">
   <div class="con">
     <div class="sh rv">
-      <div class="etag"><div class="etag-dot"></div>IT Outsourcing</div>
+      <div class="etag"><div class="edot"></div>IT Outsourcing</div>
       <h2>World-Class Teams,<br>Your Timezone</h2>
       <p>Dedicated QA &amp; engineering teams embedded into your workflow. Elastic scaling, zero hiring overhead.</p>
     </div>
-    <div class="out-layout rv">
-      <div class="out-visual">
-        <div class="out-globe-wrap">
-          <canvas id="globe-canvas"></canvas>
-        </div>
-        <div class="out-stats-row">
-          <div class="out-stat"><div class="out-stat-val">12+</div><div class="out-stat-lbl">Countries</div></div>
-          <div class="out-stat"><div class="out-stat-val">24/7</div><div class="out-stat-lbl">Coverage</div></div>
-          <div class="out-stat"><div class="out-stat-val">48hr</div><div class="out-stat-lbl">Onboarding</div></div>
+    <div class="outl rv">
+      <div>
+        <canvas id="gc"></canvas>
+        <div class="oss">
+          <div class="oss-s"><div class="oss-v">12+</div><div class="oss-l">Countries</div></div>
+          <div class="oss-s"><div class="oss-v">24/7</div><div class="oss-l">Coverage</div></div>
+          <div class="oss-s"><div class="oss-v">48hr</div><div class="oss-l">Onboarding</div></div>
         </div>
       </div>
-      <div class="out-text">
-        <div class="etag" style="justify-content:flex-start"><div class="etag-dot"></div>Engagement Models</div>
-        <div class="out-models">
-          <div class="out-model">
-            <div class="out-model-hd">
-              <div class="out-model-name">Dedicated QA Team</div>
-              <div class="out-model-badge badge-pop">Most Popular</div>
-            </div>
-            <p>A fully managed QA team — engineers, leads, and CQO — working exclusively on your product. Embedded into your Slack, Jira, and sprints.</p>
-          </div>
-          <div class="out-model">
-            <div class="out-model-hd">
-              <div class="out-model-name">Staff Augmentation</div>
-              <div class="out-model-badge badge-hot">Flexible</div>
-            </div>
-            <p>Add skilled QA engineers to your existing team on demand. Scale up for launches, scale down in steady state. No contracts, no lock-in.</p>
-          </div>
-          <div class="out-model">
-            <div class="out-model-hd">
-              <div class="out-model-name">Managed QA Center</div>
-              <div class="out-model-badge badge-ent">Enterprise</div>
-            </div>
-            <p>Full-service offshore QA delivery center. End-to-end test management, reporting, automation COE, and CQO advisory for large organizations.</p>
-          </div>
-          <div class="out-model">
-            <div class="out-model-hd">
-              <div class="out-model-name">Project-Based Engagement</div>
-              <div class="out-model-badge badge-hot">Quick Start</div>
-            </div>
-            <p>Defined-scope QA projects with fixed timelines and deliverables. Security audits, regression test suite creation, automation framework builds.</p>
-          </div>
+      <div>
+        <div class="etag" style="justify-content:flex-start"><div class="edot"></div>Engagement Models</div>
+        <div class="omods">
+          <div class="om"><div class="omhd"><div class="omn">Dedicated QA Team</div><div class="omb bp">Most Popular</div></div><p>Fully managed QA team embedded in your Slack, Jira, and sprints. Engineers, leads, and CQO advisory.</p></div>
+          <div class="om"><div class="omhd"><div class="omn">Staff Augmentation</div><div class="omb bh">Flexible</div></div><p>Add skilled QA engineers on demand. Scale up for launches, scale down in steady state. No lock-in.</p></div>
+          <div class="om"><div class="omhd"><div class="omn">Managed QA Center</div><div class="omb be">Enterprise</div></div><p>Full-service offshore QA delivery center with automation COE, end-to-end management, and CQO advisory.</p></div>
+          <div class="om"><div class="omhd"><div class="omn">Project-Based</div><div class="omb bh">Quick Start</div></div><p>Fixed-scope QA projects: security audits, regression suites, automation framework builds.</p></div>
         </div>
-        <div style="margin-top:2rem;display:flex;gap:1rem;flex-wrap:wrap">
+        <div style="margin-top:1.6rem;display:flex;gap:.75rem;flex-wrap:wrap">
           <button class="btn btn-p" onclick="openIQ()">Discuss Your Needs</button>
-          <button class="btn btn-o" onclick="scrollSec('#contact')">Contact Us</button>
+          <button class="btn btn-o" onclick="ss('#contact')">Contact Us</button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     TRUST & CLIENTS
-═══════════════════════════════════════ -->
-<section id="trust" class="sec" style="padding:4rem 0">
+<!-- TRUST -->
+<section class="sec" style="padding:2.5rem 0">
   <div class="con">
-    <div class="trust-inner rv">
-      <div class="trust-top">
+    <div class="tinner rv">
+      <div class="ttop">
         <div>
-          <div style="font-family:var(--font-mono);font-size:.65rem;letter-spacing:.2em;color:var(--subtle);text-transform:uppercase;margin-bottom:1rem">Trusted By Teams At</div>
-          <div class="trust-logos">
-            <div class="trust-logo">FinTech Corp</div>
-            <div class="trust-divider"></div>
-            <div class="trust-logo">MediSoft</div>
-            <div class="trust-divider"></div>
-            <div class="trust-logo">RetailEdge</div>
-            <div class="trust-divider"></div>
-            <div class="trust-logo">CloudNova</div>
-            <div class="trust-divider"></div>
-            <div class="trust-logo">DataPilot</div>
+          <div style="font-family:var(--fm);font-size:.57rem;letter-spacing:.17em;color:var(--subtle);text-transform:uppercase;margin-bottom:.85rem">Trusted By Teams At</div>
+          <div class="tlogos">
+            <div class="tlogo">FinTech Corp</div><div class="tdiv"></div>
+            <div class="tlogo">MediSoft</div><div class="tdiv"></div>
+            <div class="tlogo">RetailEdge</div><div class="tdiv"></div>
+            <div class="tlogo">CloudNova</div><div class="tdiv"></div>
+            <div class="tlogo">DataPilot</div>
           </div>
         </div>
-        <div class="trust-certs">
-          <div class="cert">ISO 27001</div>
-          <div class="cert">OWASP</div>
-          <div class="cert">SOC 2</div>
-          <div class="cert">GDPR</div>
-        </div>
+        <div class="tcerts"><div class="tcert">ISO 27001</div><div class="tcert">OWASP</div><div class="tcert">SOC 2</div><div class="tcert">GDPR</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     INTERNSHIPS
-═══════════════════════════════════════ -->
+<!-- INTERNSHIP -->
 <section id="internship" class="sec">
   <div class="con">
     <div class="sh rv">
-      <div class="etag"><div class="etag-dot"></div>Internship Program</div>
+      <div class="etag"><div class="edot"></div>Internship Program</div>
       <h2>Launch Your<br>Tech Career</h2>
-      <p>Work on real enterprise projects alongside senior engineers. Real clients, real challenges, real impact.</p>
+      <p>Real enterprise projects, real clients, real impact — alongside senior engineers.</p>
     </div>
-    <div class="intern-grid rv">
-      <div class="icard">
-        <div class="icard-no">01</div>
-        <div class="icard-role">QA Engineering Intern</div>
-        <div class="icard-dur">1–3 Months · Certificate</div>
-        <p>Learn testing methodologies, write test plans, manage test cases, and work directly with enterprise clients using industry-standard tools.</p>
-        <div class="icard-perks"><span class="perk">Test Design</span><span class="perk">JIRA</span><span class="perk">Agile</span><span class="perk">Certificate</span></div>
-        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
-      </div>
-      <div class="icard">
-        <div class="icard-no">02</div>
-        <div class="icard-role">Automation Testing Intern</div>
-        <div class="icard-dur">2–6 Months · Stipend</div>
-        <p>Build Selenium &amp; Playwright test suites from scratch. Contribute to live CI/CD pipelines and ship automation frameworks used by enterprise clients.</p>
-        <div class="icard-perks"><span class="perk">Selenium</span><span class="perk">Python</span><span class="perk">CI/CD</span><span class="perk">Stipend</span></div>
-        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
-      </div>
-      <div class="icard">
-        <div class="icard-no">03</div>
-        <div class="icard-role">Security Testing Intern</div>
-        <div class="icard-dur">3–6 Months · LoR + Stipend</div>
-        <p>Learn OWASP methodology, assist in real penetration tests, run VAPT assessments on client applications under senior guidance.</p>
-        <div class="icard-perks"><span class="perk">OWASP</span><span class="perk">Burp Suite</span><span class="perk">VAPT</span><span class="perk">LoR</span></div>
-        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
-      </div>
-      <div class="icard">
-        <div class="icard-no">04</div>
-        <div class="icard-role">Performance Testing Intern</div>
-        <div class="icard-dur">2–4 Months · Certificate</div>
-        <p>Master JMeter &amp; k6, run real load tests, analyze bottlenecks in production-scale systems. Present findings to client stakeholders.</p>
-        <div class="icard-perks"><span class="perk">JMeter</span><span class="perk">k6</span><span class="perk">Grafana</span><span class="perk">Certificate</span></div>
-        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
-      </div>
-      <div class="icard">
-        <div class="icard-no">05</div>
-        <div class="icard-role">Full Stack Dev Intern</div>
-        <div class="icard-dur">2–6 Months · Stipend</div>
-        <p>Build internal dashboards, test management tools, and client-facing portals. React frontend, Node.js backend, real product ownership.</p>
-        <div class="icard-perks"><span class="perk">React</span><span class="perk">Node.js</span><span class="perk">APIs</span><span class="perk">Stipend</span></div>
-        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
-      </div>
-      <div class="icard">
-        <div class="icard-no">06</div>
-        <div class="icard-role">Data Science Intern</div>
-        <div class="icard-dur">3–6 Months · Stipend</div>
-        <p>Apply ML models to test data, build predictive failure analysis systems, and develop anomaly detection for QA automation intelligence.</p>
-        <div class="icard-perks"><span class="perk">Python</span><span class="perk">ML/AI</span><span class="perk">TensorFlow</span><span class="perk">Stipend</span></div>
-        <button class="icard-apply" onclick="openIQ()">Apply Now →</button>
-      </div>
+    <div class="igrid rv">
+      <div class="ic2"><div class="icn">01</div><div class="icr">QA Engineering Intern</div><div class="icd">1–3 Months · Certificate</div><p>Learn testing methodologies, write test plans, manage test cases with enterprise clients.</p><div class="ips"><span class="ip">Test Design</span><span class="ip">JIRA</span><span class="ip">Agile</span><span class="ip">Certificate</span></div><button class="iap" onclick="openIQ()">Apply Now →</button></div>
+      <div class="ic2"><div class="icn">02</div><div class="icr">Automation Testing Intern</div><div class="icd">2–6 Months · Stipend</div><p>Build Selenium &amp; Playwright suites from scratch. Contribute to live CI/CD pipelines.</p><div class="ips"><span class="ip">Selenium</span><span class="ip">Python</span><span class="ip">CI/CD</span><span class="ip">Stipend</span></div><button class="iap" onclick="openIQ()">Apply Now →</button></div>
+      <div class="ic2"><div class="icn">03</div><div class="icr">Security Testing Intern</div><div class="icd">3–6 Months · LoR + Stipend</div><p>Learn OWASP, assist in real pen tests, run VAPT assessments on client applications.</p><div class="ips"><span class="ip">OWASP</span><span class="ip">Burp Suite</span><span class="ip">VAPT</span><span class="ip">LoR</span></div><button class="iap" onclick="openIQ()">Apply Now →</button></div>
+      <div class="ic2"><div class="icn">04</div><div class="icr">Performance Testing Intern</div><div class="icd">2–4 Months · Certificate</div><p>Master JMeter &amp; k6, run load tests, analyze bottlenecks in production-scale systems.</p><div class="ips"><span class="ip">JMeter</span><span class="ip">k6</span><span class="ip">Grafana</span><span class="ip">Certificate</span></div><button class="iap" onclick="openIQ()">Apply Now →</button></div>
+      <div class="ic2"><div class="icn">05</div><div class="icr">Full Stack Dev Intern</div><div class="icd">2–6 Months · Stipend</div><p>Build internal dashboards, test management tools, and client-facing portals with real product ownership.</p><div class="ips"><span class="ip">React</span><span class="ip">Node.js</span><span class="ip">APIs</span><span class="ip">Stipend</span></div><button class="iap" onclick="openIQ()">Apply Now →</button></div>
+      <div class="ic2"><div class="icn">06</div><div class="icr">Data Science Intern</div><div class="icd">3–6 Months · Stipend</div><p>Apply ML to test data, build predictive failure analysis and anomaly detection systems.</p><div class="ips"><span class="ip">Python</span><span class="ip">ML/AI</span><span class="ip">TensorFlow</span><span class="ip">Stipend</span></div><button class="iap" onclick="openIQ()">Apply Now →</button></div>
     </div>
   </div>
 </section>
 
-<!-- ═══════════════════════════════════════
-     CONTACT
-═══════════════════════════════════════ -->
+<!-- CONTACT -->
 <section id="contact" class="sec">
   <div class="con">
-    <div class="contact-layout rv">
-      <div class="contact-left">
-        <div class="etag" style="justify-content:flex-start"><div class="etag-dot"></div>Get In Touch</div>
+    <div class="cl rv">
+      <div class="cl-l">
+        <div class="etag" style="justify-content:flex-start"><div class="edot"></div>Get In Touch</div>
         <h2>Let's Start<br>Something Great</h2>
         <p>Whether you need a full QA overhaul or want to embed testing excellence into your next sprint — we're ready.</p>
-        <div class="contact-items">
-          <div class="ci">
-            <div class="ci-ico"><i class="fas fa-envelope"></i></div>
-            <div><div class="ci-lbl">Email</div><div class="ci-val">contact@dataeuros.com</div></div>
-          </div>
-          <div class="ci">
-            <div class="ci-ico"><i class="fas fa-phone"></i></div>
-            <div><div class="ci-lbl">Phone</div><div class="ci-val">+91 9419281505</div></div>
-          </div>
-          <div class="ci">
-            <div class="ci-ico"><i class="fas fa-clock"></i></div>
-            <div><div class="ci-lbl">Response Time</div><div class="ci-val">Within 2 Hours (Business Hours)</div></div>
-          </div>
-          <div class="ci">
-            <div class="ci-ico"><i class="fas fa-globe"></i></div>
-            <div><div class="ci-lbl">Coverage</div><div class="ci-val">12+ Countries · 24/7 Support</div></div>
-          </div>
+        <div class="citems">
+          <div class="ci"><div class="ciico">✉</div><div><div class="cil">Email</div><div class="civ">contact@dataeuros.com</div></div></div>
+          <div class="ci"><div class="ciico">📞</div><div><div class="cil">Phone</div><div class="civ">+91 9419281505</div></div></div>
+          <div class="ci"><div class="ciico">⏱</div><div><div class="cil">Response Time</div><div class="civ">Within 2 Hours (Business Hours)</div></div></div>
+          <div class="ci"><div class="ciico">🌍</div><div><div class="cil">Coverage</div><div class="civ">12+ Countries · 24/7 Support</div></div></div>
         </div>
       </div>
-      <div class="contact-right">
-        <div class="contact-form-title">Quick Message</div>
-        <form id="contactForm" novalidate>
+      <div class="cr">
+        <div class="crt">Quick Message</div>
+        <form id="cf" novalidate>
           <div class="fg2">
-            <div class="fg"><label>Name *</label><input id="c-name" type="text" placeholder="Your name"></div>
-            <div class="fg"><label>Email *</label><input id="c-email" type="email" placeholder="you@company.com"></div>
+            <div class="fg"><label>Name *</label><input id="cn" type="text" placeholder="Your name"></div>
+            <div class="fg"><label>Email *</label><input id="ce" type="email" placeholder="you@company.com"></div>
           </div>
-          <div class="fg"><label>Subject</label><input id="c-subject" type="text" placeholder="How can we help?"></div>
-          <div class="fg"><label>Message *</label><textarea id="c-msg" rows="4" placeholder="Tell us about your project..."></textarea></div>
-          <button type="submit" class="iq-submit" style="margin-top:.5rem"><span>Send Message →</span></button>
-          <div id="c-feedback" style="display:none;margin-top:1rem;padding:.8rem;border-radius:8px;text-align:center;font-family:var(--font-mono);font-size:.75rem;color:var(--acc1);border:1px solid rgba(57,255,20,.2);background:rgba(57,255,20,.05)">✓ Message sent! We'll respond within 2 hours.</div>
+          <div class="fg"><label>Subject</label><input id="cs" type="text" placeholder="How can we help?"></div>
+          <div class="fg"><label>Message *</label><textarea id="cm" rows="4" placeholder="Tell us about your project..."></textarea></div>
+          <button type="submit" class="iqs">Send Message →</button>
+          <div class="cfb" id="cfb">✓ Message sent! We'll respond within 2 hours.</div>
         </form>
       </div>
     </div>
@@ -919,517 +516,243 @@ footer{border-top:1px solid var(--border);padding:5rem 4rem 2.5rem;position:rela
 <!-- FOOTER -->
 <footer>
   <div class="con">
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <div class="logo"><div class="logo-mark">DE</div><span class="logo-txt">DATA<span>EUROS</span></span></div>
-        <p>Advanced Software Testing &amp; QA Solutions for engineering teams worldwide. Built on trust, delivered with precision. ISO 27001 certified.</p>
-      </div>
-      <div>
-        <div class="footer-col-title">Services</div>
-        <ul class="footer-links">
-          <li><a href="#services">Software Testing</a></li>
-          <li><a href="#services">Automation Testing</a></li>
-          <li><a href="#services">Security Testing</a></li>
-          <li><a href="#services">Performance Testing</a></li>
-          <li><a href="#outsourcing">IT Outsourcing</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-title">Company</div>
-        <ul class="footer-links">
-          <li><a href="#aivis">Technology</a></li>
-          <li><a href="#internship">Internships</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li><a href="#trust">Clients</a></li>
-        </ul>
-      </div>
-      <div>
-        <div class="footer-col-title">Legal</div>
-        <ul class="footer-links">
-          <li><a href="#">Privacy Policy</a></li>
-          <li><a href="#">Terms of Service</a></li>
-          <li><a href="#">Compliance</a></li>
-          <li><a href="#">NDA Request</a></li>
-        </ul>
-      </div>
+    <div class="fg3">
+      <div class="fbrand"><div class="logo"><div class="lm">DE</div><span class="lt">DATA<span>EUROS</span></span></div><p>Advanced Software Testing &amp; QA Solutions for engineering teams worldwide. Built on trust, delivered with precision.</p></div>
+      <div><div class="fct">Services</div><ul class="flinks"><li><a href="#services">Software Testing</a></li><li><a href="#services">Automation Testing</a></li><li><a href="#services">Security Testing</a></li><li><a href="#outsourcing">IT Outsourcing</a></li></ul></div>
+      <div><div class="fct">Company</div><ul class="flinks"><li><a href="#aivis">Technology</a></li><li><a href="#internship">Internships</a></li><li><a href="#contact">Contact</a></li></ul></div>
+      <div><div class="fct">Legal</div><ul class="flinks"><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li><li><a href="#">Compliance</a></li><li><a href="#">NDA Request</a></li></ul></div>
     </div>
-    <div class="footer-bottom">
-      <div class="footer-copy">© 2025 DATAEUROS. All rights reserved. · contact@dataeuros.com · +91 9419281505</div>
-      <div class="footer-badges">
-        <div class="fbadge">ISO 27001</div>
-        <div class="fbadge">OWASP</div>
-        <div class="fbadge">SOC 2</div>
-        <div class="fbadge">GDPR</div>
-      </div>
+    <div class="fbot">
+      <div class="fcopy">© 2025 DATAEUROS · contact@dataeuros.com · +91 9419281505</div>
+      <div class="fbadges"><div class="fbg">ISO 27001</div><div class="fbg">OWASP</div><div class="fbg">SOC 2</div><div class="fbg">GDPR</div></div>
     </div>
   </div>
 </footer>
 
 <script>
 'use strict';
-// ─── CURSOR ──────────────────────────────────────────────────────────────────
-var core=document.getElementById('cur-core'),orbit=document.getElementById('cur-orbit');
-var mx=0,my=0,ox=0,oy=0;
-document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;core.style.left=mx+'px';core.style.top=my+'px'});
-(function loop(){ox+=(mx-ox)*.1;oy+=(my-oy)*.1;orbit.style.left=ox+'px';orbit.style.top=oy+'px';requestAnimationFrame(loop)})();
+/* ── PERF CORE: single RAF at 30fps, canvases lazy-start via IntersectionObserver ── */
+var FPS=30,INTV=1000/FPS,lastT=0,gT=0;
+var painters=[];
+function raf(ts){
+  requestAnimationFrame(raf);
+  if(ts-lastT<INTV)return;
+  lastT=ts; gT++;
+  for(var i=0;i<painters.length;i++)if(painters[i].a)painters[i].f(gT);
+}
+requestAnimationFrame(raf);
+function addP(fn,el){
+  var i=painters.length; painters.push({f:fn,a:false});
+  new IntersectionObserver(function(e){painters[i].a=e[0].isIntersecting},{rootMargin:'120px'}).observe(el);
+}
 
-// ─── STAR BACKGROUND ──────────────────────────────────────────────────────
+/* ── CURSOR ── */
+var cc=document.getElementById('cc'),co=document.getElementById('co'),mx=0,my=0,ox=0,oy=0;
+document.addEventListener('mousemove',function(e){mx=e.clientX;my=e.clientY;cc.style.left=mx+'px';cc.style.top=my+'px'},{passive:true});
+(function orb(){ox+=(mx-ox)*.1;oy+=(my-oy)*.1;co.style.left=ox+'px';co.style.top=oy+'px';requestAnimationFrame(orb)})();
+
+/* ── BG STARS ── */
 (function(){
-  var c=document.getElementById('bg-stars'),ctx=c.getContext('2d'),stars=[],W,H;
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
-  function init(){stars=[];for(var i=0;i<280;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.5+.2,a:Math.random()*.8+.1,tw:Math.random()*3+1,phase:Math.random()*Math.PI*2})}
-  var t=0;
-  function draw(){ctx.clearRect(0,0,W,H);stars.forEach(function(s){var a=s.a*(.5+.5*Math.sin(t*s.tw+s.phase));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fillStyle='rgba(200,230,255,'+a+')';ctx.fill()});t+=.01;requestAnimationFrame(draw)}
-  resize();init();draw();
-  window.addEventListener('resize',function(){resize();init()});
+  var c=document.getElementById('bgc'),ctx=c.getContext('2d'),W,H,S=[];
+  function resize(){W=c.width=innerWidth;H=c.height=innerHeight;S=[];for(var i=0;i<160;i++)S.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.2+.2,a:Math.random()*.65+.1,ph:Math.random()*6.28,sp:Math.random()*.018+.004})}
+  resize();addEventListener('resize',resize,{passive:true});
+  addP(function(t){ctx.clearRect(0,0,W,H);for(var i=0;i<S.length;i++){var s=S[i],a=s.a*(.5+.5*Math.sin(t*s.sp+s.ph));ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,6.28);ctx.fillStyle='rgba(200,230,255,'+a+')';ctx.fill()}},c);
 })();
 
-// ─── HERO CANVAS ──────────────────────────────────────────────────────────
+/* ── INTRO ── */
 (function(){
-  var c=document.getElementById('hero-canvas'),ctx=c.getContext('2d'),pts=[],W,H;
-  function resize(){W=c.width=window.innerWidth;H=c.height=window.innerHeight}
-  function init(){pts=[];for(var i=0;i<120;i++){var a=Math.random()*Math.PI*2,r=Math.random()*Math.min(W,H)*.6;pts.push({x:W/2+Math.cos(a)*r,y:H/2+Math.sin(a)*r,vx:(Math.random()-.5)*.35,vy:(Math.random()-.5)*.2,r:Math.random()*2+.5,a:Math.random()*.6+.2,phase:Math.random()*Math.PI*2,sp:Math.random()*.02+.006})}}
-  var t=0;
-  function draw(){ctx.clearRect(0,0,W,H);for(var i=0;i<pts.length;i++){for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<160){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(0,229,255,'+((1-d/160)*.15)+')';ctx.lineWidth=.5;ctx.stroke()}}}pts.forEach(function(p){var pulse=.7+.3*Math.sin(t*p.sp+p.phase);ctx.beginPath();ctx.arc(p.x,p.y,p.r*pulse,0,Math.PI*2);ctx.fillStyle='rgba(0,229,255,'+(p.a*pulse*.7)+')';ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0});t+=.016;requestAnimationFrame(draw)}
-  resize();init();draw();
-  window.addEventListener('resize',function(){resize();init()});
+  var ic=document.getElementById('ic'),ctx=ic.getContext('2d'),W,H,P=[];
+  function resize(){W=ic.width=innerWidth;H=ic.height=innerHeight;P=[];for(var i=0;i<140;i++)P.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.45,vy:(Math.random()-.5)*.27,r:Math.random()*1.9+.4,a:Math.random()*.7+.1,ph:Math.random()*6.28,sp:Math.random()*.016+.004})}
+  resize();addEventListener('resize',resize,{passive:true});
+  var iraf,it=0;
+  function idraw(){
+    iraf=requestAnimationFrame(idraw);it++;
+    ctx.fillStyle='rgba(0,0,0,.13)';ctx.fillRect(0,0,W,H);
+    for(var i=0;i<P.length;i++)for(var j=i+1;j<P.length;j++){var dx=P[i].x-P[j].x,dy=P[i].y-P[j].y,d2=dx*dx+dy*dy;if(d2<25000){ctx.beginPath();ctx.moveTo(P[i].x,P[i].y);ctx.lineTo(P[j].x,P[j].y);ctx.strokeStyle='rgba(0,210,255,'+((1-d2/25000)*.26)+')';ctx.lineWidth=.55;ctx.stroke()}}
+    for(var k=0;k<P.length;k++){var p=P[k],pulse=.62+.38*Math.sin(it*p.sp+p.ph);ctx.beginPath();ctx.arc(p.x,p.y,p.r*pulse,0,6.28);ctx.fillStyle='rgba(0,210,255,'+(p.a*pulse)+')';ctx.fill();p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0}
+  }
+  idraw();
+  var fl=document.getElementById('ifl'),ipct=document.getElementById('ipct'),ibig=document.getElementById('ibig'),iphTxt=document.getElementById('iphTxt');
+  var phases=[{id:'p1',label:'AI PIPELINE INIT',end:28},{id:'p2',label:'QA ENGINE LOAD',end:60},{id:'p3',label:'SECURITY MODULES',end:82},{id:'p4',label:'DASHBOARD READY',end:100}];
+  var p=0,pi=0;
+  var iv=setInterval(function(){
+    p+=Math.random()*2.4+1.2;if(p>100)p=100;
+    fl.style.width=p+'%';ipct.textContent=Math.floor(p)+'%';ibig.textContent=Math.floor(p)+'%';
+    while(pi<phases.length&&p>=phases[pi].end){document.getElementById(phases[pi].id).classList.add('on');if(pi+1<phases.length)iphTxt.textContent=phases[pi+1].label;pi++}
+    if(p>=100){clearInterval(iv);setTimeout(function(){cancelAnimationFrame(iraf);document.getElementById('intro').classList.add('out');setTimeout(function(){document.getElementById('intro').style.display='none';openIQ()},700)},500)}
+  },62);
 })();
 
-// ─── CINEMATIC INTRO ──────────────────────────────────────────────────────
+/* ── TERMINAL ── */
 (function(){
-  var cvs=document.getElementById('intro-canvas'),ctx=cvs.getContext('2d'),W,H;
-  function resize(){W=cvs.width=window.innerWidth;H=cvs.height=window.innerHeight}
-  var pts=[];
-  function init(){pts=[];for(var i=0;i<300;i++){pts.push({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.6,vy:(Math.random()-.5)*.35,r:Math.random()*2.5+.5,a:Math.random()*.9+.1,phase:Math.random()*Math.PI*2,sp:Math.random()*.02+.005})}}
-  var t=0;
-  function drawBg(){
-    ctx.fillStyle='rgba(0,0,0,.15)';ctx.fillRect(0,0,W,H);
-    for(var i=0;i<pts.length;i++){for(var j=i+1;j<pts.length;j++){var dx=pts[i].x-pts[j].x,dy=pts[i].y-pts[j].y,d=Math.sqrt(dx*dx+dy*dy);if(d<200){ctx.beginPath();ctx.moveTo(pts[i].x,pts[i].y);ctx.lineTo(pts[j].x,pts[j].y);ctx.strokeStyle='rgba(0,200,255,'+((1-d/200)*.3)+')';ctx.lineWidth=.8;ctx.stroke()}}}
-    pts.forEach(function(p){var pulse=.65+.35*Math.sin(t*p.sp+p.phase);ctx.beginPath();ctx.arc(p.x,p.y,p.r*pulse,0,Math.PI*2);ctx.fillStyle='rgba(0,200,255,'+(p.a*pulse)+')';ctx.fill();if(p.r>1.2){var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r*4);g.addColorStop(0,'rgba(0,200,255,'+(p.a*.3*pulse)+')');g.addColorStop(1,'rgba(0,200,255,0)');ctx.beginPath();ctx.arc(p.x,p.y,p.r*4,0,Math.PI*2);ctx.fillStyle=g;ctx.fill()}p.x+=p.vx;p.y+=p.vy;if(p.x<0)p.x=W;if(p.x>W)p.x=0;if(p.y<0)p.y=H;if(p.y>H)p.y=0});t+=.018;requestAnimationFrame(drawBg)}
-  resize();init();drawBg();
-
-  // Intro progress logic
-  var fill=document.getElementById('intro-fill'),pctSm=document.getElementById('intro-pct-sm'),bigPct=document.getElementById('intro-pct');
-  var phases=[{id:'ph1',label:'LOADING SECURITY MODULES',end:25},{id:'ph2',label:'INITIALIZING AI PIPELINE',end:55},{id:'ph3',label:'SPINNING UP QA ENGINE',end:80},{id:'ph4',label:'PREPARING DASHBOARD',end:100}];
-  var p=0,pi=0,iv=setInterval(function(){
-    p+=Math.random()*2.8+1.2;if(p>100)p=100;
-    fill.style.width=p+'%';pctSm.textContent=Math.floor(p)+'%';bigPct.textContent=Math.floor(p)+'%';
-    if(pi<phases.length&&p>=phases[pi].end){
-      document.getElementById('phases[pi].id') && document.getElementById(phases[pi].id).classList.add('active');
-      document.getElementById(phases[pi].id).classList.add('active');
-      if(pi+1<phases.length){document.getElementById('intro-phase-txt').textContent=phases[pi+1].label}
-      pi++;
-    }
-    if(p>=100){
-      clearInterval(iv);
-      setTimeout(function(){
-        document.getElementById('intro').classList.add('fade-out');
-        setTimeout(function(){document.getElementById('intro').style.display='none';openIQ()},700);
-      },500);
-    }
-  },55);
-  window.addEventListener('resize',function(){resize();init()});
-})();
-
-// ─── TERMINAL TICKER ──────────────────────────────────────────────────────
-(function(){
-  var el=document.getElementById('term-txt');if(!el)return;
-  var lines=[
-    {p:'$ ',t:'dataeuros run --suite=full --parallel=48',c:'cmd'},
-    {p:'',t:'  ✓ Loaded 5,248 test cases across 12 modules',c:'out'},
-    {p:'',t:'  ↻ Executing: Auth, Payment, API, UI flows...',c:'out'},
-    {p:'',t:'  ✓ All 5,248 tests PASSED [99.8% accuracy]',c:'pass'},
-    {p:'$ ',t:'dataeuros security --scan=OWASP-TOP10',c:'cmd'},
-    {p:'',t:'  ◉ Scanning 847 endpoints... 0 critical CVEs found',c:'pass'},
-    {p:'$ ',t:'dataeuros perf --load=100k --duration=300s',c:'cmd'},
-    {p:'',t:'  ◉ Peak load: 100,000 users · Avg latency: 99ms',c:'pass'},
-  ];
-  var li=0,ci=0,typing=true,wait=0,lineIdx=0;
-  var termBody=document.getElementById('term-body');
+  var el=document.getElementById('tt');if(!el)return;
+  var L=[{c:'var(--c1)',t:'$ dataeuros run --suite=full --parallel=48'},{c:'var(--muted)',t:'  ↻ Loading 5,248 test cases...'},{c:'var(--acc1)',t:'  ✓ ALL PASSED [5248/5248] 99.8% accuracy'},{c:'var(--c1)',t:'$ dataeuros security --owasp'},{c:'var(--acc1)',t:'  ◉ 0 critical CVEs · 2 low · Fixed ✓'},{c:'var(--c1)',t:'$ dataeuros perf --users=100k'},{c:'var(--acc1)',t:'  ◉ Avg latency 99ms · 100k users PASS'}];
+  var li=0,ci=0,typing=true,wait=0;
   function tick(){
-    if(wait>0){wait--;setTimeout(tick,40);return}
-    var line=lines[li];
-    if(typing){
-      var full=line.p+line.t;
-      var color=line.c==='cmd'?'var(--c1)':line.c==='pass'?'var(--acc1)':'var(--muted)';
-      termBody.innerHTML='<span style="color:'+color+'">'+full.slice(0,ci+1)+'</span><span class="term-cursor"></span>';
-      ci++;
-      if(ci>=full.length){typing=false;wait=60}
-    }else{
-      li=(li+1)%lines.length;ci=0;typing=true;wait=15;
-    }
-    setTimeout(tick,typing?55:28);
+    if(wait-->0){setTimeout(tick,40);return}
+    var line=L[li];
+    if(typing){el.innerHTML='<span style="color:'+line.c+'">'+line.t.slice(0,ci+1)+'</span>';ci++;if(ci>=line.t.length){typing=false;wait=52}}
+    else{li=(li+1)%L.length;ci=0;typing=true;wait=10}
+    setTimeout(tick,typing?56:22);
   }
   tick();
 })();
 
-// ─── CV-CODE: Test Execution Stream ──────────────────────────────────────
+/* ── CANVAS SETUP HELPER ── */
+function mkC(id){
+  var el=document.getElementById(id);if(!el)return null;
+  var ctx=el.getContext('2d',{alpha:false}),W=0,H=0;
+  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=Math.round(r.width)||400;H=el.height=Math.round(r.height)||225}
+  resize();addEventListener('resize',function(){resize()},{passive:true});
+  return{ctx:ctx,gW:function(){return W},gH:function(){return H},el:el};
+}
+
+/* ── CV1: Code Execution ── */
 (function(){
-  var el=document.getElementById('cv-code');if(!el)return;
-  var ctx=el.getContext('2d'),lines=[],W=0,H=0,t=0;
-  var codeLines=['✓ test("user login flow") → PASS 12ms','✓ test("payment gateway") → PASS 28ms','✗ test("checkout redirect") → FAIL 404','→ AI FIX: updating selector [data-checkout-btn]','✓ test("checkout redirect") → PASS 31ms [FIXED]','✓ test("API: POST /orders") → PASS 8ms','◉ Running visual regression suite...','✓ 48 screenshots matched · 0 diffs found','✓ test("mobile responsive") → PASS 19ms','✓ Cross-browser: Chrome/FF/Safari → ALL PASS'];
-  var cols=['rgba(57,255,20,.8)','rgba(57,255,20,.8)','rgba(255,80,80,.9)','rgba(0,229,255,.8)','rgba(57,255,20,.8)','rgba(57,255,20,.8)','rgba(0,229,255,.6)','rgba(57,255,20,.8)','rgba(57,255,20,.8)','rgba(57,255,20,.8)'];
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
-  function draw(){
-    ctx.fillStyle='rgba(2,4,8,.18)';ctx.fillRect(0,0,W,H);
-    var lineH=H/12;
-    codeLines.forEach(function(line,i){
-      var y=H/14*(i+1);
-      var pulse=Math.sin(t*.04+i*.3)>.1;
-      ctx.font='600 '+(Math.min(W*.019,12))+'px JetBrains Mono';
-      ctx.fillStyle=cols[i];
-      ctx.globalAlpha=.7+.3*Math.sin(t*.03+i*.5);
-      ctx.fillText(line,20,y+lineH/2);
-      ctx.globalAlpha=1;
-      if(pulse&&Math.random()<.015){
-        lines.push({x:W*.7+Math.random()*W*.25,y:y,vx:-Math.random()*3-1,life:1,color:cols[i]});
-      }
-    });
-    // scan line
-    var sy=(t*1.5)%H;
-    var sg=ctx.createLinearGradient(0,sy-3,0,sy+3);
-    sg.addColorStop(0,'rgba(0,229,255,0)');sg.addColorStop(.5,'rgba(0,229,255,.3)');sg.addColorStop(1,'rgba(0,229,255,0)');
-    ctx.fillStyle=sg;ctx.fillRect(0,sy-3,W,6);
-    lines=lines.filter(function(l){l.x+=l.vx;l.life-=.04;ctx.beginPath();ctx.arc(l.x,l.y,3,0,Math.PI*2);ctx.fillStyle=l.color.replace('.8',''+l.life+')').replace('.9',''+l.life+')');ctx.fill();return l.life>0&&l.x>0});
-    t++;requestAnimationFrame(draw);
-  }
-  resize();draw();
-  var obs=new IntersectionObserver(function(e){if(e[0].isIntersecting){draw();obs.disconnect()}});obs.observe(el.parentElement);
-  window.addEventListener('resize',resize);
+  var s=mkC('cv1');if(!s)return;
+  var LL=[['✓ test("auth flow") PASS 11ms','g'],['✓ test("payment") PASS 23ms','g'],['✗ test("checkout") FAIL 404','r'],['→ AI: fixing selector [data-checkout]','b'],['✓ test("checkout") PASS 28ms [FIXED]','g'],['✓ test("POST /orders") PASS 7ms','g'],['◉ Visual regression: 48 shots matched','b'],['✓ Cross-browser: Chrome/FF/Safari PASS','g']];
+  var PKT=[];
+  addP(function(t){
+    var c=s.ctx,W=s.gW(),H=s.gH();c.fillStyle='#020509';c.fillRect(0,0,W,H);
+    var fh=H/10,fs=Math.min(W*.017,11);c.font='600 '+fs+'px JetBrains Mono';
+    for(var i=0;i<LL.length;i++){var y=fh*(i+1),cl=LL[i][1]==='g'?'rgba(57,255,20,.72)':LL[i][1]==='r'?'rgba(255,55,55,.82)':'rgba(0,229,255,.68)';c.globalAlpha=.62+.38*Math.sin(t*.045+i*.4);c.fillStyle=cl;c.fillText(LL[i][0],16,y+fh*.4);c.globalAlpha=1}
+    var sy=(t*1.7)%H;c.fillStyle='rgba(0,229,255,.1)';c.fillRect(0,sy-2,W,4);
+    if(t%5===0)PKT.push({x:W,y:Math.random()*H,vx:-2.2-Math.random()*1.8,l:1,c:Math.random()<.5?'57,255,20':'0,229,255'});
+    PKT=PKT.filter(function(p){p.x+=p.vx;p.l-=.032;if(p.l<=0||p.x<0)return false;c.beginPath();c.arc(p.x,p.y,2.2,0,6.28);c.fillStyle='rgba('+p.c+','+p.l+')';c.fill();return true});
+  },s.el.parentElement);
 })();
 
-// ─── CV-NEURAL: Neural Network ──────────────────────────────────────────
+/* ── CV2: Neural Net ── */
 (function(){
-  var el=document.getElementById('cv-neural');if(!el)return;
-  var ctx=el.getContext('2d'),W=0,H=0,t=0;
-  var nodes=[],edges=[];
-  var layers=[3,5,5,3];
-  function resize(){
-    var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height;
-    nodes=[];edges=[];
-    var lw=W/(layers.length+1);
-    layers.forEach(function(count,li){
-      for(var ni=0;ni<count;ni++){
-        var nx=lw*(li+1),ny=H/(count+1)*(ni+1);
-        nodes.push({x:nx,y:ny,layer:li,idx:ni,act:Math.random(),phase:Math.random()*Math.PI*2,sp:Math.random()*.05+.02});
-      }
-    });
-    var offset=0;
-    for(var li=0;li<layers.length-1;li++){
-      var lStart=offset,lEnd=offset+layers[li];
-      var nStart=offset+layers[li],nEnd=nStart+layers[li+1];
-      for(var a=lStart;a<lEnd;a++){for(var b=nStart;b<nEnd;b++){edges.push({a:a,b:b,w:Math.random()-.5,phase:Math.random()*Math.PI*2,sp:Math.random()*.03+.01,signal:null})}}
-      offset+=layers[li];
-    }
-  }
-  function draw(){
-    ctx.fillStyle='rgba(2,4,8,.15)';ctx.fillRect(0,0,W,H);
-    edges.forEach(function(e){
-      var na=nodes[e.a],nb=nodes[e.b];
-      var act=(Math.sin(t*e.sp+e.phase)+1)/2;
-      var col=act>.5?'0,229,255':'57,255,20';
-      ctx.beginPath();ctx.moveTo(na.x,na.y);ctx.lineTo(nb.x,nb.y);
-      ctx.strokeStyle='rgba('+col+','+(act*.35)+')';ctx.lineWidth=act*1.5;ctx.stroke();
-      // signal dot
-      var sig=(Math.sin(t*e.sp*2+e.phase)+1)/2;
-      var sx=na.x+(nb.x-na.x)*sig,sy=na.y+(nb.y-na.y)*sig;
-      ctx.beginPath();ctx.arc(sx,sy,3,0,Math.PI*2);
-      ctx.fillStyle='rgba('+col+','+(sig*.8)+')';ctx.fill();
-    });
-    nodes.forEach(function(n){
-      n.act=.5+.5*Math.sin(t*n.sp+n.phase);
-      var r=Math.max(W*.018,8)*n.act;
-      var col=n.layer===0?'0,229,255':n.layer===layers.length-1?'57,255,20':'180,79,255';
-      var g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,r*2);
-      g.addColorStop(0,'rgba('+col+','+(n.act*.7)+')');g.addColorStop(1,'rgba('+col+',0)');
-      ctx.beginPath();ctx.arc(n.x,n.y,r*2,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-      ctx.beginPath();ctx.arc(n.x,n.y,r*.5,0,Math.PI*2);
-      ctx.fillStyle='rgba('+col+','+n.act+')';ctx.fill();
-    });
-    t+=.02;requestAnimationFrame(draw);
-  }
-  resize();draw();
-  window.addEventListener('resize',resize);
+  var s=mkC('cv2');if(!s)return;
+  var nodes=[],edges=[],layers=[3,4,4,2],built=false;
+  function build(){var W=s.gW(),H=s.gH();nodes=[];edges=[];var step=W/(layers.length+1);layers.forEach(function(cnt,li){for(var ni=0;ni<cnt;ni++)nodes.push({x:step*(li+1),y:H/(cnt+1)*(ni+1),li:li,ph:Math.random()*6.28,sp:Math.random()*.038+.012})});var off=0;for(var li=0;li<layers.length-1;li++){var as=off,ae=off+layers[li],bs=off+layers[li],be=bs+layers[li+1];for(var a=as;a<ae;a++)for(var b=bs;b<be;b++)edges.push({a:a,b:b,ph:Math.random()*6.28,sp:Math.random()*.022+.007});off+=layers[li]}built=true}
+  addP(function(t){
+    if(!built)build();
+    var c=s.ctx,W=s.gW(),H=s.gH();c.fillStyle='#020509';c.fillRect(0,0,W,H);
+    edges.forEach(function(e){var na=nodes[e.a],nb=nodes[e.b],act=(Math.sin(t*e.sp+e.ph)+1)/2,col=act>.5?'0,229,255':'57,255,20';c.beginPath();c.moveTo(na.x,na.y);c.lineTo(nb.x,nb.y);c.strokeStyle='rgba('+col+','+(act*.28)+')';c.lineWidth=act*1.3+.25;c.stroke();var sig=(Math.sin(t*e.sp*2+e.ph)+1)/2,sx=na.x+(nb.x-na.x)*sig,sy=na.y+(nb.y-na.y)*sig;c.beginPath();c.arc(sx,sy,2.2,0,6.28);c.fillStyle='rgba('+col+','+(sig*.7)+')';c.fill()});
+    nodes.forEach(function(n){var act=.5+.5*Math.sin(t*n.sp+n.ph),r=Math.max(W*.022,8)*act,col=n.li===0?'0,229,255':n.li===layers.length-1?'57,255,20':'180,79,255';c.beginPath();c.arc(n.x,n.y,r*.42,0,6.28);c.fillStyle='rgba('+col+','+act+')';c.fill()});
+  },s.el.parentElement);
 })();
 
-// ─── CV-SECURITY: Threat Map ─────────────────────────────────────────────
+/* ── CV3: Security Map ── */
 (function(){
-  var el=document.getElementById('cv-security');if(!el)return;
-  var ctx=el.getContext('2d'),threats=[],zones=[],W=0,H=0,t=0;
-  function resize(){
-    var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height;
-    zones=[];
-    for(var i=0;i<12;i++)zones.push({x:(i%4+.5)*(W/4),y:Math.floor(i/4)*(H/3)+H/6,r:W*.075,threat:0,id:i});
-  }
-  function draw(){
-    ctx.fillStyle='rgba(2,4,8,.12)';ctx.fillRect(0,0,W,H);
-    // hex grid lines
-    ctx.strokeStyle='rgba(0,229,255,.06)';ctx.lineWidth=1;
-    for(var xi=0;xi<W;xi+=60){ctx.beginPath();ctx.moveTo(xi,0);ctx.lineTo(xi,H);ctx.stroke()}
-    for(var yi=0;yi<H;yi+=60){ctx.beginPath();ctx.moveTo(0,yi);ctx.lineTo(W,yi);ctx.stroke()}
-    zones.forEach(function(z){
-      z.threat=Math.max(0,z.threat-.008);
-      var c=z.threat>.5?'255,34,68':z.threat>.2?'255,107,0':'0,229,255';
-      var g=ctx.createRadialGradient(z.x,z.y,0,z.x,z.y,z.r*2);
-      g.addColorStop(0,'rgba('+c+','+(z.threat*.35)+')');g.addColorStop(1,'rgba('+c+',0)');
-      ctx.beginPath();ctx.arc(z.x,z.y,z.r*2,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-      ctx.beginPath();ctx.arc(z.x,z.y,z.r,0,Math.PI*2);
-      ctx.strokeStyle='rgba('+c+','+(z.threat*.5+.1)+')';ctx.lineWidth=1.5;ctx.stroke();
-      // label
-      ctx.font='500 '+(Math.min(W*.018,10))+'px JetBrains Mono';
-      ctx.fillStyle='rgba('+c+','+(z.threat*.6+.3)+')';
-      ctx.textAlign='center';ctx.fillText('NODE-'+String(z.id+1).padStart(2,'0'),z.x,z.y+4);
-    });
-    if(Math.random()<.04){
-      var zi=Math.floor(Math.random()*zones.length);
-      zones[zi].threat=1;
-      threats.push({x:zones[zi].x,y:zones[zi].y,r:0,maxR:zones[zi].r*3,c:Math.random()<.35?'255,34,68':Math.random()<.6?'255,107,0':'57,255,20'});
-    }
-    threats=threats.filter(function(th){
-      th.r+=5;var a=(1-th.r/th.maxR);
-      ctx.beginPath();ctx.arc(th.x,th.y,th.r,0,Math.PI*2);
-      ctx.strokeStyle='rgba('+th.c+','+(a*.7)+')';ctx.lineWidth=2;ctx.stroke();
-      return th.r<th.maxR;
-    });
-    // scan sweep
-    ctx.save();ctx.translate(W/2,H/2);
-    var angle=t*.025;
-    var sweepG=ctx.createConicalGradient?null:null;
-    ctx.beginPath();ctx.moveTo(0,0);ctx.arc(0,0,Math.max(W,H),angle,angle+.5);ctx.closePath();
-    ctx.fillStyle='rgba(0,229,255,.04)';ctx.fill();
-    ctx.restore();
-    t++;requestAnimationFrame(draw);
-  }
-  resize();draw();
-  window.addEventListener('resize',resize);
+  var s=mkC('cv3');if(!s)return;
+  var zones=[],threats=[],built=false;
+  function build(){var W=s.gW(),H=s.gH();zones=[];for(var i=0;i<10;i++)zones.push({x:(i%5+.5)*(W/5),y:Math.floor(i/5)*(H/2)+H/4,r:W*.062,thr:0});built=true}
+  addP(function(t){
+    if(!built)build();
+    var c=s.ctx,W=s.gW(),H=s.gH();c.fillStyle='#020509';c.fillRect(0,0,W,H);
+    c.strokeStyle='rgba(0,229,255,.045)';c.lineWidth=.7;
+    for(var xi=0;xi<W;xi+=50){c.beginPath();c.moveTo(xi,0);c.lineTo(xi,H);c.stroke()}
+    for(var yi=0;yi<H;yi+=50){c.beginPath();c.moveTo(0,yi);c.lineTo(W,yi);c.stroke()}
+    zones.forEach(function(z){z.thr=Math.max(0,z.thr-.009);var cl=z.thr>.5?'255,34,68':z.thr>.2?'255,107,0':'0,229,255';c.beginPath();c.arc(z.x,z.y,z.r,0,6.28);c.strokeStyle='rgba('+cl+','+(z.thr*.48+.1)+')';c.lineWidth=1.4;c.stroke()});
+    if(t%52===0){var zi=Math.floor(Math.random()*zones.length);zones[zi].thr=1;threats.push({x:zones[zi].x,y:zones[zi].y,r:0,max:zones[zi].r*2.7,c:Math.random()<.35?'255,34,68':'57,255,20'})}
+    threats=threats.filter(function(th){th.r+=3.2;var a=(1-th.r/th.max)*.68;c.beginPath();c.arc(th.x,th.y,th.r,0,6.28);c.strokeStyle='rgba('+th.c+','+a+')';c.lineWidth=1.8;c.stroke();return th.r<th.max});
+    c.save();c.translate(W*.5,H*.5);var ang=t*.02;c.beginPath();c.moveTo(0,0);c.arc(0,0,Math.max(W,H),ang,ang+.38);c.closePath();c.fillStyle='rgba(0,229,255,.025)';c.fill();c.restore();
+  },s.el.parentElement);
 })();
 
-// ─── CV-DEPLOY: CI/CD Pipeline ───────────────────────────────────────────
+/* ── CV4: CI/CD ── */
 (function(){
-  var el=document.getElementById('cv-deploy');if(!el)return;
-  var ctx=el.getContext('2d'),packets=[],W=0,H=0,t=0;
-  var stages=[{label:'SRC'},{label:'BUILD'},{label:'TEST'},{label:'SCAN'},{label:'DEPLOY'},{label:'LIVE'}];
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
-  function draw(){
-    ctx.fillStyle='rgba(2,4,8,.14)';ctx.fillRect(0,0,W,H);
-    var sx=W/(stages.length+1),sy=H/2;
-    var pts=stages.map(function(s,i){return{x:sx*(i+1),y:sy,label:s.label}});
-    // connecting lines
-    for(var i=0;i<pts.length-1;i++){
-      ctx.beginPath();ctx.moveTo(pts[i].x+18,pts[i].y);ctx.lineTo(pts[i+1].x-18,pts[i+1].y);
-      var la=(Math.sin(t*.04+i*.6)+1)/2;
-      ctx.strokeStyle='rgba(0,229,255,'+(la*.3+.1)+')';ctx.lineWidth=1.5;ctx.stroke();
-      // arrow
-      var midX=(pts[i].x+pts[i+1].x)/2,midY=pts[i].y;
-      ctx.beginPath();ctx.moveTo(midX-4,midY-4);ctx.lineTo(midX+4,midY);ctx.lineTo(midX-4,midY+4);
-      ctx.strokeStyle='rgba(0,229,255,.3)';ctx.lineWidth=1;ctx.stroke();
-    }
-    pts.forEach(function(p,i){
-      var pulse=.6+.4*Math.sin(t*.05+i*.9);
-      var col=i===pts.length-1?'57,255,20':'0,229,255';
-      ctx.beginPath();ctx.arc(p.x,p.y,18,0,Math.PI*2);
-      ctx.strokeStyle='rgba('+col+','+(pulse*.5)+')';ctx.lineWidth=2;ctx.stroke();
-      var g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,30);
-      g.addColorStop(0,'rgba('+col+','+(pulse*.2)+')');g.addColorStop(1,'rgba('+col+',0)');
-      ctx.beginPath();ctx.arc(p.x,p.y,30,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-      ctx.font='bold '+(Math.min(W*.016,9))+'px JetBrains Mono';ctx.fillStyle='rgba('+col+','+pulse+')';ctx.textAlign='center';ctx.fillText(p.label,p.x,p.y+5);
-      ctx.font=(Math.min(W*.013,8))+'px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.4)';ctx.fillText('v'+((i+1)*3)+'.'+Math.floor(t/20+i)%10,p.x,p.y+26);
-    });
-    if(Math.random()<.025){var fi=Math.floor(Math.random()*(pts.length-1));packets.push({from:fi,to:fi+1,prog:0,sp:Math.random()*.018+.008,col:Math.random()<.6?'0,229,255':'57,255,20'})}
-    packets=packets.filter(function(pk){pk.prog+=pk.sp;var x=pts[pk.from].x+(pts[pk.to].x-pts[pk.from].x)*pk.prog,y=H/2;ctx.beginPath();ctx.arc(x,y,5,0,Math.PI*2);ctx.fillStyle='rgba('+pk.col+','+(1-pk.prog)*.8+')';ctx.fill();ctx.beginPath();ctx.arc(x,y,10,0,Math.PI*2);ctx.strokeStyle='rgba('+pk.col+','+(1-pk.prog)*.3+')';ctx.lineWidth=1.5;ctx.stroke();return pk.prog<1});
-    t++;requestAnimationFrame(draw);
-  }
-  resize();draw();
-  window.addEventListener('resize',resize);
+  var s=mkC('cv4');if(!s)return;
+  var pkts=[],stgs=['SRC','BUILD','TEST','SCAN','DEPLOY','LIVE'];
+  addP(function(t){
+    var c=s.ctx,W=s.gW(),H=s.gH();c.fillStyle='#020509';c.fillRect(0,0,W,H);
+    var step=W/(stgs.length+1),cy=H*.5;
+    var pts=stgs.map(function(l,i){return{x:step*(i+1),y:cy,l:l}});
+    for(var i=0;i<pts.length-1;i++){c.beginPath();c.moveTo(pts[i].x+13,cy);c.lineTo(pts[i+1].x-13,cy);c.strokeStyle='rgba(0,229,255,'+(.13+.1*Math.sin(t*.052+i*.7))+')';c.lineWidth=1.1;c.stroke()}
+    pts.forEach(function(p,i){var pulse=.62+.38*Math.sin(t*.058+i*.85),col=i===pts.length-1?'57,255,20':'0,229,255';c.beginPath();c.arc(p.x,cy,12,0,6.28);c.strokeStyle='rgba('+col+','+(pulse*.45)+')';c.lineWidth=1.6;c.stroke();c.font='bold '+Math.min(W*.014,8)+'px JetBrains Mono';c.fillStyle='rgba('+col+','+pulse+')';c.textAlign='center';c.fillText(p.l,p.x,cy+4)});
+    if(t%62===0){var fi=Math.floor(Math.random()*(pts.length-1));pkts.push({fi:fi,pr:0,sp:.013+Math.random()*.009,c:Math.random()<.6?'0,229,255':'57,255,20'})}
+    pkts=pkts.filter(function(pk){pk.pr+=pk.sp;var x=pts[pk.fi].x+(pts[pk.fi+1].x-pts[pk.fi].x)*pk.pr,a=(1-pk.pr)*.78;c.beginPath();c.arc(x,cy,4.5,0,6.28);c.fillStyle='rgba('+pk.c+','+a+')';c.fill();return pk.pr<1});
+  },s.el.parentElement);
 })();
 
-// ─── CV-PERF: Performance Charts ─────────────────────────────────────────
+/* ── CV5: Performance Chart ── */
 (function(){
-  var el=document.getElementById('cv-perf');if(!el)return;
-  var ctx=el.getContext('2d'),W=0,H=0,t=0,history=[];
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
-  function draw(){
-    ctx.fillStyle='rgba(2,4,8,.12)';ctx.fillRect(0,0,W,H);
-    var val=50+40*Math.sin(t*.03)+15*Math.sin(t*.07)+10*Math.sin(t*.15)+Math.random()*5;
-    history.push(val);if(history.length>120)history.shift();
-    // grid
-    for(var gi=0;gi<=4;gi++){var gy=H*.15+gi*(H*.7/4);ctx.beginPath();ctx.moveTo(W*.05,gy);ctx.lineTo(W*.95,gy);ctx.strokeStyle='rgba(0,229,255,.06)';ctx.lineWidth=1;ctx.stroke();ctx.font='9px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.3)';ctx.textAlign='right';ctx.fillText(Math.round(100-gi*25)+'ms',W*.04,gy+4)}
-    // chart line
-    if(history.length>2){
-      ctx.beginPath();
-      history.forEach(function(v,i){var x=W*.05+(W*.9)*(i/(119)),y=H*.85-v*(H*.7/100);i===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});
-      ctx.strokeStyle='rgba(57,255,20,.7)';ctx.lineWidth=2;ctx.stroke();
-      // fill
-      ctx.lineTo(W*.95,H*.85);ctx.lineTo(W*.05,H*.85);ctx.closePath();
-      var lg=ctx.createLinearGradient(0,H*.15,0,H*.85);lg.addColorStop(0,'rgba(57,255,20,.2)');lg.addColorStop(1,'rgba(57,255,20,0)');ctx.fillStyle=lg;ctx.fill();
-    }
-    // labels
-    ctx.font='bold 10px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.6)';ctx.textAlign='left';ctx.fillText('LATENCY (ms)',W*.06,H*.12);
-    ctx.font='bold '+(Math.min(W*.06,28))+'px Syne';ctx.fillStyle='rgba(57,255,20,.9)';ctx.fillText(Math.round(val)+'ms',W*.06,H*.35);
-    ctx.font='10px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.4)';ctx.fillText('AVG RESPONSE',W*.06,H*.45);
-    // rps meter
-    var rps=800+Math.floor(Math.random()*200);
-    ctx.font='bold '+(Math.min(W*.045,22))+'px Syne';ctx.fillStyle='rgba(0,229,255,.8)';ctx.textAlign='right';ctx.fillText(rps+' RPS',W*.94,H*.35);
-    ctx.font='10px JetBrains Mono';ctx.fillStyle='rgba(0,229,255,.4)';ctx.fillText('THROUGHPUT',W*.94,H*.45);
-    t++;requestAnimationFrame(draw);
-  }
-  resize();draw();
-  window.addEventListener('resize',resize);
+  var s=mkC('cv5');if(!s)return;
+  var hist=[];
+  addP(function(t){
+    var c=s.ctx,W=s.gW(),H=s.gH();c.fillStyle='#020509';c.fillRect(0,0,W,H);
+    var v=50+36*Math.sin(t*.036)+13*Math.sin(t*.082)+Math.random()*3.5;
+    hist.push(v);if(hist.length>85)hist.shift();
+    c.strokeStyle='rgba(0,229,255,.055)';c.lineWidth=.7;
+    for(var g=0;g<=3;g++){var gy=H*.15+g*(H*.65/3);c.beginPath();c.moveTo(W*.06,gy);c.lineTo(W*.93,gy);c.stroke()}
+    if(hist.length>2){c.beginPath();hist.forEach(function(hv,i){var x=W*.06+(W*.87)*(i/84),y=H*.8-hv*(H*.65/100);i===0?c.moveTo(x,y):c.lineTo(x,y)});c.strokeStyle='rgba(57,255,20,.68)';c.lineWidth=1.7;c.stroke();c.lineTo(W*.93,H*.8);c.lineTo(W*.06,H*.8);c.closePath();var lg=c.createLinearGradient(0,H*.15,0,H*.8);lg.addColorStop(0,'rgba(57,255,20,.15)');lg.addColorStop(1,'rgba(57,255,20,0)');c.fillStyle=lg;c.fill()}
+    c.font='bold '+Math.min(W*.052,23)+'px Syne';c.fillStyle='rgba(57,255,20,.88)';c.textAlign='left';c.fillText(Math.round(v)+'ms',W*.08,H*.37);
+    c.font='8px JetBrains Mono';c.fillStyle='rgba(0,229,255,.42)';c.fillText('AVG LATENCY',W*.08,H*.47);
+    c.textAlign='right';c.fillStyle='rgba(0,229,255,.78)';c.font='bold '+Math.min(W*.038,17)+'px Syne';c.fillText((820+Math.floor(t%180))+'rps',W*.91,H*.37);
+  },s.el.parentElement);
 })();
 
-// ─── CV-DATA: Data Flow ──────────────────────────────────────────────────
+/* ── CV6: Data Flow ── */
 (function(){
-  var el=document.getElementById('cv-data');if(!el)return;
-  var ctx=el.getContext('2d'),W=0,H=0,t=0,streams=[];
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
-  function draw(){
-    ctx.fillStyle='rgba(2,4,8,.1)';ctx.fillRect(0,0,W,H);
-    if(Math.random()<.06){
-      var col=Math.random()<.4?'0,229,255':Math.random()<.6?'57,255,20':'180,79,255';
-      streams.push({x:Math.random()*W,y:-20,vy:Math.random()*2.5+1.5,chars:[],col:col,len:Math.floor(Math.random()*10+5)});
-      for(var i=0;i<streams[streams.length-1].len;i++)streams[streams.length-1].chars.push(String.fromCharCode(0x30A0+Math.floor(Math.random()*96)));
-    }
-    var fs=Math.min(W*.028,13);
-    streams=streams.filter(function(s){
-      s.y+=s.vy;
-      s.chars.forEach(function(c,i){
-        var cy=s.y-i*fs*1.4;if(cy<-fs||cy>H+fs)return;
-        var alpha=Math.max(0,(1-i/(s.len))*(.7+.3*Math.sin(t*.08+i)));
-        ctx.font='500 '+fs+'px JetBrains Mono';ctx.fillStyle='rgba('+s.col+','+alpha+')';
-        ctx.textAlign='center';ctx.fillText(c,s.x,cy);
-      });
-      return s.y<H+s.len*fs*1.4;
-    });
-    // horizontal data bars
-    for(var b=0;b<6;b++){
-      var by=H*.15+b*(H*.7/6),bw=(W*.6)*(.3+.7*Math.abs(Math.sin(t*.02+b)));
-      var bcol=b%3===0?'0,229,255':b%3===1?'57,255,20':'180,79,255';
-      ctx.fillStyle='rgba('+bcol+',.06)';ctx.fillRect(W*.05,by,W*.9,H*.07);
-      ctx.fillStyle='rgba('+bcol+',.3)';ctx.fillRect(W*.05,by,bw,H*.07);
-      ctx.font='9px JetBrains Mono';ctx.fillStyle='rgba('+bcol+',.6)';ctx.textAlign='left';
-      var lbl=['EVENTS','ERRORS','SPANS','TRACES','METRICS','LOGS'][b];ctx.fillText(lbl,W*.06,by+H*.045);
-      ctx.textAlign='right';ctx.fillText(Math.floor(bw/(W*.9)*100)+'%',W*.94,by+H*.045);
-    }
-    t++;requestAnimationFrame(draw);
-  }
-  resize();draw();
-  window.addEventListener('resize',resize);
+  var s=mkC('cv6');if(!s)return;
+  var streams=[],chars='アイウエオカキクケコサシスセソ0123456789ABCDEF';
+  addP(function(t){
+    var c=s.ctx,W=s.gW(),H=s.gH();
+    c.fillStyle='rgba(2,5,9,.14)';c.fillRect(0,0,W,H);
+    if(t%5===0&&streams.length<20){var col=Math.random()<.4?'0,229,255':Math.random()<.6?'57,255,20':'180,79,255';streams.push({x:Math.random()*W,y:-18,vy:1.3+Math.random()*1.6,len:Math.floor(Math.random()*7+3),chs:[],col:col})}
+    var fs=Math.min(W*.022,11);c.font='500 '+fs+'px JetBrains Mono';
+    streams=streams.filter(function(st){st.y+=st.vy;if(st.chs.length<st.len&&Math.random()<.28)st.chs.push(chars[Math.floor(Math.random()*chars.length)]);st.chs.forEach(function(ch,i){var cy=st.y-i*fs*1.3;if(cy<-fs||cy>H+fs)return;c.fillStyle='rgba('+st.col+','+(Math.max(0,1-i/st.len)*.6)+')';c.textAlign='center';c.fillText(ch,st.x,cy)});return st.y<H+st.len*fs*1.35});
+    for(var b=0;b<5;b++){var by=H*.1+b*(H*.17),bw=W*.15+(W*.58)*Math.abs(Math.sin(t*.022+b)),bc=b%3===0?'0,229,255':b%3===1?'57,255,20':'180,79,255';c.fillStyle='rgba('+bc+',.045)';c.fillRect(W*.05,by,W*.88,H*.09);c.fillStyle='rgba('+bc+',.2)';c.fillRect(W*.05,by,bw,H*.09);c.font='8px JetBrains Mono';c.fillStyle='rgba('+bc+',.52)';c.textAlign='left';c.fillText(['EVENTS','ERRORS','SPANS','TRACES','METRICS'][b],W*.07,by+H*.063);c.textAlign='right';c.fillText(Math.floor(bw/(W*.88)*100)+'%',W*.91,by+H*.063)}
+  },s.el.parentElement);
 })();
 
-// ─── GLOBE (OUTSOURCING) ─────────────────────────────────────────────────
+/* ── GLOBE ── */
 (function(){
-  var el=document.getElementById('globe-canvas');if(!el)return;
-  var ctx=el.getContext('2d'),W=0,H=0,t=0;
-  var dots=[],arcs=[];
-  function resize(){var r=el.parentElement.getBoundingClientRect();W=el.width=r.width;H=el.height=r.height}
-  function latLonTo3D(lat,lon,r){var phi=(90-lat)*Math.PI/180,theta=(lon+180)*Math.PI/180;return{x:-r*Math.sin(phi)*Math.cos(theta),y:r*Math.cos(phi),z:r*Math.sin(phi)*Math.sin(theta)}}
-  function project(p,cx,cy,r,rot){
-    var cosR=Math.cos(rot),sinR=Math.sin(rot);
-    var rx=p.x*cosR+p.z*sinR,ry=p.y,rz=-p.x*sinR+p.z*cosR;
-    return{x:cx+rx*(r/2),y:cy-ry*(r/2),z:rz,vis:rz>-r*.2}
-  }
-  var cities=[{lat:28.6,lon:77.2,name:'Delhi'},{lat:19,lon:72.8,name:'Mumbai'},{lat:51.5,lon:-.1,name:'London'},{lat:40.7,lon:-74,name:'New York'},{lat:1.3,lon:103.8,name:'Singapore'},{lat:35.7,lon:139.7,name:'Tokyo'},{lat:-33.8,lon:151.2,name:'Sydney'},{lat:48.8,lon:2.3,name:'Paris'},{lat:37.6,lon:-122.4,name:'SF'},{lat:25.2,lon:55.3,name:'Dubai'}];
-  function draw(){
+  var el=document.getElementById('gc');if(!el)return;
+  var ctx=el.getContext('2d'),W=0,H=0,arcs=[];
+  function resize(){var r=el.getBoundingClientRect(),sz=r.width||380;W=el.width=sz;H=el.height=sz}
+  resize();addEventListener('resize',function(){resize()},{passive:true});
+  var cities=[{la:28.6,lo:77.2,n:'Delhi'},{la:51.5,lo:-.1,n:'London'},{la:40.7,lo:-74,n:'NYC'},{la:1.3,lo:103.8,n:'Singapore'},{la:35.7,lo:139.7,n:'Tokyo'},{la:-33.8,lo:151.2,n:'Sydney'},{la:48.8,lo:2.3,n:'Paris'},{la:25.2,lo:55.3,n:'Dubai'},{la:19,lo:72.8,n:'Mumbai'},{la:37.6,lo:-122.4,n:'SF'}];
+  function l2p(la,lo,R){var ph=(90-la)*3.14159/180,th=(lo+180)*3.14159/180;return{x:-R*Math.sin(ph)*Math.cos(th),y:R*Math.cos(ph),z:R*Math.sin(ph)*Math.sin(th)}}
+  function proj(p,cx,cy,R,rot){var cr=Math.cos(rot),sr=Math.sin(rot),rx=p.x*cr+p.z*sr,ry=p.y,rz=-p.x*sr+p.z*cr;return{x:cx+rx*.88,y:cy-ry*.88,vis:rz>-R*.12}}
+  addP(function(t){
     ctx.clearRect(0,0,W,H);
-    var cx=W/2,cy=H/2,R=Math.min(W,H)*.42;
-    // globe base
-    var g=ctx.createRadialGradient(cx-R*.2,cy-R*.2,R*.1,cx,cy,R);
-    g.addColorStop(0,'rgba(0,50,120,.4)');g.addColorStop(1,'rgba(0,20,50,.2)');
-    ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-    ctx.beginPath();ctx.arc(cx,cy,R,0,Math.PI*2);ctx.strokeStyle='rgba(0,229,255,.18)';ctx.lineWidth=1.5;ctx.stroke();
-    var rot=t*.005;
-    // lat/lon grid
-    for(var lat=-60;lat<=60;lat+=30){
-      ctx.beginPath();var first=true;
-      for(var lon2=0;lon2<=360;lon2+=5){var p=latLonTo3D(lat,lon2,R),pp=project(p,cx,cy,R,rot);if(pp.vis){if(first){ctx.moveTo(pp.x,pp.y);first=false}else ctx.lineTo(pp.x,pp.y)}}
-      ctx.strokeStyle='rgba(0,229,255,.07)';ctx.lineWidth=.8;ctx.stroke();
-    }
-    for(var lon3=-180;lon3<180;lon3+=30){
-      ctx.beginPath();var first2=true;
-      for(var lat2=-80;lat2<=80;lat2+=5){var p2=latLonTo3D(lat2,lon3,R),pp2=project(p2,cx,cy,R,rot);if(pp2.vis){if(first2){ctx.moveTo(pp2.x,pp2.y);first2=false}else ctx.lineTo(pp2.x,pp2.y)}}
-      ctx.strokeStyle='rgba(0,229,255,.07)';ctx.lineWidth=.8;ctx.stroke();
-    }
-    // cities
-    cities.forEach(function(city,i){
-      var p3=latLonTo3D(city.lat,city.lon,R),pp3=project(p3,cx,cy,R,rot);
-      if(!pp3.vis)return;
-      var pulse=(Math.sin(t*.06+i*.7)+1)/2;
-      ctx.beginPath();ctx.arc(pp3.x,pp3.y,4,0,Math.PI*2);
-      ctx.fillStyle='rgba(57,255,20,'+(pulse*.8+.2)+')';ctx.fill();
-      ctx.beginPath();ctx.arc(pp3.x,pp3.y,10*pulse,0,Math.PI*2);
-      ctx.strokeStyle='rgba(57,255,20,'+(pulse*.4)+')';ctx.lineWidth=1;ctx.stroke();
-      ctx.font='9px JetBrains Mono';ctx.fillStyle='rgba(57,255,20,.7)';ctx.textAlign='center';ctx.fillText(city.name,pp3.x,pp3.y-12);
-    });
-    // arcs between cities
-    if(Math.random()<.02&&cities.length>2){
-      var a=Math.floor(Math.random()*cities.length),b=Math.floor(Math.random()*cities.length);
-      if(a!==b)arcs.push({a:a,b:b,prog:0,sp:Math.random()*.015+.008});
-    }
-    arcs=arcs.filter(function(arc){
-      arc.prog+=arc.sp;
-      var ca=cities[arc.a],cb=cities[arc.b];
-      var pa=latLonTo3D(ca.lat,ca.lon,R),ppa=project(pa,cx,cy,R,rot);
-      var pb=latLonTo3D(cb.lat,cb.lon,R),ppb=project(pb,cx,cy,R,rot);
-      if(!ppa.vis||!ppb.vis)return arc.prog<1;
-      var ex=ppa.x+(ppb.x-ppa.x)*arc.prog,ey=ppa.y+(ppb.y-ppa.y)*arc.prog;
-      ctx.beginPath();ctx.moveTo(ppa.x,ppa.y);ctx.lineTo(ex,ey);
-      ctx.strokeStyle='rgba(0,229,255,'+(1-arc.prog)*.6+')';ctx.lineWidth=1.5;ctx.stroke();
-      ctx.beginPath();ctx.arc(ex,ey,3,0,Math.PI*2);ctx.fillStyle='rgba(0,229,255,'+(1-arc.prog)+')';ctx.fill();
-      return arc.prog<1;
-    });
-    // atmosphere glow
-    var atm=ctx.createRadialGradient(cx,cy,R*.9,cx,cy,R*1.15);
-    atm.addColorStop(0,'rgba(0,229,255,.08)');atm.addColorStop(1,'rgba(0,229,255,0)');
-    ctx.beginPath();ctx.arc(cx,cy,R*1.15,0,Math.PI*2);ctx.fillStyle=atm;ctx.fill();
-    t++;requestAnimationFrame(draw);
-  }
-  resize();draw();
-  window.addEventListener('resize',resize);
+    var cx=W/2,cy=H/2,R=Math.min(W,H)*.44,rot=t*.0045;
+    var g=ctx.createRadialGradient(cx,cy,R*.3,cx,cy,R);g.addColorStop(0,'rgba(0,38,95,.38)');g.addColorStop(1,'rgba(0,14,38,.18)');
+    ctx.beginPath();ctx.arc(cx,cy,R,0,6.28);ctx.fillStyle=g;ctx.fill();ctx.beginPath();ctx.arc(cx,cy,R,0,6.28);ctx.strokeStyle='rgba(0,229,255,.14)';ctx.lineWidth=1.1;ctx.stroke();
+    ctx.strokeStyle='rgba(0,229,255,.055)';ctx.lineWidth=.65;
+    for(var la=-60;la<=60;la+=30){ctx.beginPath();var f=true;for(var lo2=0;lo2<=360;lo2+=7){var pp=proj(l2p(la,lo2,R),cx,cy,R,rot);if(pp.vis){f?ctx.moveTo(pp.x,pp.y):ctx.lineTo(pp.x,pp.y);f=false}}ctx.stroke()}
+    for(var lo3=-180;lo3<180;lo3+=30){ctx.beginPath();var f2=true;for(var la2=-78;la2<=78;la2+=7){var pp2=proj(l2p(la2,lo3,R),cx,cy,R,rot);if(pp2.vis){f2?ctx.moveTo(pp2.x,pp2.y):ctx.lineTo(pp2.x,pp2.y);f2=false}}ctx.stroke()}
+    cities.forEach(function(c2,i){var pp3=proj(l2p(c2.la,c2.lo,R),cx,cy,R,rot);if(!pp3.vis)return;var pulse=(Math.sin(t*.058+i*.7)+1)/2;ctx.beginPath();ctx.arc(pp3.x,pp3.y,3.2,0,6.28);ctx.fillStyle='rgba(57,255,20,'+(pulse*.78+.2)+')';ctx.fill();ctx.beginPath();ctx.arc(pp3.x,pp3.y,8*pulse,0,6.28);ctx.strokeStyle='rgba(57,255,20,'+(pulse*.32)+')';ctx.lineWidth=.9;ctx.stroke();ctx.font='8px JetBrains Mono';ctx.fillStyle='rgba(57,255,20,.62)';ctx.textAlign='center';ctx.fillText(c2.n,pp3.x,pp3.y-10)});
+    if(t%78===0){var a=Math.floor(Math.random()*cities.length),b2=Math.floor(Math.random()*cities.length);if(a!==b2)arcs.push({a:a,b:b2,pr:0,sp:.011+Math.random()*.009})}
+    arcs=arcs.filter(function(arc){arc.pr+=arc.sp;var pa=l2p(cities[arc.a].la,cities[arc.a].lo,R),ppa=proj(pa,cx,cy,R,rot),pb=l2p(cities[arc.b].la,cities[arc.b].lo,R),ppb=proj(pb,cx,cy,R,rot);if(!ppa.vis||!ppb.vis)return arc.pr<1;var ex=ppa.x+(ppb.x-ppa.x)*arc.pr,ey=ppa.y+(ppb.y-ppa.y)*arc.pr;ctx.beginPath();ctx.moveTo(ppa.x,ppa.y);ctx.lineTo(ex,ey);ctx.strokeStyle='rgba(0,229,255,'+(1-arc.pr)*.52+')';ctx.lineWidth=1.2;ctx.stroke();ctx.beginPath();ctx.arc(ex,ey,2.2,0,6.28);ctx.fillStyle='rgba(0,229,255,'+(1-arc.pr)+')';ctx.fill();return arc.pr<1});
+    var atm=ctx.createRadialGradient(cx,cy,R*.88,cx,cy,R*1.1);atm.addColorStop(0,'rgba(0,229,255,.055)');atm.addColorStop(1,'rgba(0,229,255,0)');ctx.beginPath();ctx.arc(cx,cy,R*1.1,0,6.28);ctx.fillStyle=atm;ctx.fill();
+  },el);
 })();
 
-// ─── NAV SCROLL ──────────────────────────────────────────────────────────
-window.addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('solid',window.scrollY>80)});
-document.getElementById('hbg').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mobNav').classList.toggle('open');document.body.style.overflow=document.getElementById('mobNav').classList.contains('open')?'hidden':''});
-document.getElementById('mobClose').addEventListener('click',closeMob);
-function closeMob(){document.getElementById('hbg').classList.remove('open');document.getElementById('mobNav').classList.remove('open');document.body.style.overflow=''}
-function scrollSec(id){var e=document.querySelector(id);if(e)e.scrollIntoView({behavior:'smooth'})}
+/* ── NAV ── */
+addEventListener('scroll',function(){document.getElementById('nav').classList.toggle('s',scrollY>70)},{passive:true});
+document.getElementById('hb').addEventListener('click',function(){this.classList.toggle('open');document.getElementById('mn').classList.toggle('on');document.body.style.overflow=document.getElementById('mn').classList.contains('on')?'hidden':''});
+document.getElementById('mc').addEventListener('click',cmob);
+function cmob(){document.getElementById('hb').classList.remove('open');document.getElementById('mn').classList.remove('on');document.body.style.overflow=''}
+function ss(id){var e=document.querySelector(id);if(e)e.scrollIntoView({behavior:'smooth'})}
 
-// ─── INQUIRY MODAL ───────────────────────────────────────────────────────
-function openIQ(){document.getElementById('iqModal').classList.add('show');document.body.style.overflow='hidden'}
-function closeIQ(){document.getElementById('iqModal').classList.remove('show');document.body.style.overflow=''}
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeIQ()});
-function setPill(el,val){document.querySelectorAll('.sp').forEach(function(s){s.classList.remove('sel')});el.classList.add('sel');document.getElementById('q-service').value=val}
-document.getElementById('iqForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  var name=document.getElementById('q-name').value.trim(),email=document.getElementById('q-email').value.trim(),company=document.getElementById('q-company').value.trim(),service=document.getElementById('q-service').value,msg=document.getElementById('q-msg').value.trim();
-  if(!name||!email||!company){alert('Please fill all required fields (Name, Email, Company)');return}
-  var btn=e.target.querySelector('.iq-submit');btn.disabled=true;btn.querySelector('span').textContent='Sending...';
-  setTimeout(function(){document.getElementById('iqFormWrap').style.display='none';document.getElementById('iqSuccess').classList.add('show');btn.disabled=false;btn.querySelector('span').textContent='Send Secure Inquiry →';e.target.reset();document.querySelectorAll('.sp').forEach(function(s){s.classList.remove('sel')})},1600);
+/* ── MODAL ── */
+function openIQ(){document.getElementById('iqm').classList.add('on');document.body.style.overflow='hidden'}
+function closeIQ(){document.getElementById('iqm').classList.remove('on');document.body.style.overflow=''}
+addEventListener('keydown',function(e){if(e.key==='Escape')closeIQ()});
+function pill(el,val){document.querySelectorAll('.sp').forEach(function(s){s.classList.remove('s')});el.classList.add('s');document.getElementById('qs').value=val}
+document.getElementById('iqf').addEventListener('submit',function(e){
+  e.preventDefault();var n=document.getElementById('qn').value.trim(),em=document.getElementById('qe').value.trim(),co=document.getElementById('qc2').value.trim();
+  if(!n||!em||!co){alert('Please fill Name, Email & Company');return}
+  var btn=e.target.querySelector('.iqs');btn.disabled=true;btn.textContent='Sending...';
+  setTimeout(function(){document.getElementById('iqfw').style.display='none';document.getElementById('iqok').classList.add('on');btn.disabled=false;btn.textContent='Send Secure Inquiry →';e.target.reset();document.querySelectorAll('.sp').forEach(function(s){s.classList.remove('s')})},1400);
+});
+document.getElementById('cf').addEventListener('submit',function(e){
+  e.preventDefault();var btn=e.target.querySelector('.iqs');btn.disabled=true;btn.textContent='Sending...';
+  setTimeout(function(){document.getElementById('cfb').style.display='block';btn.disabled=false;btn.textContent='Send Message →';e.target.reset()},1100);
 });
 
-// Contact form
-document.getElementById('contactForm').addEventListener('submit',function(e){
-  e.preventDefault();
-  var btn=e.target.querySelector('.iq-submit');btn.disabled=true;
-  setTimeout(function(){document.getElementById('c-feedback').style.display='block';btn.disabled=false;e.target.reset()},1200);
-});
+/* ── SCROLL REVEAL ── */
+var ro=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{threshold:.07,rootMargin:'0px 0px -25px 0px'});
+document.querySelectorAll('.rv').forEach(function(el){ro.observe(el)});
 
-// ─── SCROLL REVEAL ───────────────────────────────────────────────────────
-var ro=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');ro.unobserve(e.target)}})},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.rv,.rv-left,.rv-right').forEach(function(el){ro.observe(el)});
-
-// ─── COUNTERS ────────────────────────────────────────────────────────────
-var done=false;
-var mo=new IntersectionObserver(function(e){if(e[0].isIntersecting&&!done){done=true;document.querySelectorAll('[data-count]').forEach(function(el){var target=parseFloat(el.dataset.count),dec=parseInt(el.dataset.dec||0),suf=el.dataset.suf||'',start=null;(function step(ts){if(!start)start=ts;var p=Math.min((ts-start)/2500,1),ease=1-Math.pow(1-p,4);el.textContent=(ease*target).toFixed(dec)+suf;if(p<1)requestAnimationFrame(step)})(performance.now())});mo.disconnect()}},{threshold:.5});
-var hm=document.querySelector('.hero-metrics');if(hm)mo.observe(hm);
-
-// ─── INTRO PHASE HELPER ──────────────────────────────────────────────────
-// Graceful fallback — ensure phases activate even if element id iteration was off
-setTimeout(function(){
-  ['ph1','ph2','ph3','ph4'].forEach(function(id,i){
-    setTimeout(function(){var el=document.getElementById(id);if(el)el.classList.add('active')},i*600);
-  });
-},800);
+/* ── COUNTERS ── */
+var cDone=false,cObs=new IntersectionObserver(function(e){if(e[0].isIntersecting&&!cDone){cDone=true;document.querySelectorAll('[data-count]').forEach(function(el){var tgt=parseFloat(el.dataset.count),dec=parseInt(el.dataset.dec||0),suf=el.dataset.suf||'',st=null;(function step(ts){if(!st)st=ts;var pr=Math.min((ts-st)/2100,1),ease=1-Math.pow(1-pr,4);el.textContent=(ease*tgt).toFixed(dec)+suf;if(pr<1)requestAnimationFrame(step)})(performance.now())});cObs.disconnect()}},{threshold:.4});
+var hm=document.querySelector('.hmets');if(hm)cObs.observe(hm);
 </script>
 </body>
 </html>
